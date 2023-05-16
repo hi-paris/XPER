@@ -1,8 +1,6 @@
 '''
-
 In this file we use the data generated with the file "XGBoost_model" (see the file
 for a description of the data) and the estimated model to  
-
 '''
 
 # =============================================================================
@@ -29,6 +27,7 @@ CFN = None # Specific to MC / 5
 # Import the file
 
 import EM
+import XGBoost_model
 
 # Execute the file "XGBoost_model" which contains the Data Generating Process (DGP)
 # of a probit model and the estimation of the model. We retrieve from it the 
@@ -50,85 +49,182 @@ import pandas as pd
 # to compute the XPER value. Reminds that from k variables we compute 2^(k-1) coalitions
 # to compute the XPER value of a given feature.
 
-p = X_test.shape[1]
+# def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, gridXGBOOST):
+#     """
+#     Evaluate the performance of a model using various evaluation metrics.
 
-N_coalition_sampled = 2**(p-1)
+#     Parameters:
+#         Eval_Metric (str or list): Evaluation metric(s) to compute. Options: "AUC", "Accuracy",
+#             "Balanced_accuracy", "BS" (Brier Score), "MC" (Misclassification Cost),
+#             "Sensitivity", "Specificity", "Precision".
+#         X_train (ndarray): Training set features.
+#         y_train (ndarray): Training set labels.
+#         X_test (ndarray): Test set features.
+#         y_test (ndarray): Test set labels.
+#         gridXGBOOST : Model used for predictions.
 
-# =============================================================================
-#                               Selected model + predictions
-# =============================================================================
+#     Returns:
+#         PM (float): Performance measure(s) computed based on the specified evaluation metric(s).
+#     """
 
-model = gridXGBOOST
+#     p = X_test.shape[1]
 
-# Predicted probabilites on the test sample
-y_hat_proba = model.predict_proba(X_test)[:,1] 
+#     N_coalition_sampled = 2 ** (p - 1)
 
-# Binary predictions on the test sample with a cutoff at 0.5
-y_pred = (y_hat_proba > 0.5)
+#     # Selected model + predictions
+#     model = gridXGBOOST
 
-# Predicted probabilities on the training sample
-y_hat_proba_train = model.predict_proba(X_train)[:,1] 
+#     # Predicted probabilities on the test sample
+#     y_hat_proba = model.predict_proba(X_test)[:, 1]
 
-# Binary predictions on the training sample with a cutoff at 0.5
-y_pred_train = (y_hat_proba_train > 0.5)
+#     # Binary predictions on the test sample with a cutoff at 0.5
+#     y_pred = (y_hat_proba > 0.5)
 
+#     # Predicted probabilities on the training sample
+#     y_hat_proba_train = model.predict_proba(X_train)[:, 1]
 
+#     # Binary predictions on the training sample with a cutoff at 0.5
+#     y_pred_train = (y_hat_proba_train > 0.5)
 
+#     PM = None
 
-
-if Eval_Metric == ["AUC"]:
+#     if Eval_Metric == "AUC":
+#         PM = roc_auc_score(y_test, y_hat_proba)
+#     elif Eval_Metric == "Accuracy":
+#         PM = accuracy_score(y_test, y_pred)
+#     elif Eval_Metric == "Balanced_accuracy":
+#         PM = balanced_accuracy_score(y_test, y_pred)
+#     elif Eval_Metric == "BS":
+#         PM = -brier_score_loss(y_test, y_hat_proba)
+#     elif Eval_Metric == "MC":
+#         N = len(y_pred)
+#         CFP = 1
+#         CFN = 5
+#         FP, FN = np.zeros(shape=N), np.zeros(shape=(N))
+#         for i in range(N):
+#             FP[i] = (y_pred[i] == 0 and y_test[i] == 1)
+#             FN[i] = (y_pred[i] == 1 and y_test[i] == 0)
+#         FPR = np.mean(FP)
+#         FNR = np.mean(FN)
+#         PM = -(CFP * FPR + CFN * FNR)
+#     elif Eval_Metric == "Sensitivity":
+#         PM = np.mean((y_test * y_pred) / np.mean(y_test))
+#     elif Eval_Metric == "Specificity":
+#         PM = np.mean(((1 - y_test) * (1 - y_pred)) / np.mean((1 - y_test)))
+#     elif Eval_Metric == "Precision":
+#         PM = np.mean((y_test * y_pred) / np.mean(y_pred))
     
-    PM = roc_auc_score(y_test, y_hat_proba)  # Compute the AUC on the test sample   
-    
-elif Eval_Metric == ["Accuracy"]:
-    
-    PM = accuracy_score(y_test, y_pred)  # Compute the PM on the test sample 
-    
-elif Eval_Metric == ["Balanced_accuracy"]:
-    
-    PM = balanced_accuracy_score(y_test, y_pred)  # Compute the BS on the test sample   
+#     return PM
 
-elif Eval_Metric == ["BS"]:
-    
-    PM = -brier_score_loss(y_test, y_hat_proba)  # Compute the BS on the test sample   
+# Example usage
+#Eval_Metric = "AUC"
+#X_train = ...
+#y_train = ...
+#X_test = ...
+#y_test = ...
+#gridXGBOOST = ...
 
-elif Eval_Metric == ["MC"]:
+#PM = evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, gridXGBOOST)
+#print(PM)
+def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, gridXGBOOST):
+    """
+     Evaluate the performance of a model using various evaluation metrics.
 
-    N = len(y_pred)
-    CFP = 1
-    CFN = 5
-    FP, FN = np.zeros(shape=N), np.zeros(shape=(N))
-    for i in list(range(N)):
-        FP[i] = (y_pred[i] == 0 and y_test[i] == 1)
-        FN[i] = (y_pred[i] == 1 and y_test[i] == 0)
-    FPR = np.mean(FP)
-    FNR = np.mean(FN)
-    
-    PM = - (CFP*FPR + CFN*FNR) # Compute the PM on the test sample 
+     Parameters:
+         Eval_Metric (str or list): Evaluation metric(s) to compute. Options: "AUC", "Accuracy",
+             "Balanced_accuracy", "BS" (Brier Score), "MC" (Misclassification Cost),
+             "Sensitivity", "Specificity", "Precision".
+         X_train (ndarray): Training set features.
+         y_train (ndarray): Training set labels.
+         X_test (ndarray): Test set features.
+         y_test (ndarray): Test set labels.
+         gridXGBOOST : Model used for predictions.
 
-elif Eval_Metric == ["Sensitivity"]:
-    
-    PM = np.mean((y_test*y_pred)/np.mean(y_test))  # Compute the sensitivity on the test sample   
+     Returns:
+         PM (float): Performance measure(s) computed based on the specified evaluation metric(s).
+    """
+    p = X_test.shape[1]
 
-    #tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
-    #sensitivity = tp / (tp + fn) # Same result that with PM
-    
-elif Eval_Metric == ["Specificity"]:
-    
-    PM = np.mean(((1-y_test)*(1-y_pred))/np.mean((1-y_test)))  # Compute the specificity on the test sample   
+    N_coalition_sampled = 2**(p-1)
 
-    #tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
-    #specificity = tn / (tn+fp) # Same result that with PM
-    
-elif Eval_Metric == ["Precision"]:
-    
-    PM = np.mean((y_test*y_pred)/np.mean(y_pred))  # Compute the precision on the test sample   
+    # # =============================================================================
+    # #                               Selected model + predictions
+    # # =============================================================================
 
-    #tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
-    #precision = tp / (tp+fp) # Same result that with PM
-    
-    
+    model = gridXGBOOST
+
+    # # Predicted probabilites on the test sample
+    y_hat_proba = model.predict_proba(X_test)[:,1] 
+
+    # # Binary predictions on the test sample with a cutoff at 0.5
+    y_pred = (y_hat_proba > 0.5)
+
+    # # Predicted probabilities on the training sample
+    y_hat_proba_train = model.predict_proba(X_train)[:,1] 
+
+    # Binary predictions on the training sample with a cutoff at 0.5
+    y_pred_train = (y_hat_proba_train > 0.5)
+
+
+
+
+
+    if Eval_Metric == ["AUC"]:
+        
+        PM = roc_auc_score(y_test, y_hat_proba)  # Compute the AUC on the test sample   
+        
+    elif Eval_Metric == ["Accuracy"]:
+        
+        PM = accuracy_score(y_test, y_pred)  # Compute the PM on the test sample 
+        
+    elif Eval_Metric == ["Balanced_accuracy"]:
+        
+        PM = balanced_accuracy_score(y_test, y_pred)  # Compute the BS on the test sample   
+
+    elif Eval_Metric == ["BS"]:
+        
+        PM = -brier_score_loss(y_test, y_hat_proba)  # Compute the BS on the test sample   
+
+    elif Eval_Metric == ["MC"]:
+
+        N = len(y_pred)
+        CFP = 1
+        CFN = 5
+        FP, FN = np.zeros(shape=N), np.zeros(shape=(N))
+        for i in list(range(N)):
+            FP[i] = (y_pred[i] == 0 and y_test[i] == 1)
+            FN[i] = (y_pred[i] == 1 and y_test[i] == 0)
+        FPR = np.mean(FP)
+        FNR = np.mean(FN)
+        
+        PM = - (CFP*FPR + CFN*FNR) # Compute the PM on the test sample 
+
+    elif Eval_Metric == ["Sensitivity"]:
+        
+        PM = np.mean((y_test*y_pred)/np.mean(y_test))  # Compute the sensitivity on the test sample   
+
+        #tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
+        #sensitivity = tp / (tp + fn) # Same result that with PM
+        
+    elif Eval_Metric == ["Specificity"]:
+        
+        PM = np.mean(((1-y_test)*(1-y_pred))/np.mean((1-y_test)))  # Compute the specificity on the test sample   
+
+        #tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
+        #specificity = tn / (tn+fp) # Same result that with PM
+        
+    elif Eval_Metric == ["Precision"]:
+        
+        PM = np.mean((y_test*y_pred)/np.mean(y_pred))  # Compute the precision on the test sample   
+
+        #tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
+        #precision = tp / (tp+fp) # Same result that with PM
+        
+    return PM
+PM = evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, gridXGBOOST)        
 print(PM)
+
+
 # =============================================================================
 #                                  PM 
 # =============================================================================
