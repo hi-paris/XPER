@@ -23,75 +23,151 @@ import statsmodels.api as sm
 
 # Fixation du seed 
 
-seed = 123456
-random.seed(seed)
-np.random.seed(seed)
+# def sample_generation(N=500,p=6,seed=123456):
+#     #seed = 123456
+#     random.seed(seed)
+#     np.random.seed(seed)
 
-N = 500 # Taille de l'échantillon
-p = 6  # Nombre de variables explicatives
+#     N = 500 # Taille de l'échantillon
+#     p = 6  # Nombre de variables explicatives
 
-# Tirage loi normale multivariée
-
-
-mean = np.repeat(0, p) # Moyenne égale à 0 pour tous le monde 
-var  = np.array([1.5,1.4,1.3,1.2,1.1,1])# np.repeat(8, p) # Variance égale à 1 pour tous le monde 
-cov = var*np.eye(p)
-
-X = np.random.multivariate_normal(mean, cov, N)
+#     # Tirage loi normale multivariée
 
 
-## Model simulation 
+#     mean = np.repeat(0, p) # Moyenne égale à 0 pour tous le monde 
+#     var  = np.array([1.5,1.4,1.3,1.2,1.1,1])# np.repeat(8, p) # Variance égale à 1 pour tous le monde 
+#     cov = var*np.eye(p)
 
-# Coefficients
-
-beta = np.array([0.5, 0.5, 0.5, 0.5, 0.5, 0.5]).T
-
-print("Nombre de coefficients (constante incluse) :",np.shape(beta)[0])
-
-beta_0 = 0.75
-
-# Errors 
-
-mu_error, std_error= 0,1
-
-error = np.random.normal(mu_error, std_error, N)
-
-# Index 
-
-index = beta_0 + np.matmul(X,beta)
-
-# True y 
-
-y = index.copy() + error # Ne pas oublier de rater le terme d'erreur 
-
-y[y > 0] = 1
-y[y<= 0] = 0
-
-np.sum(y==1)/len(y)
-
-# Probabilités
-
-proba = norm.cdf(index)
-
-# =============================================================================
-#                             Train / Test
-# =============================================================================
-
-N_train = int(0.7*N)
+#     X = np.random.multivariate_normal(mean, cov, N)
+#     print(X)
 
 
-# 70% de l'échantillon pour l'apprentissage du modèle
+#     ## Model simulation 
 
-X_train = X[:N_train,:]
+#     # Coefficients
 
-y_train = y[:N_train]
+#     beta = np.array([0.5, 0.5, 0.5, 0.5, 0.5, 0.5]).T
 
-# 30% de l'échantillon pour le test 
+#     print("Nombre de coefficients (constante incluse) :",np.shape(beta)[0])
 
-X_test = X[N_train:,:] 
+#     beta_0 = 0.75
 
-y_test = y[N_train:]
+#     # Errors 
+#     mu_error, std_error= 0,1
+#     error = np.random.normal(mu_error, std_error, N)
 
+#     # Index 
+#     index = beta_0 + np.matmul(X,beta)
+
+#     # True y 
+
+#     y = index.copy() + error # Ne pas oublier de rater le terme d'erreur
+
+
+
+#     y[y > 0] = 1
+#     y[y<= 0] = 0
+
+#     np.sum(y==1)/len(y)
+
+#     # Probabilités
+
+#     proba = norm.cdf(index)
+
+#     # =============================================================================
+#     #                             Train / Test
+#     # =============================================================================
+
+#     N_train = int(0.7*N)
+
+
+#     # 70% de l'échantillon pour l'apprentissage du modèle
+
+#     X_train = X[:N_train,:]
+
+#     y_train = y[:N_train]
+
+#     # 30% de l'échantillon pour le test 
+
+#     X_test = X[N_train:,:] 
+
+#     y_test = y[N_train:]
+
+
+#     return X_train, y_train, X_test,  y_test, seed
+
+
+def sample_generation(N=500, p=6, seed=123456):
+    """
+    Generate a synthetic dataset for binary classification using a multivariate normal distribution.
+
+    Parameters:
+        N (int): Size of the sample (default: 500)
+        p (int): Number of explanatory variables (default: 6)
+        seed (int): Random seed for reproducibility (default: 123456)
+
+    Returns:
+        X_train (ndarray): Training set features
+        y_train (ndarray): Training set labels
+        X_test (ndarray): Test set features
+        y_test (ndarray): Test set labels
+        seed (int): Random seed used
+    """
+
+    # Set the random seed for reproducibility
+    random.seed(seed)
+    np.random.seed(seed)
+
+    # Set the sample size and number of variables
+    N = 500  # Size of the sample
+    p = 6    # Number of explanatory variables
+
+    # Generate a multivariate normal distribution
+    mean = np.repeat(0, p)  # Mean equal to 0 for all variables
+    var = np.array([1.5, 1.4, 1.3, 1.2, 1.1, 1])  # Variances for each variable
+    cov = var * np.eye(p)  # Covariance matrix (diagonal)
+
+    X = np.random.multivariate_normal(mean, cov, N)
+    print(X)
+
+    # Simulate the model
+
+    # Coefficients
+    beta = np.array([0.5, 0.5, 0.5, 0.5, 0.5, 0.5]).T
+    print("Number of coefficients (including the intercept):", np.shape(beta)[0])
+
+    beta_0 = 0.75  # Intercept
+
+    # Errors
+    mu_error, std_error = 0, 1
+    error = np.random.normal(mu_error, std_error, N)
+
+    # Calculate the index
+    index = beta_0 + np.matmul(X, beta)
+
+    # Generate the true labels
+    y = index.copy() + error
+    y[y > 0] = 1
+    y[y <= 0] = 0
+
+    # Calculate the proportion of positive labels
+    print(np.sum(y == 1) / len(y))
+
+    # Calculate the probabilities
+    proba = norm.cdf(index)
+
+    # Train/Test split
+    N_train = int(0.7 * N)  # 70% of the sample for training
+
+    X_train = X[:N_train, :]
+    y_train = y[:N_train]
+
+    X_test = X[N_train:, :]
+    y_test = y[N_train:]
+
+    return X_train, y_train, X_test, y_test, seed
+
+X_train, y_train, X_test, y_test, seed  = sample_generation(N=500,p=6,seed=123456)
 # =============================================================================
 #                              #### XGBOOST ####
 # =============================================================================
@@ -99,7 +175,7 @@ y_test = y[N_train:]
 import xgboost as xgb                         
 from sklearn.model_selection import RandomizedSearchCV
 
-clf = xgb.XGBClassifier(eval_metric="error",use_label_encoder=False) # ,scale_pos_weight=sum(y_train == 0)/sum(y_train == 1)
+clf = xgb.XGBClassifier(eval_metric="error") # ,scale_pos_weight=sum(y_train == 0)/sum(y_train == 1)
 
 #x["gender"] = pd.to_numeric(x["gender"])
 
@@ -165,3 +241,12 @@ AUC = roc_auc_score(y_test, gridXGBOOST.predict_proba(X_test)[:,1:])
 
 print("AUC: {}\n".format(round(AUC,4)))
 
+print(gridXGBOOST.best_estimator_)
+
+
+import joblib
+joblib.dump(gridXGBOOST, 'xgboost_model.joblib')
+# load the model from disk
+loaded_model = joblib.load('xgboost_model.joblib')
+result = loaded_model.score(X_test, y_test)
+print(result)
