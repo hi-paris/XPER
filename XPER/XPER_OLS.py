@@ -9,7 +9,7 @@ for a description of the data) and the estimated model to
 #             Only parameter to change in the code / Performance metric 
 # =============================================================================
 
-Eval_Metric = ["R2"] 
+Eval_Metric = ["MAE"] 
                      # Name of the chosen metric 
                      # ["MSE","MAE","R2"].
 

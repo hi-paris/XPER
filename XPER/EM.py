@@ -77,8 +77,8 @@ def AUC_PC_pickle(y, X, Pred_Formula, Eval_Metric, var_interet, N_coalition_samp
         benchmark = np.zeros(shape=(N_coalition_sampled)) # vector with N_coalition_sampled 0 elements
         sample_EM = np.zeros(shape=(N_coalition_sampled)) # vector with N_coalition_sampled 0 elements
         
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-          
+        #with concurrent.futures.ProcessPoolExecutor() as executor:
+        with concurrent.futures.ThreadPoolExecutor() as executor:  
             results = [executor.submit(Optimisation.loop_AUC_pickle,s,combination_list_sampled,p,X,y,Pred_Formula,delta_n3,Metric,Metric_ind,N,X_shuffle,Metric_vinteret,Metric_ind_vinteret,var_interet) for s in list(range(N_coalition_sampled))]
         
             for result in concurrent.futures.as_completed(results):
@@ -185,8 +185,9 @@ def AUC_Kernel(y, X, Pred_Formula, Eval_Metric, N_coalition_sampled = 1000, seed
         #benchmark = np.zeros(shape=(N_coalition_sampled)) # vector with N_coalition_sampled 0 elements
         #sample_EM = np.zeros(shape=(N_coalition_sampled)) # vector with N_coalition_sampled 0 elements
         
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-          
+        #with concurrent.futures.ProcessPoolExecutor() as executor:
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+
             results = [executor.submit(Optimisation.loop_AUC_Kernel,s,combination_list_sampled,p,X,y,Pred_Formula,delta_n3,Metric,Metric_ind,N,X_shuffle) for s in list(range(N_coalition_sampled))]
         
             for result in concurrent.futures.as_completed(results):
@@ -346,7 +347,8 @@ def XPER(y, X, Pred_Formula, Eval_Metric, var_interet=None, N_coalition_sampled 
              benchmark = np.zeros(shape=(N_coalition_sampled)) # vector with N_coalition_sampled 0 elements
              sample_EM = np.zeros(shape=(N_coalition_sampled)) # vector with N_coalition_sampled 0 elements
              
-         with concurrent.futures.ProcessPoolExecutor() as executor:
+         #with concurrent.futures.ProcessPoolExecutor() as executor:
+         with concurrent.futures.ThreadPoolExecutor() as executor:
            
              if kernel == True:
                 
@@ -683,8 +685,9 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
         benchmark = np.zeros(shape=(N_coalition_sampled)) # vector with N_coalition_sampled 0 elements
         sample_EM = np.zeros(shape=(N_coalition_sampled)) # vector with N_coalition_sampled 0 elements
         
-    with concurrent.futures.ProcessPoolExecutor() as executor:
-      
+    #with concurrent.futures.ProcessPoolExecutor() as executor:
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+
         if kernel == True:
            
             results = [executor.submit(Optimisation.loop_choice,s,combination_list_sampled,p,X,y,model,model_predict,delta,Metric,Metric_ind,N,X_shuffle,Eval_Metric=Eval_Metric,Metric_vinteret=None,Metric_ind_vinteret=None,var_interet=None,CFP=CFP, CFN = CFN, kernel=True) for s in list(range(N_coalition_sampled))]
