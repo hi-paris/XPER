@@ -1,0 +1,3 @@
+#!/Users/gaetanbrison/Documents/GitHub/hi-paris/XPER/env-xper/bin/python
+from numba.pycc import main
+main()

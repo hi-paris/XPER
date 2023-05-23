@@ -139,9 +139,13 @@ all_contrib = [] # List to store all the result of the function "AUC_PC_pickle"
 
 all_phi_j = []   # List to store the XPER value of each feature + the benchmark 
 
+print(" ")
+print("Score of Metrics",PM)
+print(" ")
+
 for var in np.arange(p): # loop on the number of variables
     
-    get_ipython().magic('clear')   # Clear the console
+    #get_ipython().magic('clear')   # Clear the console
 
     print("Variable numéro:", var)    
     
