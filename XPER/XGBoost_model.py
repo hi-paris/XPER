@@ -73,7 +73,7 @@ def sample_generation(N=500, p=6, seed=123456):
     y[y <= 0] = 0
 
     # Calculate the proportion of positive labels
-    print(np.sum(y == 1) / len(y))
+    print("Calculate the proportion of positive labels: ",np.sum(y == 1) / len(y))
 
     # Calculate the probabilities
     proba = norm.cdf(index)
@@ -150,7 +150,7 @@ gridXGBOOST.fit(X_train, y_train)
 
 time_elapsed_XG = datetime.now() - start_time 
 
-print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed_XG))
+#print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed_XG))
 
 
 # =============================================================================
@@ -171,4 +171,4 @@ joblib.dump(gridXGBOOST, 'xgboost_model.joblib')
 # load the model from disk
 loaded_model = joblib.load('xgboost_model.joblib')
 result = loaded_model.score(X_test, y_test)
-print(result)
+print("Model performance: ",result)
