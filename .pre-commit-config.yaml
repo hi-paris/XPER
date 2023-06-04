@@ -1,9 +1,0 @@
- repos:
-
-      -   repo: https://github.com/pre-commit/pre-commit-hooks
-          rev: v2.0.0
-          hooks:
-          - id: flake8
-            args:
-            - --ignore=E501,W291,W292,E231,E722,F401,E128,W503,W391,E261
-          

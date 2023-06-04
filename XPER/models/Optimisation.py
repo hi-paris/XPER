@@ -388,7 +388,6 @@ def loop_AUC_Kernel(s,combination_list_sampled,p,X,y,Pred_Formula,delta_n3,Metri
             # Compute the individual i contribution to the performance metric 
             # for the subset S and without knowing the feature value of interest of 
             # individual i 
-        
         ###
         
 # =============================================================================
@@ -527,40 +526,40 @@ def loop_AUC(s,combination_list_sampled,p,X,y,Pred_Formula,delta_n3,Metric,Metri
     p : number of features
     
     X : feature values
-    
+
     y : target values 
-    
+
     Pred_Formula : estimated model
-    
+
     delta_n3 : denominator of the AUC
-    
+
     Metric : AUC(s) computed without the variable of interest for each combination 
              of feature (filled as it goes along the loop)
-    
+
     Metric_ind ; Individual AUC computed without the variable of interest for 
                  each combination of feature (filled as it goes along the loop)
-    
+
     N : Sample size 
-    
+
     X_shuffle : Feature values shuffled
-    
+
     Metric_vinteret : AUC(s) computed with the variable of interest for each 
                       combination of feature (filled as it goes along the loop)
-        
+ 
     Metric_ind_vinteret : Individual AUC computed with the variable of interest 
                           for each combination of feature 
                           (filled as it goes along the loop)
-    
+
     var_interet : number of the variable of interest 
-    
+
     '''
-    
+
     import math
     import pandas as pd
-    
+
     S = combination_list_sampled[s]   # Retrieve the sth combination of features 
     S = [x-1 for x in S]              # To move index from (1,p) to (0,p-1)
-    
+
     if kernel == True:
         
         # Specific to Kernel XPER 
@@ -573,7 +572,7 @@ def loop_AUC(s,combination_list_sampled,p,X,y,Pred_Formula,delta_n3,Metric,Metri
     # Code specific to the measure            
     
     X_shuffle_combination = X_shuffle.copy()      
-    X_shuffle_combination[:,S] = X[:,S].copy()   # Change the value of the feature 
+    X_shuffle_combination[:, S] = X[:, S].copy()   # Change the value of the feature 
                                                  # values shuffled in column S 
                                                  # to the feature values not shuffled
     
