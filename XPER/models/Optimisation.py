@@ -226,7 +226,7 @@ def loop_AUC_pickle(s,combination_list_sampled,p,X,y,Pred_Formula,delta_n3,Metri
         
         time_elapsed_AUC = datetime.now() - start_time_AUC
 
-        print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed_AUC))
+        #print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed_AUC))
         
     Metric_s = np.sum(G_i_j)/((N)**2) # np.mean(Metric_ind_j)
     Metric_s_vinteret = np.sum(G_i_j_vinteret)/((N)**2) # np.mean(Metric_ind_j_vinteret)
@@ -477,7 +477,7 @@ def loop_AUC_Kernel(s,combination_list_sampled,p,X,y,Pred_Formula,delta_n3,Metri
         
         time_elapsed_AUC = datetime.now() - start_time_AUC
 
-        print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed_AUC))
+        #print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed_AUC))
         
     Metric_s = np.sum(G_i_j)/((N)**2) # np.mean(Metric_ind_j)
     #Metric_s_vinteret = np.sum(G_i_j_vinteret)/((N)**2) # np.mean(Metric_ind_j_vinteret)
@@ -745,7 +745,7 @@ def loop_AUC(s,combination_list_sampled,p,X,y,Pred_Formula,delta_n3,Metric,Metri
         
         time_elapsed_AUC = datetime.now() - start_time_AUC
 
-        print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed_AUC))
+        #print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed_AUC))
         
     Metric_s = np.sum(G_i_j)/((N)**2) # np.mean(Metric_ind_j)
     
@@ -1256,7 +1256,7 @@ def loop_choice(s,combination_list_sampled,p,X,y,model,model_predict,
         
         time_elapsed_AUC = datetime.now() - start_time_AUC
 
-        print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed_AUC))
+        #print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed_AUC))
         
     Metric_s = np.sum(G_i_j)/((N)**2) # np.mean(Metric_ind_j)
     

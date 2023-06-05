@@ -34,7 +34,7 @@ setup(
     description="""XPER (eXplainable PERformance) is a methodology designed 
     to measure the specific contribution of the input features to 
     the predictive performance of any econometric or machine learning model.""",
-    install_requires=["numpy", "scipy", "sklearn", "shap", "seaborn", "matplotlib", "xgboost", "statmodels"],
+    install_requires=["numpy", "scipy", "scikit-learn", "shap", "seaborn", "matplotlib", "xgboost", "statsmodels"],
     license="MIT license",
     include_package_data=True,
     keywords='XPER',

@@ -10,7 +10,7 @@ Created on Thu May  5 19:56:18 2022
 #                               Packages
 # =============================================================================
 
-import Optimisation
+import XPER.models.Optimisation
 import random
 import numpy as np 
 import concurrent.futures
