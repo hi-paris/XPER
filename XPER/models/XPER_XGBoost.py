@@ -26,14 +26,16 @@ CFN = None # Specific to MC / 5
 
 # Import the file
 
-from XPER.models.EM import *
-from XPER.models.XGBoost_model import * 
+#from XPER.models.EM import *
+#from XPER.models.XGBoost_model import * 
+#import EM
+#import XGBoost_model
 
 # Execute the file "XGBoost_model" which contains the Data Generating Process (DGP)
 # of a probit model and the estimation of the model. We retrieve from it the 
 # data and the estimated model.
 
-exec(open('XGBoost_model.py').read())
+#exec(open('XGBoost_model.py').read())
 
 # =============================================================================
 #                               Packages
@@ -44,6 +46,7 @@ import numpy as np
 from IPython import get_ipython
 from datetime import datetime
 import pandas as pd 
+import XGBoost_model
 
 class Computation:
     """
@@ -72,7 +75,7 @@ class Computation:
         self.Eval_Metric = ["Precision"]
         self.CFP = None
         self.CFN = None 
-        self.Model = gridXGBOOST
+        self.Model = None
     
 
     def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, Model):
@@ -480,7 +483,7 @@ from XPER.datasets.sample import sample_generation
 X_train, y_train, X_test, y_test, seed  = sample_generation(N=500,p=6,seed=123456)
 
 Eval_Metric = ["Precision"] 
-Model = "gridXGBOOST"
+Model = gridXGBOOST
 CFP = None 
 CFN = None
 c = Computation()
