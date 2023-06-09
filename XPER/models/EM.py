@@ -10,7 +10,8 @@ Created on Thu May  5 19:56:18 2022
 #                               Packages
 # =============================================================================
 
-import Optimisation
+#from Optimisation import OptimizationClass
+from XPER.models.Optimisation import OptimizationClass
 import random
 import numpy as np 
 import concurrent.futures
@@ -18,6 +19,8 @@ from itertools import combinations
 from itertools import chain
 import pandas as pd 
 import statsmodels.api as sm
+
+
 
 
 def AUC_PC_pickle(y, X, Pred_Formula, Eval_Metric, var_interet, N_coalition_sampled = 1000, seed = 42):
@@ -508,12 +511,12 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
                                           # features to avoid taking it into account for
                                           # the computation of XPER
                 
-                model_predict = Optimisation.model_predict1
+                model_predict = OptimizationClass.model_predict1
                 
             else:
                 
                 
-                model_predict = Optimisation.model_predict4
+                model_predict = OptimizationClass.model_predict4
                 
     elif (getattr(model,"predict","No") != "No"): 
         # The model only includes a "predict" method
@@ -690,11 +693,11 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
 
         if kernel == True:
            
-            results = [executor.submit(Optimisation.loop_choice,s,combination_list_sampled,p,X,y,model,model_predict,delta,Metric,Metric_ind,N,X_shuffle,Eval_Metric=Eval_Metric,Metric_vinteret=None,Metric_ind_vinteret=None,var_interet=None,CFP=CFP, CFN = CFN, kernel=True) for s in list(range(N_coalition_sampled))]
+            results = [executor.submit(OptimizationClass.loop_choice,s,combination_list_sampled,p,X,y,model,model_predict,delta,Metric,Metric_ind,N,X_shuffle,Eval_Metric=Eval_Metric,Metric_vinteret=None,Metric_ind_vinteret=None,var_interet=None,CFP=CFP, CFN = CFN, kernel=True) for s in list(range(N_coalition_sampled))]
            
         else: # if exact computation
             
-            results = [executor.submit(Optimisation.loop_choice,s,combination_list_sampled,p,X,y,model,model_predict,delta,Metric,Metric_ind,N,X_shuffle,Metric_vinteret,Metric_ind_vinteret,var_interet,Eval_Metric = Eval_Metric,CFP=CFP, CFN = CFN,kernel=False) for s in list(range(N_coalition_sampled))]
+            results = [executor.submit(OptimizationClass.loop_choice,s,combination_list_sampled,p,X,y,model,model_predict,delta,Metric,Metric_ind,N,X_shuffle,Metric_vinteret,Metric_ind_vinteret,var_interet,Eval_Metric = Eval_Metric,CFP=CFP, CFN = CFN,kernel=False) for s in list(range(N_coalition_sampled))]
     
         for result in concurrent.futures.as_completed(results):
             s = result.result()[0]
