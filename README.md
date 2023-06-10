@@ -1,8 +1,7 @@
 **XPER (eXplainable PERformance)** is a methodology designed to measure the specific contribution of the input features to the predictive performance of any econometric or machine learning model. XPER is built on Shapley values and interpretability tools developed in machine learning but with the distinct objective of focusing on model performance (AUC, $R^2$) and not on model predictions ($\hat{y}$). XPER has as a special case the standard explainability method in Machine Learning (SHAP).
 
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ## 01 Install 🚀
 The library has been tested on Linux, MacOSX and Windows. It relies on the following Python modules:
 
