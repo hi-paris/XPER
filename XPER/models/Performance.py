@@ -38,7 +38,7 @@ CFN = None # Specific to MC / 5
 # =============================================================================
 #                               Packages
 # =============================================================================
-import XPER.models.EM
+from XPER.models.EM import XPER_choice
 from sklearn.metrics import roc_auc_score,brier_score_loss,balanced_accuracy_score,accuracy_score
 import numpy as np
 from IPython import get_ipython
@@ -144,7 +144,7 @@ def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, mo
 #print("Performance Metrics: ",PM)
 
 
-def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN):
+def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN,PM):
     """
     Calculates XPER (Extended Partial-Expected Ranking) values for each feature based on the given inputs.
 
@@ -176,7 +176,7 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN):
     for var in np.arange(p):  # loop on the number of variables
         print("Variable numéro:", var)
 
-        Contrib = EM.XPER_choice(y=y_test,          # Target values
+        Contrib = XPER_choice(y=y_test,          # Target values
                                  X=X_test,       # Feature values / include the intercept
                                  model=model,       # Estimated model
                                  Eval_Metric=Eval_Metric,  # Name of the performance metric
