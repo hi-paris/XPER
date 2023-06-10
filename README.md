@@ -31,7 +31,7 @@ import XPER
 * Option 1 
 ```python
 import XPER
-import XPER.datasets.sample
+from XPER.datasets.sample import sample_generation
 X_train, y_train, X_test, y_test, p, N, seed  = sample_generation(N=500,p=6,seed=123456)
 ```
 ![sample](https://i.postimg.cc/59TwZb8r/Sample.png)
@@ -50,6 +50,7 @@ df.head(3)
 #### 2️⃣ Load the trained model or train your model ⚙️
 
 ```python
+import joblib
 model = joblib.load('xgboost_model.joblib')
 result = loaded_model.score(X_test, y_test)
 print("Model performance: ",result)
@@ -67,10 +68,10 @@ print("Performance Metrics: ",PM)
 ![metric](https://i.postimg.cc/Gt5zfDdg/Performance-Metrics.png)
 
 ```python
-from XPER.models.XPER_XGBoost import calculate_XPER_values
+from XPER.models.Performance import calculate_XPER_values
 CFP = None
 CFN = None
-result = calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN)
+result = calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, PM)
 print("Efficiency bench XPER: ", result[-1])
 ```
 
