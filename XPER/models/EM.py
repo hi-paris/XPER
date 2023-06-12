@@ -80,11 +80,11 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
                                           # features to avoid taking it into account for
                                           # the computation of XPER
                        
-                model_predict = Optimisation.model_predict2
+                model_predict = OptimizationClass.model_predict2
                                           
             else:
                  
-                model_predict = Optimisation.model_predict3
+                model_predict = OptimizationClass.model_predict3
          
         else: # If the metric does not use predicted probabilities 
             
@@ -121,12 +121,12 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
                                           # features to avoid taking it into account for
                                           # the computation of XPER
                 
-                model_predict = Optimisation.model_predict1
+                model_predict = OptimizationClass.model_predict1
                 
             else:
                 
                 
-                model_predict = Optimisation.model_predict4
+                model_predict = OptimizationClass.model_predict4
         
         else: # Case where the model only includes a predict method 
               # which gives predicted probabilities and that the metric 
@@ -142,12 +142,12 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
                                           # features to avoid taking it into account for
                                           # the computation of XPER
                 
-                model_predict = Optimisation.model_predict5
+                model_predict = OptimizationClass.model_predict5
                 
             else:
                 
                 
-                model_predict = Optimisation.model_predict6
+                model_predict = OptimizationClass.model_predict6
            
             
     elif (getattr(model,"predict_proba","No") == "No") and (getattr(model,"predict","No") == "No"):      
