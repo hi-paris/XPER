@@ -88,7 +88,7 @@ def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, mo
         
     return PM
 
-def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, kernel=False, intercept=False):
+def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, N_coalition_sampled = None , kernel=False, intercept=False):
     """
     Calculates XPER (Extended Partial-Expected Ranking) values for each feature based on the given inputs.
 
@@ -99,16 +99,16 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, kernel=F
         Eval_Metric: Name of the performance metric.
         CFP: Cost of false positive.
         CFN: Cost of false negative.
+        N_coalition_sampled: Number of coalitions considered to compute the XPER values. Minimum = 1 and maximum = (2**p) - 2.
         kernel: True if we approximate the XPER values (appropriate when the number of features is large), False otherwise
         intercept: True if the model and the features include an intercept, False otherwise
-
+ 
     Returns:
         tuple: A tuple containing the following elements:
-            - all_contrib (list): List to store all the result of the function "AUC_PC_pickle" from the python file "EM.py".
+            - all_contrib (list): List to store all the result of the function "XPER_choice" from the python file "EM.py".
             - all_phi_j (list): List to store the XPER value of each feature + the benchmark.
             - df_phi_i_j (pandas.DataFrame): DataFrame of shape (n_samples, n_features) containing the XPER values for each feature.
             - benchmark_ind (pandas.DataFrame): DataFrame containing the benchmark performance metric for each individual.
-            - EM_ind (pandas.DataFrame): DataFrame containing the EM (Expected Metric) performance metric for each individual.
     """
 
     start_time = datetime.now()
@@ -118,6 +118,7 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, kernel=F
     p = X_test.shape[1]
     
     if kernel == False:
+     
       N_coalition_sampled = 2**(p-1)
 
       for var in np.arange(p):  # loop on the number of variables
@@ -162,8 +163,10 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, kernel=F
 
     else:
      
-      N_coalition_sampled = (2**p) - 2
-
+      if N_coalition_sampled == None:
+       
+        N_coalition_sampled = (2**p) - 2 # Maximum number of coalitions 
+       
       Contrib_Kernel = EM.XPER_choice(y = y_test,          # Target values
                                          X = X_test,  # Feature values
                                          model = model,       # Estimated model
@@ -171,8 +174,8 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, kernel=F
                                          N_coalition_sampled = N_coalition_sampled, # Number of coalitions taken into account for XPER computation
                                          CFP=CFP,
                                          CFN=CFN,
-                                         intercept=False,
-                                         kernel=True) 
+                                         intercept=intercept,
+                                         kernel=kernel) 
 
       time_elapsed = datetime.now() - start_time
 
