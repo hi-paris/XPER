@@ -1,47 +1,9 @@
-'''
-In this file we use the data generated with the file "XGBoost_model" (see the file
-for a description of the data) and the estimated model to  
-'''
-
-# =============================================================================
-#             Only parameter to change in the code / Performance metric 
-# =============================================================================
-
-Eval_Metric = ["Precision"] 
-                     # Name of the chosen metric 
-                     # ["AUC","BS","Balanced_accuracy","Accuracy","MC",
-                     #  "Sensitivity","Specificity","Precision"].
-
-CFP = None # Specific to MC / 1 
-CFN = None # Specific to MC / 5 
-
-# =============================================================================
-#                              Need to install XGBoost 
-# =============================================================================
-
-
-# =============================================================================
-#                Current path should be the one of this file     
-# =============================================================================
-
-# Import the file
-
-
-#import XGBoost_model
-
-# Execute the file "XGBoost_model" which contains the Data Generating Process (DGP)
-# of a probit model and the estimation of the model. We retrieve from it the 
-# data and the estimated model.
-
-#exec(open('XGBoost_model.py').read())
-
-# =============================================================================
+ =============================================================================
 #                               Packages
 # =============================================================================
 from XPER.models.EM import XPER_choice
 from sklearn.metrics import roc_auc_score,brier_score_loss,balanced_accuracy_score,accuracy_score
 import numpy as np
-from IPython import get_ipython
 from datetime import datetime
 import pandas as pd 
 
@@ -57,14 +19,12 @@ def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, mo
          y_train (ndarray): Training set labels.
          X_test (ndarray): Test set features.
          y_test (ndarray): Test set labels.
-         gridXGBOOST : Model used for predictions.
+         model : Model used for predictions.
 
      Returns:
          PM (float): Performance measure(s) computed based on the specified evaluation metric(s).
     """
     p = X_test.shape[1]
-
-    N_coalition_sampled = 2**(p-1)
 
     # # =============================================================================
     # #                               Selected model + predictions
@@ -83,10 +43,6 @@ def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, mo
 
     # Binary predictions on the training sample with a cutoff at 0.5
     y_pred_train = (y_hat_proba_train > 0.5)
-
-
-
-
 
     if Eval_Metric == ["AUC"]:
         
@@ -121,30 +77,18 @@ def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, mo
     elif Eval_Metric == ["Sensitivity"]:
         
         PM = np.mean((y_test*y_pred)/np.mean(y_test))  # Compute the sensitivity on the test sample   
-
-        #tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
-        #sensitivity = tp / (tp + fn) # Same result that with PM
         
     elif Eval_Metric == ["Specificity"]:
         
         PM = np.mean(((1-y_test)*(1-y_pred))/np.mean((1-y_test)))  # Compute the specificity on the test sample   
-
-        #tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
-        #specificity = tn / (tn+fp) # Same result that with PM
-        
+    
     elif Eval_Metric == ["Precision"]:
         
         PM = np.mean((y_test*y_pred)/np.mean(y_pred))  # Compute the precision on the test sample   
-
-        #tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
-        #precision = tp / (tp+fp) # Same result that with PM
         
     return PM
-#PM = evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, gridXGBOOST)        
-#print("Performance Metrics: ",PM)
 
-
-def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN,PM):
+def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, kernel=False, intercept=False):
     """
     Calculates XPER (Extended Partial-Expected Ranking) values for each feature based on the given inputs.
 
@@ -155,6 +99,8 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN,PM):
         Eval_Metric: Name of the performance metric.
         CFP: Cost of false positive.
         CFN: Cost of false negative.
+        kernel: True if we approximate the XPER values (appropriate when the number of features is large), False otherwise
+        intercept: True if the model and the features include an intercept, False otherwise
 
     Returns:
         tuple: A tuple containing the following elements:
@@ -163,7 +109,6 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN,PM):
             - df_phi_i_j (pandas.DataFrame): DataFrame of shape (n_samples, n_features) containing the XPER values for each feature.
             - benchmark_ind (pandas.DataFrame): DataFrame containing the benchmark performance metric for each individual.
             - EM_ind (pandas.DataFrame): DataFrame containing the EM (Expected Metric) performance metric for each individual.
-            - efficiency_bench_XPER (numpy.ndarray): Array containing the efficiency benchmark XPER values.
     """
 
     start_time = datetime.now()
@@ -171,7 +116,11 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN,PM):
     all_contrib = []  # List to store all the result of the function "AUC_PC_pickle" from the python file "EM.py"
     all_phi_j = []    # List to store the XPER value of each feature + the benchmark
     p = X_test.shape[1]
-    N_coalition_sampled = 2**(p-1)
+    
+    if kernel == False:
+      N_coalition_sampled = 2**(p-1)
+    else:
+      N_coalition_sampled = (2**p) - 2
 
     for var in np.arange(p):  # loop on the number of variables
         print("Variable numéro:", var)
@@ -184,8 +133,8 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN,PM):
                                  N_coalition_sampled=N_coalition_sampled,  # Number of coalitions taken into account for XPER computation
                                  CFP=CFP,
                                  CFN=CFN,
-                                 intercept=False,
-                                 kernel=False)
+                                 intercept=intercept,
+                                 kernel=kernel)
 
         if var == 0:  # Ajout du benchmark
             all_phi_j.append(Contrib[2])  # Add the benchmark to the list of XPER values
@@ -204,105 +153,6 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN,PM):
         phi_i_j = contrib[1].copy()
         df_phi_i_j.iloc[:, i] = phi_i_j.copy()
 
-    PM_XPER = Contrib[3][0]
-    Benchmark_XPER = Contrib[2][0]
-    phi_j_XPER = np.insert(all_phi_j[1:], 0, all_phi_j[0])
-    phi_j_XPER_pct = 100 * (phi_j_XPER[1:] / (phi_j_XPER.sum() - phi_j_XPER[0]))
-    efficiency_XPER = PM - (phi_j_XPER[1:].sum() + Benchmark_XPER)
-    efficiency_bench_XPER = np.array([Benchmark_XPER, efficiency_XPER])
+    return all_contrib, all_phi_j, df_phi_i_j, benchmark_ind, EM_ind
 
-    return all_contrib, all_phi_j, df_phi_i_j, benchmark_ind, EM_ind, efficiency_bench_XPER
-
-#result = calculate_XPER_values(X_test, y_test, gridXGBOOST, Eval_Metric, CFP, CFN)
-#print("Efficiency bench XPER: ", result[-1])
-
-
-# # =============================================================================
-# #                                PM: Kernel XPER
-# # =============================================================================
-# all_contrib = result[0]
-# all_phi_j = result[1]
-# df_phi_i_j = result[2]
-# efficiency_bench_XPER = result[-1]
-# p = X_test.shape[1]
-# N_coalition_sampled = (2**p) - 2   # use all of coalitions: (2**p) - 2 
-# model = gridXGBOOST
-
-# start_time = datetime.now()
-
-
-    
-# Contrib_Kernel = EM.XPER_choice(y = y_test,          # Target values
-#                                    X = X_test,  # Feature values
-#                                    model = model,       # Estimated model
-#                                    Eval_Metric = Eval_Metric,  # Name of the performance metric
-#                                    N_coalition_sampled = N_coalition_sampled, # Number of coalitions taken into account for XPER computation
-#                                    CFP=CFP,
-#                                    CFN=CFN,
-#                                    intercept=False,
-#                                    kernel=True) 
-    
-# time_elapsed = datetime.now() - start_time
-
-# #print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed))
-
-
-# phi, phi_i_j = Contrib_Kernel
-
-# efficiency_Kernel = PM - (phi.sum())
-
-# efficiency_bench_kernel = np.array([phi[0],efficiency_Kernel])
-
-
-
-# # # =============================================================================
-# # #               Give a name to the variable in the dataset
-# # # =============================================================================
-
-# variable_name = ["X" + str(i+1) for i in range(p)] # Give a name to the 6 variables: X1, ..., X6
-
-
-# # # =============================================================================
-# # #             Comparison of XPER "exact" computation vs Kernel XPER
-# # #             Not that this part (comparison) is not to include in the package
-# # # =============================================================================
-
-# import matplotlib.pyplot as plt
-# import seaborn as sns
-
-# fig, axs = plt.subplots(1,2)
-
-# fig.suptitle("Difference between exact XPER values and Kernel approximation")
-
-# axs[0].bar(variable_name,phi[1:],color="red",label="Kernel",align="edge",width=0.6)
-# axs[0].bar(variable_name,all_phi_j[1:],label="Exact",width=0.6) 
-# axs[0].legend() # Add the legend 
-# sns.despine() # Remove the right and to bar of the graphic
-
-
-# axs[1].bar(["Benchmark","PM - sum(phi_j)"],efficiency_bench_kernel,color="red",label="Kernel",align="edge",width=0.6)
-# axs[1].bar(["Benchmark","PM - sum(phi_j)"],efficiency_bench_XPER,label="Exact",width=0.6)
-# sns.despine() # Remove the right and to bar of the graphic
-# fig.tight_layout()
-
-# plt.show()
-
-# # # =============================================================================
-# # #                              End of the comparison
-# # # =============================================================================
-
-# # # =============================================================================
-# # #                           Data visualisation
-# # # =============================================================================
-
-# # Run the file "Visualisation.py" 
-
-# #exec(open('Visualisation.py').read())
-
-
-
-# # # =============================================================================
-# # #           Choice between the results of exact XPER and kernel XPER
-# # # =============================================================================
-
-
+  
