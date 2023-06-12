@@ -113,46 +113,69 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, kernel=F
 
     start_time = datetime.now()
 
-    all_contrib = []  # List to store all the result of the function "AUC_PC_pickle" from the python file "EM.py"
+    all_contrib = []  # List to store all the result of the function "XPER_choice" from the python file "EM.py"
     all_phi_j = []    # List to store the XPER value of each feature + the benchmark
     p = X_test.shape[1]
     
     if kernel == False:
       N_coalition_sampled = 2**(p-1)
+
+      for var in np.arange(p):  # loop on the number of variables
+          print("Variable numéro:", var)
+
+          Contrib = XPER_choice(y=y_test,          # Target values
+                                   X=X_test,       # Feature values / include the intercept
+                                   model=model,       # Estimated model
+                                   Eval_Metric=Eval_Metric,  # Name of the performance metric
+                                   var_interet=var,            # Variable for which to compute XPER value
+                                   N_coalition_sampled=N_coalition_sampled,  # Number of coalitions taken into account for XPER computation
+                                   CFP=CFP,
+                                   CFN=CFN,
+                                   intercept=intercept,
+                                   kernel=kernel)
+
+          if var == 0:  # Ajout du benchmark
+              all_phi_j.append(Contrib[2])  # Add the benchmark to the list of XPER values
+
+          all_contrib.append(Contrib)
+          all_phi_j.append(Contrib[0])  # Add the XPER value to "all_contrib_AUC"
+
+      time_elapsed = datetime.now() - start_time
+
+      phi_j = np.insert(all_phi_j[1:], 0,all_phi_j[0])
+      
+      benchmark_ind = pd.DataFrame(Contrib[4][np.isnan(Contrib[4]) == False], columns=["Individual Benchmark"])
+
+      df_phi_i_j = pd.DataFrame(index=np.arange(len(y_test)), columns=np.arange(p))
+
+      for i, contrib in enumerate(all_contrib):
+          phi_i_j = contrib[1].copy()
+          df_phi_i_j.iloc[:, i] = phi_i_j.copy()
+         
+      phi_i_j = pd.concat([benchmark_ind,df_phi_i_j],axis=1).values
+      
+      return phi_j, phi_i_j
+
+    # =============================================================================
+    #                                Kernel XPER
+    # =============================================================================
+
     else:
+     
       N_coalition_sampled = (2**p) - 2
 
-    for var in np.arange(p):  # loop on the number of variables
-        print("Variable numéro:", var)
+      Contrib_Kernel = EM.XPER_choice(y = y_test,          # Target values
+                                         X = X_test,  # Feature values
+                                         model = model,       # Estimated model
+                                         Eval_Metric = Eval_Metric,  # Name of the performance metric
+                                         N_coalition_sampled = N_coalition_sampled, # Number of coalitions taken into account for XPER computation
+                                         CFP=CFP,
+                                         CFN=CFN,
+                                         intercept=False,
+                                         kernel=True) 
 
-        Contrib = XPER_choice(y=y_test,          # Target values
-                                 X=X_test,       # Feature values / include the intercept
-                                 model=model,       # Estimated model
-                                 Eval_Metric=Eval_Metric,  # Name of the performance metric
-                                 var_interet=var,            # Variable for which to compute XPER value
-                                 N_coalition_sampled=N_coalition_sampled,  # Number of coalitions taken into account for XPER computation
-                                 CFP=CFP,
-                                 CFN=CFN,
-                                 intercept=intercept,
-                                 kernel=kernel)
+      time_elapsed = datetime.now() - start_time
 
-        if var == 0:  # Ajout du benchmark
-            all_phi_j.append(Contrib[2])  # Add the benchmark to the list of XPER values
+      phi, phi_i_j = Contrib_Kernel
 
-        all_contrib.append(Contrib)
-        all_phi_j.append(Contrib[0])  # Add the XPER value to "all_contrib_AUC"
-
-    time_elapsed = datetime.now() - start_time
-
-    benchmark_ind = pd.DataFrame(Contrib[4][np.isnan(Contrib[4]) == False], columns=["Individual Benchmark"])
-    EM_ind = pd.DataFrame(Contrib[5][np.isnan(Contrib[5]) == False], columns=["Individual EM"])
-
-    df_phi_i_j = pd.DataFrame(index=np.arange(len(y_test)), columns=np.arange(p))
-
-    for i, contrib in enumerate(all_contrib):
-        phi_i_j = contrib[1].copy()
-        df_phi_i_j.iloc[:, i] = phi_i_j.copy()
-
-    return all_contrib, all_phi_j, df_phi_i_j, benchmark_ind, EM_ind
-
-  
+      return phi, phi_i_j
