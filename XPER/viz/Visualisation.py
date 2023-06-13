@@ -1,11 +1,13 @@
 # =============================================================================
 #                           Packages
 # =============================================================================
-#import XPER.models.Performance as PM
+import XPER.models.Performance
+import XPER.models.EM
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+
 
 plt.rc('text', usetex = True) # TeX 
 
@@ -63,7 +65,7 @@ def compute_efficiency_kernel(all_contrib, all_phi_j, df_phi_i_j, efficiency_ben
 
     variable_name = ["X" + str(i+1) for i in range(p)]
 
-    return efficiency_bench_kernel
+    return efficiency_bench_kernel, variable_name
 
     
 
@@ -587,6 +589,72 @@ else:
         
     benchmark_v_ind = benchmark_ind.copy()
     
+
+
+
+
+
+def compute_shap_values_with_xper(kernel=True,phi,phi_i_j,all_phi_j,benchmark_ind):
+    """
+    Computes SHAP values using XGBoost model and XPER values.
+
+    Parameters:
+        kernel (bool): If True, XPER values are computed using kernel method.
+                       If False, XPER values are computed using global method.
+                       Default is True.
+
+    Returns:
+        shap.Explanation: SHAP values obtained using XPER values.
+
+    """
+
+    # train XGBoost model
+    X_useless, y_useless = shap.datasets.adult()
+
+    X_useless = X_useless.iloc[:100, :]
+    y_useless = y_useless[:100]
+
+    model = xgboost.XGBClassifier().fit(X_useless, y_useless)
+
+    # compute SHAP values
+    explainer = shap.Explainer(model, X_useless)
+    shap_values = explainer(X_useless)
+
+    if kernel:
+        XPER_v = phi.copy()
+        # XPER value for each feature (global level)
+        # Format: array of size p + 1 (include the benchmark)
+
+        XPER_v_ind = pd.DataFrame(phi_i_j[:, 1:])
+        # Dataframe with the XPER values for each feature
+        # Careful: it does not include the benchmark values
+
+        benchmark_v_ind = pd.DataFrame(phi_i_j[:, 0], columns=["Individual Benchmark"])
+
+    else:
+        XPER_v = np.insert(all_phi_j[1:], 0, all_phi_j[0][0])
+        # XPER value for each feature (global level)
+        # Format: array of size p + 1 (include the benchmark)
+
+        XPER_v_ind = df_phi_i_j.copy()
+        # Dataframe with the XPER values for each feature
+        # Careful: it does not include the benchmark values
+
+        benchmark_v_ind = benchmark_ind.copy()
+
+    return shap_values, XPER_v, XPER_v_ind, benchmark_v_ind
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
