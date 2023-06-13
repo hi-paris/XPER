@@ -13,7 +13,7 @@ Scikit-learn
 XPER can be installed from [PyPI](https://pypi.org/project/XPER):
 
 <pre>
-pip install -i https://test.pypi.org/simple/ XPER==0.0.3
+pip install -i https://test.pypi.org/simple/ XPER==0.0.4
 </pre>
 
 #### Post installation check
@@ -34,7 +34,7 @@ import XPER
 from XPER.datasets.sample import sample_generation
 X_train, y_train, X_test, y_test, p, N, seed  = sample_generation(N=500,p=6,seed=123456)
 ```
-![sample](https://i.postimg.cc/59TwZb8r/Sample.png)
+![sample](images/Sample.png)
 
 
 * Option 2
@@ -45,7 +45,7 @@ df = boston()
 df.head(3)
 ```
 
-![boston](https://i.postimg.cc/85TyfDZ4/Boston.png)
+![boston](images/Boston.png)
 
 #### 2️⃣ Load the trained model or train your model ⚙️
 
@@ -65,7 +65,7 @@ PM = evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, m
 print("Performance Metrics: ",PM)
 ```
 
-![metric](https://i.postimg.cc/Gt5zfDdg/Performance-Metrics.png)
+![metrics](images/Performance-Metrics.png)
 
 ```python
 from XPER.models.Performance import calculate_XPER_values
