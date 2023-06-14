@@ -4,7 +4,6 @@
 from XPER.models.EM import XPER_choice
 from sklearn.metrics import roc_auc_score,brier_score_loss,balanced_accuracy_score,accuracy_score
 import numpy as np
-from datetime import datetime
 import pandas as pd 
 
 def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, model):
@@ -37,12 +36,6 @@ def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, mo
 
     # # Binary predictions on the test sample with a cutoff at 0.5
     y_pred = (y_hat_proba > 0.5)
-
-    # # Predicted probabilities on the training sample
-    y_hat_proba_train = model.predict_proba(X_train)[:,1] 
-
-    # Binary predictions on the training sample with a cutoff at 0.5
-    y_pred_train = (y_hat_proba_train > 0.5)
 
     if Eval_Metric == ["AUC"]:
         
@@ -176,8 +169,6 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, N_coalit
                                          CFN=CFN,
                                          intercept=intercept,
                                          kernel=kernel) 
-
-      time_elapsed = datetime.now() - start_time
 
       phi, phi_i_j = Contrib_Kernel
 
