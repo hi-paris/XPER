@@ -4,6 +4,7 @@
 from XPER.models.EM import XPER_choice
 from sklearn.metrics import roc_auc_score,brier_score_loss,balanced_accuracy_score,accuracy_score
 import numpy as np
+from datetime import datetime
 import pandas as pd 
 
 def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, model):
