@@ -205,9 +205,13 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
         
     elif Eval_Metric == ["Precision"]:
         
-        delta = [np.mean(model_predict(X,model))]
+        delta = []
+
+        shuffle = np.array(range(N)) # list with numbers from 0 to (N-1) 
+        random.shuffle(shuffle)      # Shuffle the list with numbers from 0 to (N-1)
         
-        X_shuffle = None
+        X_shuffle = X[shuffle,:]     # Retrieve the feature values according to
+                                     # order given by the shuffled list
         
     elif Eval_Metric == ["R2"]:
         
