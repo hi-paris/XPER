@@ -227,8 +227,17 @@ class OptimizationClass:
                 G = ((1 - y_hat_pred_i) * (1 - y[j])) / globals()['delta_1']
 
             elif Eval_Metric == ["Precision"]:
+                X_shuffle_combination = X_shuffle.copy()
+                X_shuffle_combination[:, S] = X[:, S].copy()  # Change the value of the feature
+                # values shuffled in column S to the feature values not shuffled
+
+                y_hat_tirage = model_predict(X_shuffle_combination, model)
+                # N predictions / for all individuals
+                
+                delta_n1 = np.mean(y_hat_tirage)
+                
                 y_hat_pred_i = model_predict(X_tirage_i, model)
-                G = (y_hat_pred_i * y[j]) / globals()['delta_1']  # Same as sensitivity but different denominator
+                G = (y_hat_pred_i * y[j]) / delta_n1
 
             elif Eval_Metric == ["MC"]:
                 y_hat_pred_i = model_predict(X_tirage_i, model)
@@ -348,8 +357,18 @@ class OptimizationClass:
                     G_vinteret = ((1 - y_hat_pred_i_vinteret) * (1 - y[j])) / globals()['delta_1']
 
                 elif Eval_Metric == ["Precision"]:
+                    X_shuffle_combination_vinteret = X_shuffle_combination.copy()
+                    X_shuffle_combination_vinteret[:, var_interet] = X[:, var_interet].copy()
+                    # Change the value of the feature of interest in the shuffled database
+                    # to the one of individual i
+
+                    y_hat_tirage_vinteret = model_predict(X_shuffle_combination_vinteret, model)
+                    # N predictions / for all individuals
+
+                    delta_n1 = np.mean(y_hat_tirage_vinteret)
+                    
                     y_hat_pred_i_vinteret = model_predict(X_tirage_i_vinteret, model)
-                    G_vinteret = (y_hat_pred_i_vinteret * y[j]) / globals()['delta_1']
+                    G_vinteret = (y_hat_pred_i_vinteret * y[j]) / delta_n1
 
                 elif Eval_Metric == ["MC"]:
                     y_hat_pred_i_vinteret = model_predict(X_tirage_i_vinteret, model)
