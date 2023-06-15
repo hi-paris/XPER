@@ -1,5 +1,3 @@
-
-
 """The setup script."""
 
 from setuptools import setup, find_packages
@@ -43,6 +41,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/hi-paris/XPER',
-    version='0.0.4',
+    version='0.0.5',
     zip_safe=False,
 )
