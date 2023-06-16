@@ -7,7 +7,7 @@ import numpy as np
 from datetime import datetime
 import pandas as pd 
 
-def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, model):
+def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, model, CFP=None, CFN=None):
     """
      Evaluate the performance of a model using various evaluation metrics.
 
@@ -57,8 +57,8 @@ def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, mo
     elif Eval_Metric == ["MC"]:
 
         N = len(y_pred)
-        CFP = 1
-        CFN = 5
+        # CFP = 1
+        # CFN = 5
         FP, FN = np.zeros(shape=N), np.zeros(shape=(N))
         for i in list(range(N)):
             FP[i] = (y_pred[i] == 0 and y_test[i] == 1)
@@ -82,7 +82,7 @@ def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, mo
         
     return PM
 
-def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, N_coalition_sampled = None , kernel=False, intercept=False):
+def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP = None, CFN = None, N_coalition_sampled = None, kernel=True, intercept=False):
     """
     Calculates XPER (Extended Partial-Expected Ranking) values for each feature based on the given inputs.
 
@@ -94,15 +94,14 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, N_coalit
         CFP: Cost of false positive.
         CFN: Cost of false negative.
         N_coalition_sampled: Number of coalitions considered to compute the XPER values. Minimum = 1 and maximum = (2**p) - 2.
-        kernel: True if we approximate the XPER values (appropriate when the number of features is large), False otherwise
-        intercept: True if the model and the features include an intercept, False otherwise
+        kernel: True if we approximate the XPER values (appropriate when the number of features is large), False otherwise.
+        intercept: True if the model and the features include an intercept, False otherwise.
  
     Returns:
         tuple: A tuple containing the following elements:
-            - all_contrib (list): List to store all the result of the function "XPER_choice" from the python file "EM.py".
-            - all_phi_j (list): List to store the XPER value of each feature + the benchmark.
-            - df_phi_i_j (pandas.DataFrame): DataFrame of shape (n_samples, n_features) containing the XPER values for each feature.
-            - benchmark_ind (pandas.DataFrame): DataFrame containing the benchmark performance metric for each individual.
+            - phi (numpy.ndarray): Array of shape (n_features + 1) containing the XPER value of each feature and the benchmark value of the performance metric (first value). 
+            - phi_i_j (numpy.ndarray): Array of shape (n_samples, n_features + 1) containing the individual XPER values of each feature for all individuals and the corresponding
+                                       benchmark values of the performance metric (first column).
     """
 
     start_time = datetime.now()
