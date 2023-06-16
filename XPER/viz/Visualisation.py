@@ -18,57 +18,6 @@ plt.rc('text', usetex = True) # TeX
 import numpy as np
 from datetime import datetime
 
-def compute_efficiency_kernel(all_contrib, all_phi_j, df_phi_i_j, efficiency_bench_XPER, X_test, model, Eval_Metric, CFP, CFN):
-    """
-    Compute efficiency using XPER kernel.
-
-    Parameters:
-        all_contrib (numpy.ndarray): Array of all contributions.
-        all_phi_j (numpy.ndarray): Array of all phi_j values.
-        df_phi_i_j (numpy.ndarray): Array of df_phi_i_j values.
-        efficiency_bench_XPER (float): Efficiency benchmark for XPER.
-        X_test (numpy.ndarray): Feature values.
-        model (object): Estimated model.
-        Eval_Metric (str): Name of the performance metric.
-        CFP (float): Cost of false positive.
-        CFN (float): Cost of false negative.
-
-    Returns:
-        numpy.ndarray: Array containing efficiency benchmark using XPER kernel.
-
-    Raises:
-        None
-    """
-
-    p = X_test.shape[1]
-    N_coalition_sampled = (2**p) - 2
-
-    start_time = datetime.now()
-
-    Contrib_Kernel = EM.XPER_choice(y=all_contrib,
-                                   X=all_phi_j,
-                                   model=model,
-                                   Eval_Metric=Eval_Metric,
-                                   N_coalition_sampled=N_coalition_sampled,
-                                   CFP=CFP,
-                                   CFN=CFN,
-                                   intercept=False,
-                                   kernel=True)
-
-    time_elapsed = datetime.now() - start_time
-
-    phi, phi_i_j = Contrib_Kernel
-
-    efficiency_Kernel = df_phi_i_j - phi.sum()
-
-    efficiency_bench_kernel = np.array([phi[0], efficiency_Kernel])
-
-    variable_name = ["X" + str(i+1) for i in range(p)]
-
-    return efficiency_bench_kernel, variable_name
-
-    
-
 # =============================================================================
 #       Bar plot: X-axis = phi_j value or pct // y-axis = Feature names
 # =============================================================================
@@ -111,8 +60,6 @@ def feature_imp(Contribution,data,labels,metric,nb_var=5,percentage=True,echanti
     sns.despine()
     plt.tight_layout()
     plt.axvline(x=0, color='black', ls='--', lw=1)
-    #plt.savefig('./Figures/Global_ESHAP_XGB_{}_{}.eps'.format(metric,echantillon), format='eps', dpi = 1200, bbox_inches='tight')
-    #plt.savefig('./Figures/Global_ESHAP_XGB_{}_{}.pdf'.format(metric,echantillon), format='pdf', dpi = 1200, bbox_inches='tight')
     plt.show()
     
   
@@ -762,20 +709,4 @@ force_plot(XPER=XPER_values,
                           # the features. If the contribution of a feature 
                           # is very small then we do not display the feature 
                           # to avoid an overloaded graphic.
-# # =============================================================================
-
-# # =============================================================================
-# # Look at the result and confirm that we display what we wanted 
-# # =============================================================================
-
-perf_value_ind
-
-XPER_values.sum()
-
-benchmark_ind_i
-
-X_ind_i
-
-# # =============================================================================
-# # End of the verification
 # # =============================================================================
