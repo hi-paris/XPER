@@ -161,7 +161,7 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, N_coalit
        
         N_coalition_sampled = (2**p) - 2 # Maximum number of coalitions 
        
-      Contrib_Kernel = EM.XPER_choice(y = y_test,          # Target values
+      Contrib_Kernel = XPER_choice(y = y_test,          # Target values
                                          X = X_test,  # Feature values
                                          model = model,       # Estimated model
                                          Eval_Metric = Eval_Metric,  # Name of the performance metric
