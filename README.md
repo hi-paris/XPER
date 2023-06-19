@@ -37,6 +37,9 @@ p = 6 # Number of features
 N = 500 # Number of individuals
 X_train, y_train, X_test, y_test, p, N, seed  = sample_generation(N=N,p=p,seed=123456)
 ```
+
+<!--- Comments are Fun --->
+
 ![sample](images/Sample.png)
 
 
