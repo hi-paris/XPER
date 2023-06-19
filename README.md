@@ -108,7 +108,7 @@ viz.force_plot(XPER_values=result, instance=1, X_test=X_test, variable_name=labe
 ## 03 Acknowledgements
 
 The contributors to this library are 
-* [Sullivan Hué]([https://www.hec.edu/fr/faculty-research/faculty-directory/faculty-member/perignon-christophe](https://www.amse-aixmarseille.fr/fr/membres/hu%C3%A9))
+* [Sullivan Hué](https://www.amse-aixmarseille.fr/fr/membres/hu%C3%A9)
 * [Christophe Hurlin](https://sites.google.com/view/christophe-hurlin/home)
 * [Christophe Pérignon](https://www.hec.edu/fr/faculty-research/faculty-directory/faculty-member/perignon-christophe)
 * [Sébastien Saurin](https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=4582330)
