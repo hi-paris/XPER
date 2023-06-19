@@ -13,7 +13,7 @@ Scikit-learn
 XPER can be installed from [PyPI](https://pypi.org/project/XPER):
 
 <pre>
-pip install -i https://test.pypi.org/simple/ XPER==0.0.6
+pip install -i https://test.pypi.org/simple/ XPER==0.0.7
 </pre>
 
 #### Post installation check
