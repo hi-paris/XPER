@@ -64,7 +64,7 @@ model = joblib.load('xgboost_model.joblib')
 from XPER.models.Performance import evaluate_model_performance
 Eval_Metric = ["Accuracy"]
 PM = evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, model)
-print("Performance Metrics: ",PM)
+print("Performance level: ",PM)
 ```
 
 ![metrics](images/performance.jpg)
