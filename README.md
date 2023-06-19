@@ -67,7 +67,7 @@ PM = evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, m
 print("Performance Metrics: ",PM)
 ```
 
-![metrics](images/Performance-Metrics.png)
+![metrics](images/performance.png)
 
 ```python
 from XPER.models.Performance import calculate_XPER_values
