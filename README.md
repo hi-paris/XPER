@@ -28,7 +28,7 @@ import XPER
 
 #### 1️⃣ Load the Data 💽
 
-* Option 1 
+<!--- * Option 1 --->
 ```python
 import XPER
 from XPER.datasets.sample import sample_generation
