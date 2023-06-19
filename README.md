@@ -88,19 +88,21 @@ labels = ["X" + str(i+1) for i in range(p)]
 ```python
 viz.bar_plot(XPER_values=result, X_test=pd.DataFrame(X_test), labels=labels, p=p,percentage=True)
 ```
+![sample](images/bar_plot.png)
 
 ##### Beeswarn plot
 
 ```python
 viz.beeswarn_plot(XPER_values=result, X_test=pd.DataFrame(X_test), labels=labels)
 ```
+![sample](images/beeswarn.png)
 
 ##### Force plot
 
 ```python
 viz.force_plot(XPER_values=result, instance=1, X_test=X_test, variable_name=labels, figsize=(16,4))
 ```
-
+![sample](images/force.png)
 
 ## 03 Acknowledgements
 
