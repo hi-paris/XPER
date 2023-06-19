@@ -38,10 +38,7 @@ N = 500 # Number of individuals
 X_train, y_train, X_test, y_test, p, N, seed  = sample_generation(N=N,p=p,seed=123456)
 ```
 
-<!--- Comments are Fun --->
-
-![sample](images/Sample.png)
-
+<!--- ![sample](images/Sample.png) 
 
 * Option 2
 ```python
@@ -50,8 +47,9 @@ from XPER.datasets.load_data import boston
 df = boston()
 df.head(3)
 ```
-
 ![boston](images/Boston.png)
+
+--->
 
 #### 2️⃣ Load the trained model or train your model ⚙️
 
