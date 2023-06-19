@@ -167,7 +167,7 @@ class visualizationClass:
                  fontsize=13, color='#FF0D57',
                  horizontalalignment='center')
         
-    def force_plot(XPER_values,instance, X_test, variable_name,savefig_name,figsize=(8,4),min_perc=0.00001):
+    def force_plot(XPER_values,instance, X_test, variable_name,figsize=(8,4),min_perc=0.00001):
         
         
         ind_i = instance
@@ -446,7 +446,7 @@ class visualizationClass:
                 if key != 'top':
                     spine.set_visible(False)
     
-        plt.savefig(f'./Figures/{savefig_name}.pdf', format='pdf', dpi = 1200)
+        #plt.savefig(f'./Figures/{savefig_name}.pdf', format='pdf', dpi = 1200)
     
         plt.show()  
             
