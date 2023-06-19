@@ -32,7 +32,10 @@ import XPER
 ```python
 import XPER
 from XPER.datasets.sample import sample_generation
-X_train, y_train, X_test, y_test, p, N, seed  = sample_generation(N=500,p=6,seed=123456)
+
+p = 6 # Number of features
+N = 500 # Number of individuals
+X_train, y_train, X_test, y_test, p, N, seed  = sample_generation(N=N,p=p,seed=123456)
 ```
 ![sample](images/Sample.png)
 
@@ -52,15 +55,13 @@ df.head(3)
 ```python
 import joblib
 model = joblib.load('xgboost_model.joblib')
-result = loaded_model.score(X_test, y_test)
-print("Model performance: ",result)
 ```
 
 #### 3️⃣ Monitor Performance 📈
 
 ```python
 from XPER.models.Performance import evaluate_model_performance
-Eval_Metric = ["Precision"]
+Eval_Metric = ["Accuracy"]
 PM = evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, model)
 print("Performance Metrics: ",PM)
 ```
@@ -72,7 +73,27 @@ from XPER.models.Performance import calculate_XPER_values
 CFP = None
 CFN = None
 result = calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, PM)
-print("Efficiency bench XPER: ", result[-1])
+```
+
+#### 4 Visualisation
+
+```python
+from XPER.viz.Visualisation import visualizationClass as viz
+
+labels = ["X" + str(i+1) for i in range(p)]
+
+# Bar plot
+
+viz.bar_plot(XPER_values=result, X_test=pd.DataFrame(X_test), labels=labels, p=p,percentage=True)
+
+# Beeswarn plot
+
+viz.beeswarn_plot(XPER_values=result, X_test=pd.DataFrame(X_test), labels=labels)
+
+# Force plot
+
+viz.force_plot(XPER_values=result, instance=1, X_test=X_test, variable_name=labels, figsize=(16,4))
+
 ```
 
 ## 03 Acknowledgements
