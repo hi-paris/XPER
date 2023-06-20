@@ -73,12 +73,13 @@ print("Performance level: ",PM)
 from XPER.models.Performance import calculate_XPER_values
 CFP = None
 CFN = None
-result = calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN, PM)
+result = calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN)
 ```
 
 #### 4 Visualisation
 
 ```python
+import pandas as pd
 from XPER.viz.Visualisation import visualizationClass as viz
 
 labels = ["X" + str(i+1) for i in range(p)]
