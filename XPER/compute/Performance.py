@@ -1,11 +1,12 @@
 # =============================================================================
 #                               Packages
 # =============================================================================
-from XPER.models.EM import XPER_choice
+from XPER.compute.EM import XPER_choice
 from sklearn.metrics import roc_auc_score,brier_score_loss,balanced_accuracy_score,accuracy_score
 import numpy as np
 from datetime import datetime
 import pandas as pd 
+import tqdm
 
 def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, model, CFP=None, CFN=None):
     """
@@ -113,9 +114,10 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP = None, CFN = 
     if kernel == False:
      
       N_coalition_sampled = 2**(p-1)
-
+      total_iterations = p
+      progress_bar = tqdm(total=total_iterations, desc="Performing computation")
       for var in np.arange(p):  # loop on the number of variables
-          print("Variable numéro:", var)
+          #print("Variable numéro:", var)
 
           Contrib = XPER_choice(y=y_test,          # Target values
                                    X=X_test,       # Feature values / include the intercept
@@ -127,13 +129,13 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP = None, CFN = 
                                    CFN=CFN,
                                    intercept=intercept,
                                    kernel=kernel)
-
+          progress_bar.update(1)
           if var == 0:  # Ajout du benchmark
               all_phi_j.append(Contrib[2])  # Add the benchmark to the list of XPER values
 
           all_contrib.append(Contrib)
           all_phi_j.append(Contrib[0])  # Add the XPER value to "all_contrib_AUC"
-
+      progress_bar.close()
       time_elapsed = datetime.now() - start_time
 
       phi_j = np.insert(all_phi_j[1:], 0,all_phi_j[0])

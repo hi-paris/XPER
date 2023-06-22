@@ -4,7 +4,8 @@ import numpy as np
 from sklearn.metrics import roc_auc_score
 from scipy.stats import norm
 import statsmodels.api as sm
-def sample_generation(N=500, p=6, seed=123456, pct_train=0.7, mean=np.repeat(0, p), cov=np.repeat(1.5,p)*np.eye(p), beta=np.repeat(0.5,p), beta_0=0.75):
+#def sample_generation(N=500, p=6, seed=123456, pct_train=0.7, mean=np.repeat(0, p), cov=np.repeat(1.5,p)*np.eye(p), beta=np.repeat(0.5,p), beta_0=0.75):
+def sample_generation(N=500, p=6, seed=123456, pct_train=0.7, mean=None, cov=None, beta=None, beta_0=None):
     """
     Generate a synthetic dataset for binary classification using a multivariate normal distribution.
 
@@ -30,7 +31,14 @@ def sample_generation(N=500, p=6, seed=123456, pct_train=0.7, mean=np.repeat(0, 
         p (int): Number of explanatory variables (default: 6)
         seed (int): Random seed used
     """
-
+    if mean is None:
+        mean = np.repeat(0, p)
+    if cov is None:
+        cov = np.repeat(1.5, p) * np.eye(p)
+    if beta is None:
+        beta = np.repeat(0.5, p)
+    if beta_0 is None:
+        beta_0 = 0.75
     # Set the random seed for reproducibility
     random.seed(seed)
     np.random.seed(seed)

@@ -11,7 +11,7 @@ Created on Thu May  5 19:56:18 2022
 # =============================================================================
 
 #from Optimisation import OptimizationClass
-from XPER.models.Optimisation import OptimizationClass
+from XPER.compute.Optimisation import OptimizationClass
 import random
 import numpy as np 
 import concurrent.futures
@@ -255,8 +255,8 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
         
         combination_list_sampled = random.sample(combination_list, N_coalition_sampled) # sample without replacement (no need in reality)
         
-        print("Nombre de coalitions totales:",len(combination_list))
-        print("Part du nombre de coalitions:",round(100*(N_coalition_sampled/len(combination_list)),4),"%")
+        #print("Nombre de coalitions totales:",len(combination_list))
+        #print("Part du nombre de coalitions:",round(100*(N_coalition_sampled/len(combination_list)),4),"%")
     # =============================================================================
 
     weight = np.zeros(shape=(N_coalition_sampled,1))          # column vector with N_coalition_sampled 0 elements
@@ -289,7 +289,7 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
     
         for result in concurrent.futures.as_completed(results):
             s = result.result()[0]
-            print("Coalition (results)",s)
+            #print("Coalition (results)",s)
             weight[s,:] = result.result()[1]
             Metric[s] = result.result()[2]
             Metric_ind[s,:] = result.result()[3]
