@@ -16,11 +16,14 @@ from matplotlib import lines
 from matplotlib.path import Path
 from matplotlib.patches import PathPatch
 import matplotlib
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+import plotly.express as px
 
 #plt.rc('text', usetex = True) # TeX 
 
 
-class visualizationClass:
+class visualizationClass():
     
     def __init__(self,X_test, labels, XPER_values, XPER_v, XPER_v_ind, benchmark_v_ind,p):
         
@@ -36,49 +39,96 @@ class visualizationClass:
     #       Bar plot: X-axis = phi_j value or pct // y-axis = Feature names
     # =============================================================================
     
-    def bar_plot(XPER_values,X_test,labels,p,percentage=True):
-        
+    def bar_plot(XPER_values, X_test, labels, p, percentage=True):
+        """
+        Create a bar plot to visualize contributions.
+
+        Parameters
+        ----------
+        XPER_values : numpy.ndarray
+            Array of contributions.
+        X_test : pandas.DataFrame
+            Test data used for labeling the plot.
+        labels : list
+            List of labels for the contributions.
+        p : int
+            Number of top contributions to display.
+        percentage : bool, optional
+            If True, contributions are shown as percentages. Default is True.
+
+        Returns
+        -------
+        None
+
+        Examples
+        --------
+        >>> import numpy as np
+        >>> import pandas as pd
+        >>> import plotly.graph_objects as go
+        >>> import plotly.express as px
+        >>> XPER_values = np.array([0.2, 0.3, 0.5])
+        >>> X_test = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})
+        >>> labels = ['Label 1', 'Label 2', 'Label 3']
+        >>> p = 2
+        >>> bar_plot(XPER_values, X_test, labels, p)
+
+        Notes
+        -----
+        This function creates a horizontal bar plot to visualize contributions. The contributions are provided as an array
+        in `XPER_values`, which represents the contributions of each feature or metric. The `X_test` DataFrame is used to
+        label the plot based on the column names. The `labels` list provides additional labels for the contributions.
+        The `p` parameter determines the number of top contributions to display.
+
+        If `percentage` is True, the contributions are shown as percentages of the total contribution. Otherwise, the
+        contributions are displayed as absolute values.
+
+        The plot is created using plotly.graph_objects and plotly.express libraries. The bars are colored using a gradient
+        from RGB(249, 218, 37) to RGB(99, 2, 164). The y-axis displays the labels and the x-axis represents the contribution
+        values. The plot is displayed using fig.show().
+        """
         Contribution = XPER_values[0].copy()
-        
+
         ecart_contrib = sum(Contribution) - Contribution[0]
-                                          
-        if percentage == True:       
-    
-            Contribution = (Contribution / ecart_contrib)*100
-        
-            print("Contribution (%) sum: ", sum(Contribution[1:]) )
-            
-        selection = pd.DataFrame(Contribution[1:],index=X_test.columns,columns=["Metric"])
-        
-        selection["Labels"] = labels
-        
-        selection["absolute"] = abs(selection["Metric"])
-        
-        testons = selection.sort_values(by="absolute",ascending=False)[:p].index
-        
-        final_selection_values = selection.loc[testons,"Metric"].values
-        final_selection_labels = selection.loc[testons,"Labels"]
-        
-        plt.rcdefaults()
-        fig, ax = plt.subplots()
-        
-        y_pos = np.arange(0,2*len(final_selection_values),2)
-        
-        ax.barh(y_pos, final_selection_values, align='center',color="#893F45")
-        ax.set_yticks(y_pos)
-        ax.set_yticklabels(final_selection_labels)
-        ax.invert_yaxis()  # labels read top-to-bottom
+
         if percentage == True:
-            ax.set_xlabel('Contribution (%)')
+            Contribution = (Contribution / ecart_contrib) * 100
+
+            print("Contribution (%) sum: ", sum(Contribution[1:]))
+
+        selection = pd.DataFrame(Contribution[1:], index=X_test.columns, columns=["Metric"])
+
+        selection["Labels"] = labels
+
+        selection["absolute"] = abs(selection["Metric"])
+
+        testons = selection.sort_values(by="absolute", ascending=False)[:p].index
+
+        final_selection_values = selection.loc[testons, "Metric"].values
+        final_selection_labels = selection.loc[testons, "Labels"]
+
+        colorscale = [[0, 'rgb(4, 123, 244)'], [1, 'rgb(174, 20, 166)']]
+
+        fig = go.Figure()
+        fig.add_trace(go.Bar(
+            x=final_selection_values,
+            y=final_selection_labels,
+            orientation='h',
+            marker=dict(color=final_selection_values, colorscale=colorscale)
+        ))
+
+        if percentage == True:
+            fig.update_layout(xaxis_title='Contribution (%)')
         else:
-            ax.set_xlabel('Contribution')
-            
-        sns.despine()
-        plt.tight_layout()
-        plt.axvline(x=0, color='black', ls='--', lw=1)
-        plt.show()
-        
-    
+            fig.update_layout(xaxis_title='Contribution')
+
+        fig.update_layout(
+            yaxis=dict(autorange="reversed"),
+            showlegend=False,
+            plot_bgcolor='white'
+        )
+
+        fig.show()
+
     def beeswarn_plot(XPER_values,X_test,labels):
         
         XPER_v_ind = pd.DataFrame(XPER_values[1][:,1:])
@@ -139,9 +189,7 @@ class visualizationClass:
         plt.xlabel("Contribution")
         plt.show()
 
-    
-  
-    
+        
     # =============================================================================
     #                                   Force plots
     # =============================================================================
@@ -152,19 +200,19 @@ class visualizationClass:
     
     def draw_higher_lower_element(out_value, offset_text):
         plt.text(out_value - offset_text, 0.495, 'higher',
-                 fontsize=13, color='#FF0D57',
+                 fontsize=13, color='#f2a2ee',
                  horizontalalignment='right')
     
         plt.text(out_value + offset_text, 0.495, 'lower',
-                 fontsize=13, color='#1E88E5',
+                 fontsize=13, color='#92c7fc',
                  horizontalalignment='left')
         
         plt.text(out_value, 0.49, r'$\leftarrow$',
-                 fontsize=13, color='#1E88E5',
+                 fontsize=13, color='#92c7fc',
                  horizontalalignment='center')
         
         plt.text(out_value, 0.515, r'$\rightarrow$',
-                 fontsize=13, color='#FF0D57',
+                 fontsize=13, color='#f2a2ee',
                  horizontalalignment='center')
         
     def force_plot(XPER_values,instance, X_test, variable_name,figsize=(8,4),min_perc=0.00001):
@@ -263,7 +311,7 @@ class visualizationClass:
                                (base_x, base_height),
                                (base_x - values - width_separators, base_height),
                                (base_x - cut_x - width_separators, cut_y)
-                            ], closed=True, fill=True,facecolor="#FFC3D5", linewidth=0) #  "#FFC3D5"
+                            ], closed=True, fill=True,facecolor="#f2a2ee", linewidth=0) #  "#FFC3D5"
                             
                 plt.gca().add_patch(polygon_sep)
                                  
@@ -274,7 +322,7 @@ class visualizationClass:
                                (base_x, base_height),
                                (base_x - values, base_height),
                                (base_x - cut_x, cut_y)
-                            ], closed=True, fill=True,facecolor="#FF0D57", linewidth=0) #  "#FF0D57"
+                            ], closed=True, fill=True,facecolor="#ae14a6", linewidth=0) #  "#FF0D57"
                             
                 plt.gca().add_patch(polygon)
      
@@ -294,7 +342,7 @@ class visualizationClass:
                             (base_x - values - width_separators , base_height),
                             (base_x - width_separators,base_height),
                             (ancien_cut_x- width_separators, cut_y)], 
-                            closed=True, fill=True,facecolor="#FFC3D5", linewidth=0) #  "#FFC3D5"
+                            closed=True, fill=True,facecolor="#f2a2ee", linewidth=0) #  "#FFC3D5"
                             
                 plt.gca().add_patch(polygon_sep)
                        
@@ -306,7 +354,7 @@ class visualizationClass:
                             (base_x - values , base_height),
                             (base_x ,base_height),
                             (ancien_cut_x, cut_y)],
-                                closed=True, fill=True,facecolor="#FF0D57", linewidth=0) #  "#FF0D57"
+                                closed=True, fill=True,facecolor="#ae14a6", linewidth=0) #  "#FF0D57"
                 
                 plt.gca().add_patch(polygon)    
             
@@ -338,7 +386,7 @@ class visualizationClass:
                                (base_x, base_height),
                                (base_x + values + width_separators, base_height),
                                (base_x + cut_x + width_separators, cut_y)
-                            ], closed=True, fill=True,facecolor="#D1E6FA", linewidth=0) #  "#D1E6FA" 
+                            ], closed=True, fill=True,facecolor="#92c7fc", linewidth=0) #  "#D1E6FA" 
                             
                 plt.gca().add_patch(polygon_sep)
                                     
@@ -349,7 +397,7 @@ class visualizationClass:
                                (base_x, base_height),
                                (base_x + values, base_height),
                                (base_x + cut_x, cut_y)
-                            ], closed=True, fill=True,facecolor="#1E88E5", linewidth=0) #  
+                            ], closed=True, fill=True,facecolor="#047bf4", linewidth=0) #  
                             
                 plt.gca().add_patch(polygon)
     
@@ -369,7 +417,7 @@ class visualizationClass:
                             (base_x + values + width_separators , base_height),
                             (base_x + width_separators,base_height),
                             (ancien_cut_x+ width_separators, cut_y)], 
-                            closed=True, fill=True,facecolor="#D1E6FA", linewidth=0) # "#FFC3D5" "#D1E6FA"
+                            closed=True, fill=True,facecolor="#92c7fc", linewidth=0) # "#FFC3D5" "#D1E6FA"
                             
                 plt.gca().add_patch(polygon_sep)
                        
@@ -381,7 +429,7 @@ class visualizationClass:
                             (base_x + values , base_height),
                             (base_x ,base_height),
                             (ancien_cut_x, cut_y)],
-                                closed=True, fill=True,facecolor="#1E88E5", linewidth=0) #  "#1E88E5"
+                                closed=True, fill=True,facecolor="#047bf4", linewidth=0) #  "#1E88E5"
                 
                 plt.gca().add_patch(polygon)    
             
@@ -461,11 +509,11 @@ class visualizationClass:
         
         # Define variables specific to positive and negative effect features
         if feature_type == 'positive':
-            colors = ['#FF0D57', '#FFC3D5'] # ['#FF0D57', '#FFC3D5'] ['#FF0D57', '#FFC3D5']
+            colors = ['#f2a2ee', '#ae14a6'] # ['#FF0D57', '#FFC3D5'] ['#FF0D57', '#FFC3D5']
             alignement = 'right'
             sign = 1
         else:
-            colors =  ['#1E88E5', '#D1E6FA']# ['#1E88E5', '#D1E6FA']
+            colors =  ['#92c7fc', '#047bf4']# ['#1E88E5', '#D1E6FA']
             alignement = 'left'
             sign = -1
         
