@@ -8,6 +8,8 @@ from datetime import datetime
 import pandas as pd 
 import tqdm
 
+
+
 def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, model, CFP=None, CFN=None):
     """
      Evaluate the performance of a model using various evaluation metrics.
@@ -82,6 +84,9 @@ def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, mo
         PM = np.mean((y_test*y_pred)/np.mean(y_pred))  # Compute the precision on the test sample   
         
     return PM
+
+
+
 
 def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP = None, CFN = None, N_coalition_sampled = None, kernel=True, intercept=False):
     """
