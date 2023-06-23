@@ -93,7 +93,7 @@ class visualizationClass():
         if percentage == True:
             Contribution = (Contribution / ecart_contrib) * 100
 
-            print("Contribution (%) sum: ", sum(Contribution[1:]))
+            #print("Contribution (%) sum: ", sum(Contribution[1:]))
 
         selection = pd.DataFrame(Contribution[1:], index=X_test.columns, columns=["Metric"])
 
@@ -106,7 +106,7 @@ class visualizationClass():
         final_selection_values = selection.loc[testons, "Metric"].values
         final_selection_labels = selection.loc[testons, "Labels"]
 
-        colorscale = [[0, 'rgb(4, 123, 244)'], [1, 'rgb(174, 20, 166)']]
+        colorscale = [[0, 'rgb(29, 166, 88)'], [1, 'rgb(234, 96, 47)']]
 
         fig = go.Figure()
         fig.add_trace(go.Bar(
@@ -200,19 +200,19 @@ class visualizationClass():
     
     def draw_higher_lower_element(out_value, offset_text):
         plt.text(out_value - offset_text, 0.495, 'higher',
-                 fontsize=13, color='#f2a2ee',
+                 fontsize=13, color='#ea602f',
                  horizontalalignment='right')
     
         plt.text(out_value + offset_text, 0.495, 'lower',
-                 fontsize=13, color='#92c7fc',
+                 fontsize=13, color='#1da658',
                  horizontalalignment='left')
         
         plt.text(out_value, 0.49, r'$\leftarrow$',
-                 fontsize=13, color='#92c7fc',
+                 fontsize=13, color='#1da658',
                  horizontalalignment='center')
         
         plt.text(out_value, 0.515, r'$\rightarrow$',
-                 fontsize=13, color='#f2a2ee',
+                 fontsize=13, color='#ea602f',
                  horizontalalignment='center')
         
     def force_plot(XPER_values,instance, X_test, variable_name,figsize=(8,4),min_perc=0.00001):
@@ -311,7 +311,7 @@ class visualizationClass():
                                (base_x, base_height),
                                (base_x - values - width_separators, base_height),
                                (base_x - cut_x - width_separators, cut_y)
-                            ], closed=True, fill=True,facecolor="#f2a2ee", linewidth=0) #  "#FFC3D5"
+                            ], closed=True, fill=True,facecolor="#ed8f6d", linewidth=0) #  "#FFC3D5"
                             
                 plt.gca().add_patch(polygon_sep)
                                  
@@ -322,7 +322,7 @@ class visualizationClass():
                                (base_x, base_height),
                                (base_x - values, base_height),
                                (base_x - cut_x, cut_y)
-                            ], closed=True, fill=True,facecolor="#ae14a6", linewidth=0) #  "#FF0D57"
+                            ], closed=True, fill=True,facecolor="#ea602f", linewidth=0) #  "#FF0D57"
                             
                 plt.gca().add_patch(polygon)
      
@@ -342,7 +342,7 @@ class visualizationClass():
                             (base_x - values - width_separators , base_height),
                             (base_x - width_separators,base_height),
                             (ancien_cut_x- width_separators, cut_y)], 
-                            closed=True, fill=True,facecolor="#f2a2ee", linewidth=0) #  "#FFC3D5"
+                            closed=True, fill=True,facecolor="#ed8f6d", linewidth=0) #  "#FFC3D5"
                             
                 plt.gca().add_patch(polygon_sep)
                        
@@ -354,7 +354,7 @@ class visualizationClass():
                             (base_x - values , base_height),
                             (base_x ,base_height),
                             (ancien_cut_x, cut_y)],
-                                closed=True, fill=True,facecolor="#ae14a6", linewidth=0) #  "#FF0D57"
+                                closed=True, fill=True,facecolor="#ea602f", linewidth=0) #  "#FF0D57"
                 
                 plt.gca().add_patch(polygon)    
             
@@ -386,7 +386,7 @@ class visualizationClass():
                                (base_x, base_height),
                                (base_x + values + width_separators, base_height),
                                (base_x + cut_x + width_separators, cut_y)
-                            ], closed=True, fill=True,facecolor="#92c7fc", linewidth=0) #  "#D1E6FA" 
+                            ], closed=True, fill=True,facecolor="#56a378", linewidth=0) #  "#D1E6FA" 
                             
                 plt.gca().add_patch(polygon_sep)
                                     
@@ -397,7 +397,7 @@ class visualizationClass():
                                (base_x, base_height),
                                (base_x + values, base_height),
                                (base_x + cut_x, cut_y)
-                            ], closed=True, fill=True,facecolor="#047bf4", linewidth=0) #  
+                            ], closed=True, fill=True,facecolor="#1da658", linewidth=0) #  
                             
                 plt.gca().add_patch(polygon)
     
@@ -417,7 +417,7 @@ class visualizationClass():
                             (base_x + values + width_separators , base_height),
                             (base_x + width_separators,base_height),
                             (ancien_cut_x+ width_separators, cut_y)], 
-                            closed=True, fill=True,facecolor="#92c7fc", linewidth=0) # "#FFC3D5" "#D1E6FA"
+                            closed=True, fill=True,facecolor="#56a378", linewidth=0) # "#FFC3D5" "#D1E6FA"
                             
                 plt.gca().add_patch(polygon_sep)
                        
@@ -429,7 +429,7 @@ class visualizationClass():
                             (base_x + values , base_height),
                             (base_x ,base_height),
                             (ancien_cut_x, cut_y)],
-                                closed=True, fill=True,facecolor="#047bf4", linewidth=0) #  "#1E88E5"
+                                closed=True, fill=True,facecolor="#1da658", linewidth=0) #  "#1E88E5"
                 
                 plt.gca().add_patch(polygon)    
             
@@ -509,11 +509,11 @@ class visualizationClass():
         
         # Define variables specific to positive and negative effect features
         if feature_type == 'positive':
-            colors = ['#f2a2ee', '#ae14a6'] # ['#FF0D57', '#FFC3D5'] ['#FF0D57', '#FFC3D5']
+            colors = ['#ed8f6d', '#ea602f'] # ['#FF0D57', '#FFC3D5'] ['#FF0D57', '#FFC3D5']
             alignement = 'right'
             sign = 1
         else:
-            colors =  ['#92c7fc', '#047bf4']# ['#1E88E5', '#D1E6FA']
+            colors =  ['#56a378', '#1da658']# ['#1E88E5', '#D1E6FA']
             alignement = 'left'
             sign = -1
         

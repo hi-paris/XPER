@@ -6,7 +6,11 @@ from sklearn.metrics import roc_auc_score,brier_score_loss,balanced_accuracy_sco
 import numpy as np
 from datetime import datetime
 import pandas as pd 
-import tqdm
+from tqdm import tqdm
+import warnings
+
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 
 
 
@@ -84,8 +88,6 @@ def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, mo
         PM = np.mean((y_test*y_pred)/np.mean(y_pred))  # Compute the precision on the test sample   
         
     return PM
-
-
 
 
 def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP = None, CFN = None, N_coalition_sampled = None, kernel=True, intercept=False):
