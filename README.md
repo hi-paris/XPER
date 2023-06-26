@@ -16,7 +16,7 @@ Scikit-learn
 XPER can be installed from [PyPI](https://pypi.org/project/XPER):
 
 <pre>
-pip install -i https://test.pypi.org/simple/ XPER==0.0.7
+pip install XPER
 </pre>
 
 #### Post installation check
@@ -31,52 +31,67 @@ import XPER
 
 #### 1️⃣ Load the Data 💽
 
-<!--- * Option 1 --->
+
 ```python
+
 import XPER
-from XPER.datasets.sample import sample_generation
+from XPER.datasets.load_data import loan_status
+from sklearn.model_selection import train_test_split
+loan = loan_status().iloc[:, :7]
 
-p = 6 # Number of features
-N = 500 # Number of individuals
-X_train, y_train, X_test, y_test, p, N, seed  = sample_generation(N=N,p=p,seed=123456)
+X = loan.drop(columns='Loan_Status')
+Y = pd.DataFrame(loan['Loan_Status'])
+
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.15, random_state=3)
 ```
-
-<!--- ![sample](images/Sample.png) 
-
-* Option 2
-```python
-
-from XPER.datasets.load_data import boston
-df = boston()
-df.head(3)
-```
-![boston](images/Boston.png)
+![loan](images/dataset.png)
 
 --->
 
 #### 2️⃣ Load the trained model or train your model ⚙️
 
 ```python
-import joblib
-model = joblib.load('xgboost_model.joblib')
+from xgboost import XGBClassifier
+import xgboost as xgb
+
+# Create an XGBoost classifier object
+gridXGBOOST = xgb.XGBClassifier(eval_metric="error")
+
+# Train the XGBoost classifier on the training data
+model = gridXGBOOST.fit(X_train, y_train)
+
 ```
 
 #### 3️⃣ Monitor Performance 📈
 
 ```python
-from XPER.models.Performance import evaluate_model_performance
-Eval_Metric = ["Accuracy"]
+# Convert the training and testing data from Pandas DataFrames to NumPy arrays
+X_train = X_train.values
+y_train = y_train.values
+X_test = X_test.values
+y_test = y_test.values
+
+from XPER.compute.Performance import evaluate_model_performance
+
+# Define the evaluation metric(s) to be used
+Eval_Metric = ["Precision"]
+
+# Evaluate the model performance using the specified metric(s)
 PM = evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, model)
-print("Performance level: ",PM)
+
+# Print the performance metrics
+print("Performance Metrics: ", round(PM, 3))
+
 ```
 
 ![metrics](images/performance.jpg)
 
 ```python
+from XPER.models.EM import *
 from XPER.models.Performance import calculate_XPER_values
-CFP = None
-CFN = None
-result = calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN)
+
+# Calculate XPER values for the model's performance
+result = calculate_XPER_values(X_test, y_test, model, Eval_Metric)
 ```
 
 #### 4 Visualisation
@@ -85,7 +100,7 @@ result = calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP, CFN)
 import pandas as pd
 from XPER.viz.Visualisation import visualizationClass as viz
 
-labels = ["X" + str(i+1) for i in range(p)]
+labels = list(loan.drop(columns='Loan_Status').columns)
 ```
 
 ##### Bar plot 
@@ -93,21 +108,14 @@ labels = ["X" + str(i+1) for i in range(p)]
 ```python
 viz.bar_plot(XPER_values=result, X_test=pd.DataFrame(X_test), labels=labels, p=p,percentage=True)
 ```
-![sample](images/bar_plot.png)
-
-##### Beeswarn plot
-
-```python
-viz.beeswarn_plot(XPER_values=result, X_test=pd.DataFrame(X_test), labels=labels)
-```
-![sample](images/beeswarn.png)
+![sample](images/chart1.png)
 
 ##### Force plot
 
 ```python
 viz.force_plot(XPER_values=result, instance=1, X_test=X_test, variable_name=labels, figsize=(16,4))
 ```
-![sample](images/force.png)
+![sample](images/chart2.png)
 
 ## 03 Acknowledgements
 
