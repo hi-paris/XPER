@@ -38,10 +38,9 @@ setup(
     keywords='XPER',
     name='XPER',
     packages=find_packages(include=['XPER', 'XPER.*']),
-    package_data={'XPER': ['xgboost_model.joblib']},
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/hi-paris/XPER',
-    version='0.0.17',
+    version='0.0.22',
     zip_safe=False,
 )

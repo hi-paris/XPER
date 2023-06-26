@@ -8,6 +8,7 @@ from datetime import datetime
 import pandas as pd 
 from tqdm import tqdm
 import warnings
+import sys
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -137,6 +138,7 @@ def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP = None, CFN = 
                                    intercept=intercept,
                                    kernel=kernel)
           progress_bar.update(1)
+          sys.stdout.flush()
           if var == 0:  # Ajout du benchmark
               all_phi_j.append(Contrib[2])  # Add the benchmark to the list of XPER values
 
