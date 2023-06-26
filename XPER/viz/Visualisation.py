@@ -106,7 +106,7 @@ class visualizationClass():
         final_selection_values = selection.loc[testons, "Metric"].values
         final_selection_labels = selection.loc[testons, "Labels"]
 
-        colorscale = [[0, 'rgb(29, 166, 88)'], [1, 'rgb(234, 96, 47)']]
+        colorscale = [[0, 'rgb(29, 166, 88)'], [1, 'rgb(29, 166, 88)']]
 
         fig = go.Figure()
         fig.add_trace(go.Bar(

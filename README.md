@@ -108,7 +108,7 @@ labels = list(loan.drop(columns='Loan_Status').columns)
 ```python
 viz.bar_plot(XPER_values=result, X_test=pd.DataFrame(X_test), labels=labels, p=p,percentage=True)
 ```
-![sample](images/chart1.png)
+![sample](images/chart3.png)
 
 ##### Force plot
 
