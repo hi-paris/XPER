@@ -36,7 +36,9 @@ import XPER
 
 import XPER
 from XPER.datasets.load_data import loan_status
+import pandas as pd
 from sklearn.model_selection import train_test_split
+
 loan = loan_status().iloc[:, :7]
 
 X = loan.drop(columns='Loan_Status')
