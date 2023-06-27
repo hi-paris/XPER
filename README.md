@@ -46,7 +46,6 @@ X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.15, random
 ```
 ![loan](images/dataset.png)
 
---->
 
 #### 2️⃣ Load the trained model or train your model ⚙️
 
@@ -94,7 +93,7 @@ from XPER.models.Performance import calculate_XPER_values
 result = calculate_XPER_values(X_test, y_test, model, Eval_Metric)
 ```
 
-#### 4 Visualisation
+#### 4️⃣ Visualisation 📊
 
 ```python
 import pandas as pd
@@ -106,7 +105,7 @@ labels = list(loan.drop(columns='Loan_Status').columns)
 ##### Bar plot 
 
 ```python
-viz.bar_plot(XPER_values=result, X_test=pd.DataFrame(X_test), labels=labels, p=p,percentage=True)
+viz.bar_plot(XPER_values=result, X_test=pd.DataFrame(X_test), labels=labels, p=6,percentage=True)
 ```
 ![sample](images/chart3.png)
 
@@ -129,5 +128,5 @@ The contributors to this library are
 
 ## 04 References
 
-1. *XPER:* Hué, Sullivan, Hurlin, Christophe, Pérignon, Christophe and Saurin Sébastien. "Explainable Performance (XPER): Measuring the Driving Forces of Predictive Performance". HEC Paris Research Paper No. FIN-2022-1463, Available at SSRN: https://ssrn.com/abstract=4280563 or http://dx.doi.org/10.2139/ssrn.4280563, 2022.
+1.Hué, Sullivan, Hurlin, Christophe, Pérignon, Christophe and Saurin, Sébastien. "Measuring the Driving Forces of Predictive Performance: Application to Credit Scoring". HEC Paris Research Paper No. FIN-2022-1463, Available at https://ssrn.com/abstract=4280563 or https://arxiv.org/abs/2212.05866, 2023.
 
