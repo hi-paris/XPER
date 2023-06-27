@@ -111,6 +111,14 @@ viz.bar_plot(XPER_values=result, X_test=pd.DataFrame(X_test), labels=labels, p=6
 ```
 ![sample](images/chart3.png)
 
+
+##### Beeswarn plot
+
+```python
+viz.beeswarn_plot(XPER_values=result,X_test=pd.DataFrame(X_test),labels=labels)
+```
+![sample](images/chart5.png)
+
 ##### Force plot
 
 ```python
