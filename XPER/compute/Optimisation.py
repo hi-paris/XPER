@@ -11,6 +11,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 
+
 class OptimizationClass:
     def __init__(self, s, combination_list_sampled, p, X, y, Pred_Formula, delta_n3, Metric, Metric_ind, N, X_shuffle, Metric_vinteret, Metric_ind_vinteret, var_interet):
         self.s = s

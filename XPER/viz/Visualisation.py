@@ -184,8 +184,8 @@ class visualizationClass():
                                                     # using shap_values.abs.mean(0). We
                                                     # change it to the mean value of the
                                                     # XPER values = phi_j (global ones)
-
-        shap.plots.beeswarm(shap_values, order=ordering,show=False)
+        custom_green = '#1da658'
+        shap.plots.beeswarm(shap_values, order=ordering,show=False,color = custom_green)
         plt.xlabel("Contribution")
         plt.show()
 

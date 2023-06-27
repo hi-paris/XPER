@@ -5,11 +5,13 @@ import numpy as np
 import sklearn.datasets
 
 def boston():
-    df = pd.read_csv("https://github.com/hi-paris/XPER/blob/main/XPER/datasets/boston/BostonHousing.csv")
+    url = "https://github.com/hi-paris/XPER/blob/main/XPER/datasets/boston/BostonHousing.csv?raw=true"
+    df = pd.read_csv(url, index_col=0)
     return df
 
 def loan_status():
-    df = pd.read_csv("https://github.com/hi-paris/XPER/blob/main/XPER/datasets/loan/Loan_Status.csv")
+    url = "https://github.com/hi-paris/XPER/blob/main/XPER/datasets/loan/Loan_Status.csv?raw=true"
+    df = pd.read_csv(url, index_col=0)
     return df
 
 def iris():

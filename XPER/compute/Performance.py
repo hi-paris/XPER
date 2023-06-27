@@ -10,7 +10,8 @@ from tqdm import tqdm
 import warnings
 import sys
 
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+import warnings
+warnings.filterwarnings("ignore")
 
 
 
