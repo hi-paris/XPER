@@ -46,7 +46,6 @@ X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.15, random
 ```
 ![loan](images/dataset.png)
 
---->
 
 #### 2️⃣ Load the trained model or train your model ⚙️
 
