@@ -5,15 +5,11 @@ import numpy as np
 import sklearn.datasets
 
 def boston():
-    this_dir, this_filename = os.path.split(__file__)
-    DATA_PATH = os.path.join(this_dir,"boston", "BostonHousing.csv")
-    df = pd.read_csv(DATA_PATH)
+    df = pd.read_csv("https://github.com/hi-paris/XPER/blob/main/XPER/datasets/boston/BostonHousing.csv")
     return df
 
 def loan_status():
-    this_dir, this_filename = os.path.split(__file__)
-    DATA_PATH = os.path.join(this_dir,"loan", "Loan_Status.csv")
-    df = pd.read_csv(DATA_PATH)
+    df = pd.read_csv("https://github.com/hi-paris/XPER/blob/main/XPER/datasets/loan/Loan_Status.csv")
     return df
 
 def iris():
