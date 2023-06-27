@@ -94,7 +94,7 @@ from XPER.models.Performance import calculate_XPER_values
 result = calculate_XPER_values(X_test, y_test, model, Eval_Metric)
 ```
 
-#### 4 Visualisation
+#### 4️⃣ Visualisation 📊
 
 ```python
 import pandas as pd
