@@ -86,8 +86,8 @@ print("Performance Metrics: ", round(PM, 3))
 ![metrics](images/performance.jpg)
 
 ```python
-from XPER.models.EM import *
-from XPER.models.Performance import calculate_XPER_values
+from XPER.compute.EM import *
+from XPER.compute.Performance import calculate_XPER_values
 
 # Calculate XPER values for the model's performance
 result = calculate_XPER_values(X_test, y_test, model, Eval_Metric)
