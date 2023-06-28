@@ -332,7 +332,7 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
         #         EM_ind[s,:] = result.result()[9]
          
     if kernel == True:
-        
+
         weight = np.asarray(weight)
 
         Z = np.zeros(shape=(N_coalition_sampled,p))

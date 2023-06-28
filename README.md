@@ -85,7 +85,7 @@ print("Performance Metrics: ", round(PM, 3))
 
 ```
 
-![metrics](images/performance.jpg)
+![metrics](images/perf.png)
 
 ```python
 from XPER.compute.EM import *
