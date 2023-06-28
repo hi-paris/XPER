@@ -19,6 +19,8 @@ from itertools import combinations
 from itertools import chain
 import pandas as pd 
 import statsmodels.api as sm
+from concurrent.futures import ProcessPoolExecutor
+
 
     
 
@@ -277,32 +279,57 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
         benchmark = np.zeros(shape=(N_coalition_sampled)) # vector with N_coalition_sampled 0 elements
         sample_EM = np.zeros(shape=(N_coalition_sampled)) # vector with N_coalition_sampled 0 elements
         
-    #with concurrent.futures.ProcessPoolExecutor() as executor:
-    with concurrent.futures.ThreadPoolExecutor() as executor:
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+
+
 
         if kernel == True:
-           
-            results = [executor.submit(OptimizationClass.loop_choice,s,combination_list_sampled,p,X,y,model,model_predict,delta,Metric,Metric_ind,N,X_shuffle,Eval_Metric=Eval_Metric,Metric_vinteret=None,Metric_ind_vinteret=None,var_interet=None,CFP=CFP, CFN = CFN, kernel=True) for s in list(range(N_coalition_sampled))]
-           
-        else: # if exact computation
-            
-            results = [executor.submit(OptimizationClass.loop_choice,s,combination_list_sampled,p,X,y,model,model_predict,delta,Metric,Metric_ind,N,X_shuffle,Metric_vinteret,Metric_ind_vinteret,var_interet,Eval_Metric = Eval_Metric,CFP=CFP, CFN = CFN,kernel=False) for s in list(range(N_coalition_sampled))]
-    
+            results = [executor.submit(OptimizationClass.loop_choice, s, combination_list_sampled, p, X, y, model, model_predict, delta, Metric, Metric_ind, N, X_shuffle, Eval_Metric=Eval_Metric, Metric_vinteret=None, Metric_ind_vinteret=None, var_interet=None, CFP=CFP, CFN=CFN, kernel=True) for s in range(N_coalition_sampled)]
+        else:
+            results = [executor.submit(OptimizationClass.loop_choice, s, combination_list_sampled, p, X, y, model, model_predict, delta, Metric, Metric_ind, N, X_shuffle, Metric_vinteret, Metric_ind_vinteret, var_interet, Eval_Metric=Eval_Metric, CFP=CFP, CFN=CFN, kernel=False) for s in range(N_coalition_sampled)]
+
+
+
         for result in concurrent.futures.as_completed(results):
-            s = result.result()[0]
-            #print("Coalition (results)",s)
-            weight[s,:] = result.result()[1]
-            Metric[s] = result.result()[2]
-            Metric_ind[s,:] = result.result()[3]
+            s, weight_s, Metric_s, Metric_ind_s, *extra_results = result.result()
+
+            weight[s, :] = weight_s
+            Metric[s] = Metric_s
+            Metric_ind[s, :] = Metric_ind_s
+
+        if kernel != True:
+            Metric_vinteret[s] = extra_results[0]
+            Metric_ind_vinteret[s, :] = extra_results[1]
+            benchmark[s] = extra_results[2]
+            sample_EM[s] = extra_results[3]
+            Benchmark_ind[s, :] = extra_results[4]
+            EM_ind[s, :] = extra_results[5]
+
+    #with concurrent.futures.ThreadPoolExecutor() as executor:
+
+        # if kernel == True:
+           
+        #     results = [executor.submit(OptimizationClass.loop_choice,s,combination_list_sampled,p,X,y,model,model_predict,delta,Metric,Metric_ind,N,X_shuffle,Eval_Metric=Eval_Metric,Metric_vinteret=None,Metric_ind_vinteret=None,var_interet=None,CFP=CFP, CFN = CFN, kernel=True) for s in list(range(N_coalition_sampled))]
+           
+        # else: # if exact computation
             
-            if kernel != True:
+        #     results = [executor.submit(OptimizationClass.loop_choice,s,combination_list_sampled,p,X,y,model,model_predict,delta,Metric,Metric_ind,N,X_shuffle,Metric_vinteret,Metric_ind_vinteret,var_interet,Eval_Metric = Eval_Metric,CFP=CFP, CFN = CFN,kernel=False) for s in list(range(N_coalition_sampled))]
+    
+        # for result in concurrent.futures.as_completed(results):
+        #     s = result.result()[0]
+        #     #print("Coalition (results)",s)
+        #     weight[s,:] = result.result()[1]
+        #     Metric[s] = result.result()[2]
+        #     Metric_ind[s,:] = result.result()[3]
+            
+        #     if kernel != True:
                 
-                Metric_vinteret[s] = result.result()[4]
-                Metric_ind_vinteret[s,:] = result.result()[5]
-                benchmark[s] = result.result()[6]
-                sample_EM[s] = result.result()[7]
-                Benchmark_ind[s,:] = result.result()[8]
-                EM_ind[s,:] = result.result()[9]
+        #         Metric_vinteret[s] = result.result()[4]
+        #         Metric_ind_vinteret[s,:] = result.result()[5]
+        #         benchmark[s] = result.result()[6]
+        #         sample_EM[s] = result.result()[7]
+        #         Benchmark_ind[s,:] = result.result()[8]
+        #         EM_ind[s,:] = result.result()[9]
          
     if kernel == True:
         
