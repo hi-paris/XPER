@@ -36,7 +36,9 @@ import XPER
 
 import XPER
 from XPER.datasets.load_data import loan_status
+import pandas as pd
 from sklearn.model_selection import train_test_split
+
 loan = loan_status().iloc[:, :7]
 
 X = loan.drop(columns='Loan_Status')
@@ -86,8 +88,8 @@ print("Performance Metrics: ", round(PM, 3))
 ![metrics](images/performance.jpg)
 
 ```python
-from XPER.models.EM import *
-from XPER.models.Performance import calculate_XPER_values
+from XPER.compute.EM import *
+from XPER.compute.Performance import calculate_XPER_values
 
 # Calculate XPER values for the model's performance
 result = calculate_XPER_values(X_test, y_test, model, Eval_Metric)
@@ -108,6 +110,14 @@ labels = list(loan.drop(columns='Loan_Status').columns)
 viz.bar_plot(XPER_values=result, X_test=pd.DataFrame(X_test), labels=labels, p=6,percentage=True)
 ```
 ![sample](images/chart3.png)
+
+
+##### Beeswarn plot
+
+```python
+viz.beeswarn_plot(XPER_values=result,X_test=pd.DataFrame(X_test),labels=labels)
+```
+![sample](images/chart5.png)
 
 ##### Force plot
 
