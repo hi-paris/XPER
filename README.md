@@ -84,8 +84,7 @@ PM = evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, m
 print("Performance Metrics: ", round(PM, 3))
 
 ```
-
-![metrics](images/perf.png)
+<img src="images/perf.png" alt="metrics" width="200">
 
 ```python
 from XPER.compute.EM import *
