@@ -20,6 +20,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import plotly.express as px
 
+from XPER.compute.Performance import  X_test, XPER_values,labels
 #plt.rc('text', usetex = True) # TeX 
 
 
@@ -39,7 +40,7 @@ class visualizationClass():
     #       Bar plot: X-axis = phi_j value or pct // y-axis = Feature names
     # =============================================================================
     
-    def bar_plot(XPER_values, X_test, labels, p, percentage=True):
+    def bar_plot(XPER_values,labels,p, X_test, percentage=True):
         """
         Create a bar plot to visualize contributions.
 
