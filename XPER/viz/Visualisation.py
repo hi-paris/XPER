@@ -21,12 +21,15 @@ from plotly.subplots import make_subplots
 import plotly.express as px
 
 
+from XPER.compute.Performance import ModelPerformance
+
 #plt.rc('text', usetex = True) # TeX 
 
 
-class visualizationClass():
+class visualizationClass(ModelPerformance):
     
-    def __init__(self,X_test, labels, XPER_values, XPER_v, XPER_v_ind, benchmark_v_ind,p):
+    def __init__(self,X_test, labels, XPER_values, XPER_v, XPER_v_ind, benchmark_v_ind,p,X):
+        super().__init__(X_test)
         
         self.X_test = X_test
         self.labels = labels
@@ -34,13 +37,14 @@ class visualizationClass():
         self.XPER_v = XPER_values[0].copy()
         self.XPER_v_ind = pd.DataFrame(XPER_values[1][:,1:])
         self.benchmark_v_ind = pd.DataFrame(XPER_values[1][:,0],columns=["Individual Benchmark"])
-        self.p = p # Number of features
+        self.p =  X_test.shape[1]# Number of features
 
     # =============================================================================
     #       Bar plot: X-axis = phi_j value or pct // y-axis = Feature names
     # =============================================================================
     
-    def bar_plot(XPER_values,labels,p, X_test, percentage=True):
+    def bar_plot(XPER_values,p, X_test,labels, percentage=True):
+    #def bar_plot(XPER_values,labels,percentage=True):
         """
         Create a bar plot to visualize contributions.
 
@@ -96,6 +100,7 @@ class visualizationClass():
 
             #print("Contribution (%) sum: ", sum(Contribution[1:]))
 
+        #selection = pd.DataFrame(Contribution[1:], index=X_test.columns, columns=["Metric"])
         selection = pd.DataFrame(Contribution[1:], index=X_test.columns, columns=["Metric"])
 
         selection["Labels"] = labels
@@ -118,7 +123,7 @@ class visualizationClass():
         ))
 
         if percentage == True:
-            fig.update_layout(xaxis_title='Contribution (%)')
+            fig.update_layout(xaxis_title='Contribution')
         else:
             fig.update_layout(xaxis_title='Contribution')
 

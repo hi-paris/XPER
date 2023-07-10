@@ -5,7 +5,15 @@
 **XPER (eXplainable PERformance)** is a methodology designed to measure the specific contribution of the input features to the predictive performance of any econometric or machine learning model. XPER is built on Shapley values and interpretability tools developed in machine learning but with the distinct objective of focusing on model performance (AUC, $R^2$) and not on model predictions ($\hat{y}$). XPER has as a special case the standard explainability method in Machine Learning (SHAP).
 
 
-## 01 Install 🚀
+### 00 Colab Examples:
+* Classification on Loan Data 🎯
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1K-_wSENq-s1PUZys-cyJ8zIViRd0gdl2?usp=sharing)
+
+
+* Regression on Boston Housing 🎯
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/16Jahf7JbRB2Y62xXbaE617k9GU5cD1Nk?usp=sharing)
+
+### 01 Install 🚀
 The library has been tested on Linux, MacOSX and Windows. It relies on the following Python modules:
 
 Pandas
@@ -26,7 +34,7 @@ After a correct installation, you should be able to import the module without er
 import XPER
 ```
 
-## 02 XPER example on sampled data step by step ➡️
+### 02 XPER example on sampled data step by step ➡️
 
 
 #### 1️⃣ Load the Data 💽
@@ -39,7 +47,7 @@ from XPER.datasets.load_data import loan_status
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-loan = loan_status().iloc[:, :7]
+loan = loan_status().iloc[:, :6]
 
 X = loan.drop(columns='Loan_Status')
 Y = pd.DataFrame(loan['Loan_Status'])
@@ -72,13 +80,13 @@ y_train = y_train.values
 X_test = X_test.values
 y_test = y_test.values
 
-from XPER.compute.Performance import evaluate_model_performance
+from XPER.compute.Performance import ModelPerformance
 
 # Define the evaluation metric(s) to be used
-Eval_Metric = ["Precision"]
+XPER = ModelPerformance(X_train, y_train, X_test, y_test, model)
 
 # Evaluate the model performance using the specified metric(s)
-PM = evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, model)
+PM = XPER.evaluate(["Precision"])
 
 # Print the performance metrics
 print("Performance Metrics: ", round(PM, 3))
@@ -87,12 +95,17 @@ print("Performance Metrics: ", round(PM, 3))
 <img src="images/perf.png" alt="metrics" width="200">
 
 ```python
-from XPER.compute.EM import *
-from XPER.compute.Performance import calculate_XPER_values
-
+# Option 1 - Kernel True
 # Calculate XPER values for the model's performance
-result = calculate_XPER_values(X_test, y_test, model, Eval_Metric)
+XPER_values = XPER.calculate_XPER_values(["Precision"])
 ```
+
+```python
+# Option 2 - Kernel False
+# Calculate XPER values for the model's performance
+XPER_values = XPER.calculate_XPER_values(["Precision"],kernel=False)
+```
+<img src="images/kernel-false.png" alt="metrics" width="300">
 
 #### 4️⃣ Visualisation 📊
 
@@ -125,7 +138,7 @@ viz.force_plot(XPER_values=result, instance=1, X_test=X_test, variable_name=labe
 ```
 ![sample](images/chart2.png)
 
-## 03 Acknowledgements
+### 03 Acknowledgements
 
 The contributors to this library are 
 * [Sullivan Hué](https://www.amse-aixmarseille.fr/fr/membres/hu%C3%A9)
@@ -135,7 +148,7 @@ The contributors to this library are
 
 
 
-## 04 References
+### 04 Reference
 
-1.Hué, Sullivan, Hurlin, Christophe, Pérignon, Christophe and Saurin, Sébastien. "Measuring the Driving Forces of Predictive Performance: Application to Credit Scoring". HEC Paris Research Paper No. FIN-2022-1463, Available at https://ssrn.com/abstract=4280563 or https://arxiv.org/abs/2212.05866, 2023.
+Hué, Sullivan, Hurlin, Christophe, Pérignon, Christophe and Saurin, Sébastien. "Measuring the Driving Forces of Predictive Performance: Application to Credit Scoring". HEC Paris Research Paper No. FIN-2022-1463, Available at https://ssrn.com/abstract=4280563 or https://arxiv.org/abs/2212.05866, 2023.
 

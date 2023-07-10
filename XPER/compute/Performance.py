@@ -17,210 +17,185 @@ warnings.filterwarnings("ignore")
 
 
 
-def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, model, CFP=None, CFN=None):
+class ModelPerformance():
     """
-     Evaluate the performance of a model using various evaluation metrics.
-
-     Parameters:
-         Eval_Metric (str or list): Evaluation metric(s) to compute. Options: "AUC", "Accuracy",
-             "Balanced_accuracy", "BS" (Brier Score), "MC" (Misclassification Cost),
-             "Sensitivity", "Specificity", "Precision".
-         X_train (ndarray): Training set features.
-         y_train (ndarray): Training set labels.
-         X_test (ndarray): Test set features.
-         y_test (ndarray): Test set labels.
-         model : Model used for predictions.
-
-     Returns:
-         PM (float): Performance measure(s) computed based on the specified evaluation metric(s).
-    """
-    p = X_test.shape[1]
-
-    # # =============================================================================
-    # #                               Selected model + predictions
-    # # =============================================================================
-
-    model = model
-    y_pred = None
-
-
-    if Eval_Metric == ["MSE"]:
-        y_pred = model.predict(X_test)
-        PM = mean_squared_error(y_test, y_pred)  # Compute the MSE on the test sample
-    elif Eval_Metric == ["RMSE"]:
-        y_pred = model.predict(X_test)
-        PM = np.sqrt(mean_squared_error(y_test, y_pred))  # Compute the RMSE on the test sample
-    elif Eval_Metric == ["MAE"]:
-        y_pred = model.predict(X_test)
-        PM = mean_absolute_error(y_test, y_pred)  # Compute the MAE on the test sample
-
-    elif Eval_Metric == ["AUC"]:
-        # # Predicted probabilites on the test sample
-        y_hat_proba = model.predict_proba(X_test)[:,1] 
-        # # Binary predictions on the test sample with a cutoff at 0.5
-        y_pred = (y_hat_proba > 0.5)
-        
-        PM = roc_auc_score(y_test, y_hat_proba)  # Compute the AUC on the test sample   
-        
-    elif Eval_Metric == ["Accuracy"]:
-        # # Predicted probabilites on the test sample
-        y_hat_proba = model.predict_proba(X_test)[:,1] 
-        # # Binary predictions on the test sample with a cutoff at 0.5
-        y_pred = (y_hat_proba > 0.5)
-        
-        PM = accuracy_score(y_test, y_pred)  # Compute the PM on the test sample 
-        
-    elif Eval_Metric == ["Balanced_accuracy"]:
-        # # Predicted probabilites on the test sample
-        y_hat_proba = model.predict_proba(X_test)[:,1] 
-        # # Binary predictions on the test sample with a cutoff at 0.5
-        y_pred = (y_hat_proba > 0.5)
-        
-        PM = balanced_accuracy_score(y_test, y_pred)  # Compute the BS on the test sample   
-
-    elif Eval_Metric == ["BS"]:
-        # # Predicted probabilites on the test sample
-        y_hat_proba = model.predict_proba(X_test)[:,1] 
-        # # Binary predictions on the test sample with a cutoff at 0.5
-        y_pred = (y_hat_proba > 0.5)
-        
-        PM = -brier_score_loss(y_test, y_hat_proba)  # Compute the BS on the test sample   
-
-    elif Eval_Metric == ["MC"]:
-        # # Predicted probabilites on the test sample
-        y_hat_proba = model.predict_proba(X_test)[:,1] 
-        # # Binary predictions on the test sample with a cutoff at 0.5
-        y_pred = (y_hat_proba > 0.5)
-
-        N = len(y_pred)
-        # CFP = 1
-        # CFN = 5
-        FP, FN = np.zeros(shape=N), np.zeros(shape=(N))
-        for i in list(range(N)):
-            FP[i] = (y_pred[i] == 0 and y_test[i] == 1)
-            FN[i] = (y_pred[i] == 1 and y_test[i] == 0)
-        FPR = np.mean(FP)
-        FNR = np.mean(FN)
-        
-        PM = - (CFP*FPR + CFN*FNR) # Compute the PM on the test sample 
-
-    elif Eval_Metric == ["Sensitivity"]:
-        # # Predicted probabilites on the test sample
-        y_hat_proba = model.predict_proba(X_test)[:,1] 
-        # # Binary predictions on the test sample with a cutoff at 0.5
-        y_pred = (y_hat_proba > 0.5)
-        
-        PM = np.mean((y_test*y_pred)/np.mean(y_test))  # Compute the sensitivity on the test sample   
-        
-    elif Eval_Metric == ["Specificity"]:
-        # # Predicted probabilites on the test sample
-        y_hat_proba = model.predict_proba(X_test)[:,1] 
-        # # Binary predictions on the test sample with a cutoff at 0.5
-        y_pred = (y_hat_proba > 0.5)
-        
-        PM = np.mean(((1-y_test)*(1-y_pred))/np.mean((1-y_test)))  # Compute the specificity on the test sample   
-    
-    elif Eval_Metric == ["Precision"]:
-        # # Predicted probabilites on the test sample
-        y_hat_proba = model.predict_proba(X_test)[:,1] 
-        # # Binary predictions on the test sample with a cutoff at 0.5
-        y_pred = (y_hat_proba > 0.5)
-        
-        PM = np.mean((y_test*y_pred)/np.mean(y_pred))  # Compute the precision on the test sample   
-        
-    return PM
-
-
-def calculate_XPER_values(X_test, y_test, model, Eval_Metric, CFP = None, CFN = None, N_coalition_sampled = None, kernel=True, intercept=False):
-    """
-    Calculates XPER (Extended Partial-Expected Ranking) values for each feature based on the given inputs.
-
-    Parameters:
-        X_test (numpy.ndarray): Array of shape (n_samples, n_features) containing the feature values.
-        y_test (numpy.ndarray): Array of shape (n_samples,) containing the target values.
-        model: The estimated model object.
-        Eval_Metric: Name of the performance metric.
-        CFP: Cost of false positive.
-        CFN: Cost of false negative.
-        N_coalition_sampled: Number of coalitions considered to compute the XPER values. Minimum = 1 and maximum = (2**p) - 2.
-        kernel: True if we approximate the XPER values (appropriate when the number of features is large), False otherwise.
-        intercept: True if the model and the features include an intercept, False otherwise.
- 
-    Returns:
-        tuple: A tuple containing the following elements:
-            - phi (numpy.ndarray): Array of shape (n_features + 1) containing the XPER value of each feature and the benchmark value of the performance metric (first value). 
-            - phi_i_j (numpy.ndarray): Array of shape (n_samples, n_features + 1) containing the individual XPER values of each feature for all individuals and the corresponding
-                                       benchmark values of the performance metric (first column).
+    Class to evaluate the performance of a model using various evaluation metrics.
     """
 
-    start_time = datetime.now()
+    def __init__(self, X_train, y_train, X_test, y_test, model):
+        """
+        Initialize the ModelEvaluator instance.
 
-    all_contrib = []  # List to store all the result of the function "XPER_choice" from the python file "EM.py"
-    all_phi_j = []    # List to store the XPER value of each feature + the benchmark
-    p = X_test.shape[1]
-    
-    if kernel == False:
-     
-      N_coalition_sampled = 2**(p-1)
-      total_iterations = p
-      progress_bar = tqdm(total=total_iterations, desc="Performing computation")
-      for var in np.arange(p):  # loop on the number of variables
-          #print("Variable numéro:", var)
+        Parameters:
+            X_train (ndarray): Training set features.
+            y_train (ndarray): Training set labels.
+            X_test (ndarray): Test set features.
+            y_test (ndarray): Test set labels.
+            model : Model used for predictions.
+        """
+        self.X_train = X_train
+        self.y_train = y_train
+        self.X_test = X_test
+        self.y_test = y_test
+        self.model = model
 
-          Contrib = XPER_choice(y=y_test,          # Target values
-                                   X=X_test,       # Feature values / include the intercept
-                                   model=model,       # Estimated model
-                                   Eval_Metric=Eval_Metric,  # Name of the performance metric
-                                   var_interet=var,            # Variable for which to compute XPER value
-                                   N_coalition_sampled=N_coalition_sampled,  # Number of coalitions taken into account for XPER computation
-                                   CFP=CFP,
-                                   CFN=CFN,
-                                   intercept=intercept,
-                                   kernel=kernel)
-          progress_bar.update(1)
-          sys.stdout.flush()
-          if var == 0:  # Ajout du benchmark
-              all_phi_j.append(Contrib[2])  # Add the benchmark to the list of XPER values
+    def evaluate(self, Eval_Metric, CFP=None, CFN=None):
+        """
+        Evaluate the performance of the model using various evaluation metrics.
 
-          all_contrib.append(Contrib)
-          all_phi_j.append(Contrib[0])  # Add the XPER value to "all_contrib_AUC"
-      progress_bar.close()
-      time_elapsed = datetime.now() - start_time
+        Parameters:
+            Eval_Metric (str or list): Evaluation metric(s) to compute. Options: "AUC", "Accuracy",
+                "Balanced_accuracy", "BS" (Brier Score), "MC" (Misclassification Cost),
+                "Sensitivity", "Specificity", "Precision".
+            CFP: Cost of false positive.
+            CFN: Cost of false negative.
 
-      phi_j = np.insert(all_phi_j[1:], 0,all_phi_j[0])
-      
-      benchmark_ind = pd.DataFrame(Contrib[4][np.isnan(Contrib[4]) == False], columns=["Individual Benchmark"])
+        Returns:
+            PM (float): Performance measure(s) computed based on the specified evaluation metric(s).
+        """
+        p = self.X_test.shape[1]
 
-      df_phi_i_j = pd.DataFrame(index=np.arange(len(y_test)), columns=np.arange(p))
+        model = self.model
+        y_pred = None
 
-      for i, contrib in enumerate(all_contrib):
-          phi_i_j = contrib[1].copy()
-          df_phi_i_j.iloc[:, i] = phi_i_j.copy()
-         
-      phi_i_j = pd.concat([benchmark_ind,df_phi_i_j],axis=1).values
-      
-      return phi_j, phi_i_j
+        if Eval_Metric == ["MSE"]:
+            y_pred = model.predict(self.X_test)
+            PM = mean_squared_error(self.y_test, y_pred)
+        elif Eval_Metric == ["RMSE"]:
+            y_pred = model.predict(self.X_test)
+            PM = np.sqrt(mean_squared_error(self.y_test, y_pred))
+        elif Eval_Metric == ["MAE"]:
+            y_pred = model.predict(self.X_test)
+            PM = mean_absolute_error(self.y_test, y_pred)
+        elif Eval_Metric == ["AUC"]:
+            y_hat_proba = model.predict_proba(self.X_test)[:, 1]
+            y_pred = (y_hat_proba > 0.5)
+            PM = roc_auc_score(self.y_test, y_hat_proba)
+        elif Eval_Metric == ["Accuracy"]:
+            y_hat_proba = model.predict_proba(self.X_test)[:, 1]
+            y_pred = (y_hat_proba > 0.5)
+            PM = accuracy_score(self.y_test, y_pred)
+        elif Eval_Metric == ["Balanced_accuracy"]:
+            y_hat_proba = model.predict_proba(self.X_test)[:, 1]
+            y_pred = (y_hat_proba > 0.5)
+            PM = balanced_accuracy_score(self.y_test, y_pred)
+        elif Eval_Metric == ["BS"]:
+            y_hat_proba = model.predict_proba(self.X_test)[:, 1]
+            y_pred = (y_hat_proba > 0.5)
+            PM = -brier_score_loss(self.y_test, y_hat_proba)
+        elif Eval_Metric == ["MC"]:
+            y_hat_proba = model.predict_proba(self.X_test)[:, 1]
+            y_pred = (y_hat_proba > 0.5)
+            N = len(y_pred)
+            FP, FN = np.zeros(shape=N), np.zeros(shape=(N))
+            for i in range(N):
+                FP[i] = (y_pred[i] == 0 and self.y_test[i] == 1)
+                FN[i] = (y_pred[i] == 1 and self.y_test[i] == 0)
+            FPR = np.mean(FP)
+            FNR = np.mean(FN)
+            PM = -(CFP * FPR + CFN * FNR)
+        elif Eval_Metric == ["Sensitivity"]:
+            y_hat_proba = model.predict_proba(self.X_test)[:, 1]
+            y_pred = (y_hat_proba > 0.5)
+            PM = np.mean((self.y_test * y_pred) / np.mean(self.y_test))
+        elif Eval_Metric == ["Specificity"]:
+            y_hat_proba = model.predict_proba(self.X_test)[:, 1]
+            y_pred = (y_hat_proba > 0.5)
+            PM = np.mean(((1 - self.y_test) * (1 - y_pred)) / np.mean((1 - self.y_test)))
+        elif Eval_Metric == ["Precision"]:
+            y_hat_proba = model.predict_proba(self.X_test)[:, 1]
+            y_pred = (y_hat_proba > 0.5)
+            PM = np.mean((self.y_test * y_pred) / np.mean(y_pred))
 
-    # =============================================================================
-    #                                Kernel XPER
-    # =============================================================================
+        return PM
 
-    else:
-     
-      if N_coalition_sampled == None:
-       
-        N_coalition_sampled = (2**p) - 2 # Maximum number of coalitions 
-       
-      Contrib_Kernel = XPER_choice(y = y_test,          # Target values
-                                         X = X_test,  # Feature values
-                                         model = model,       # Estimated model
-                                         Eval_Metric = Eval_Metric,  # Name of the performance metric
-                                         N_coalition_sampled = N_coalition_sampled, # Number of coalitions taken into account for XPER computation
-                                         CFP=CFP,
-                                         CFN=CFN,
-                                         intercept=intercept,
-                                         kernel=kernel) 
+    def calculate_XPER_values(self, Eval_Metric, CFP=None, CFN=None, N_coalition_sampled=None, kernel=True, intercept=False):
+        """
+        Calculates XPER (Extended Partial-Expected Ranking) values for each feature based on the given inputs.
 
-      phi, phi_i_j = Contrib_Kernel
+        Parameters:
+            Eval_Metric: Name of the performance metric.
+            CFP: Cost of false positive.
+            CFN: Cost of false negative.
+            N_coalition_sampled: Number of coalitions considered to compute the XPER values.
+                Minimum = 1 and maximum = (2**p) - 2.
+            kernel: True if we approximate the XPER values (appropriate when the number of features is large),
+                False otherwise.
+            intercept: True if the model and the features include an intercept, False otherwise.
 
-      return phi, phi_i_j
+        Returns:
+            tuple: A tuple containing the following elements:
+                - phi (numpy.ndarray): Array of shape (n_features + 1) containing the XPER value of each feature
+                    and the benchmark value of the performance metric (first value).
+                - phi_i_j (numpy.ndarray): Array of shape (n_samples, n_features + 1) containing the individual XPER
+                    values of each feature for all individuals and the corresponding benchmark values of the performance
+                    metric (first column).
+        """
+        start_time = datetime.now()
+        all_contrib = []
+        all_phi_j = []
+        p = self.X_test.shape[1]
+
+        if kernel is False:
+            N_coalition_sampled = 2**(p - 1)
+            total_iterations = p
+            progress_bar = tqdm(total=total_iterations, desc="Performing computation")
+            for var in range(p):
+                Contrib = XPER_choice(
+                    y=self.y_test,
+                    X=self.X_test,
+                    model=self.model,
+                    Eval_Metric=Eval_Metric,
+                    var_interet=var,
+                    N_coalition_sampled=N_coalition_sampled,
+                    CFP=CFP,
+                    CFN=CFN,
+                    intercept=intercept,
+                    kernel=kernel
+                )
+
+                progress_bar.update(1)
+                sys.stdout.flush()
+                if var == 0:
+                    all_phi_j.append(Contrib[2])
+
+                all_contrib.append(Contrib)
+                all_phi_j.append(Contrib[0])
+            progress_bar.close()
+            time_elapsed = datetime.now() - start_time
+            phi_j = np.insert(all_phi_j[1:], 0, all_phi_j[0])
+
+            benchmark_ind = pd.DataFrame(
+                Contrib[4][np.isnan(Contrib[4]) == False],
+                columns=["Individual Benchmark"]
+            )
+
+            df_phi_i_j = pd.DataFrame(index=np.arange(len(self.y_test)), columns=np.arange(p))
+
+            for i, contrib in enumerate(all_contrib):
+                phi_i_j = contrib[1].copy()
+                df_phi_i_j.iloc[:, i] = phi_i_j.copy()
+
+            phi_i_j = pd.concat([benchmark_ind, df_phi_i_j], axis=1).values
+
+            return phi_j, phi_i_j
+
+        else:
+            if N_coalition_sampled is None:
+                N_coalition_sampled = (2**p) - 2
+
+            Contrib_Kernel = XPER_choice(
+                y=self.y_test,
+                X=self.X_test,
+                model=self.model,
+                Eval_Metric=Eval_Metric,
+                N_coalition_sampled=N_coalition_sampled,
+                CFP=CFP,
+                CFN=CFN,
+                intercept=intercept,
+                kernel=kernel
+            )
+
+            phi, phi_i_j = Contrib_Kernel
+
+            return phi, phi_i_j
