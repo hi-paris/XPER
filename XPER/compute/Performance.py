@@ -41,6 +41,8 @@ def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, mo
     # # =============================================================================
 
     model = model
+    y_pred = None
+
 
     if Eval_Metric == ["MSE"]:
         y_pred = model.predict(X_test)
@@ -103,14 +105,26 @@ def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, mo
         PM = - (CFP*FPR + CFN*FNR) # Compute the PM on the test sample 
 
     elif Eval_Metric == ["Sensitivity"]:
+        # # Predicted probabilites on the test sample
+        y_hat_proba = model.predict_proba(X_test)[:,1] 
+        # # Binary predictions on the test sample with a cutoff at 0.5
+        y_pred = (y_hat_proba > 0.5)
         
         PM = np.mean((y_test*y_pred)/np.mean(y_test))  # Compute the sensitivity on the test sample   
         
     elif Eval_Metric == ["Specificity"]:
+        # # Predicted probabilites on the test sample
+        y_hat_proba = model.predict_proba(X_test)[:,1] 
+        # # Binary predictions on the test sample with a cutoff at 0.5
+        y_pred = (y_hat_proba > 0.5)
         
         PM = np.mean(((1-y_test)*(1-y_pred))/np.mean((1-y_test)))  # Compute the specificity on the test sample   
     
     elif Eval_Metric == ["Precision"]:
+        # # Predicted probabilites on the test sample
+        y_hat_proba = model.predict_proba(X_test)[:,1] 
+        # # Binary predictions on the test sample with a cutoff at 0.5
+        y_pred = (y_hat_proba > 0.5)
         
         PM = np.mean((y_test*y_pred)/np.mean(y_pred))  # Compute the precision on the test sample   
         
