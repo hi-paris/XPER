@@ -41,9 +41,6 @@ class OptimizationClass:
         # as mentioned in the function when the parameter intercept = True
         return model.predict(X_intercept)
 
-    def model_predict4(X, model):
-        return model.predict(X)
-
     def model_predict2(X, model):
         '''
         X: feature values but exclude the variable of interest
@@ -60,6 +57,9 @@ class OptimizationClass:
     def model_predict3(X, model):
         return model.predict_proba(X)[:, 1]  # only keep the predicted probabilities
                                               # for the positive class (P(y=1|X))
+
+    def model_predict4(X, model):
+        return model.predict(X)
 
     def model_predict5(X, model):
         '''

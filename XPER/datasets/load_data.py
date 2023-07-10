@@ -6,12 +6,12 @@ import sklearn.datasets
 
 def boston():
     url = "https://github.com/hi-paris/XPER/blob/main/XPER/datasets/boston/BostonHousing.csv?raw=true"
-    df = pd.read_csv(url, index_col=0)
+    df = pd.read_csv(url)
     return df
 
 def loan_status():
     url = "https://github.com/hi-paris/XPER/blob/main/XPER/datasets/loan/Loan_Status.csv?raw=true"
-    df = pd.read_csv(url, index_col=0)
+    df = pd.read_csv(url)
     return df
 
 def iris():

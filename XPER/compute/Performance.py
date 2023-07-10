@@ -4,6 +4,7 @@
 from XPER.compute.EM import XPER_choice
 from sklearn.metrics import roc_auc_score,brier_score_loss,balanced_accuracy_score,accuracy_score
 import numpy as np
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 from datetime import datetime
 import pandas as pd 
 from tqdm import tqdm
@@ -41,29 +42,53 @@ def evaluate_model_performance(Eval_Metric, X_train, y_train, X_test, y_test, mo
 
     model = model
 
-    # # Predicted probabilites on the test sample
-    y_hat_proba = model.predict_proba(X_test)[:,1] 
+    if Eval_Metric == ["MSE"]:
+        y_pred = model.predict(X_test)
+        PM = mean_squared_error(y_test, y_pred)  # Compute the MSE on the test sample
+    elif Eval_Metric == ["RMSE"]:
+        y_pred = model.predict(X_test)
+        PM = np.sqrt(mean_squared_error(y_test, y_pred))  # Compute the RMSE on the test sample
+    elif Eval_Metric == ["MAE"]:
+        y_pred = model.predict(X_test)
+        PM = mean_absolute_error(y_test, y_pred)  # Compute the MAE on the test sample
 
-    # # Binary predictions on the test sample with a cutoff at 0.5
-    y_pred = (y_hat_proba > 0.5)
-
-    if Eval_Metric == ["AUC"]:
+    elif Eval_Metric == ["AUC"]:
+        # # Predicted probabilites on the test sample
+        y_hat_proba = model.predict_proba(X_test)[:,1] 
+        # # Binary predictions on the test sample with a cutoff at 0.5
+        y_pred = (y_hat_proba > 0.5)
         
         PM = roc_auc_score(y_test, y_hat_proba)  # Compute the AUC on the test sample   
         
     elif Eval_Metric == ["Accuracy"]:
+        # # Predicted probabilites on the test sample
+        y_hat_proba = model.predict_proba(X_test)[:,1] 
+        # # Binary predictions on the test sample with a cutoff at 0.5
+        y_pred = (y_hat_proba > 0.5)
         
         PM = accuracy_score(y_test, y_pred)  # Compute the PM on the test sample 
         
     elif Eval_Metric == ["Balanced_accuracy"]:
+        # # Predicted probabilites on the test sample
+        y_hat_proba = model.predict_proba(X_test)[:,1] 
+        # # Binary predictions on the test sample with a cutoff at 0.5
+        y_pred = (y_hat_proba > 0.5)
         
         PM = balanced_accuracy_score(y_test, y_pred)  # Compute the BS on the test sample   
 
     elif Eval_Metric == ["BS"]:
+        # # Predicted probabilites on the test sample
+        y_hat_proba = model.predict_proba(X_test)[:,1] 
+        # # Binary predictions on the test sample with a cutoff at 0.5
+        y_pred = (y_hat_proba > 0.5)
         
         PM = -brier_score_loss(y_test, y_hat_proba)  # Compute the BS on the test sample   
 
     elif Eval_Metric == ["MC"]:
+        # # Predicted probabilites on the test sample
+        y_hat_proba = model.predict_proba(X_test)[:,1] 
+        # # Binary predictions on the test sample with a cutoff at 0.5
+        y_pred = (y_hat_proba > 0.5)
 
         N = len(y_pred)
         # CFP = 1
