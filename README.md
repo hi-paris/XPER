@@ -145,6 +145,8 @@ The contributors to this library are
 * [Christophe Hurlin](https://sites.google.com/view/christophe-hurlin/home)
 * [Christophe Pérignon](https://www.hec.edu/fr/faculty-research/faculty-directory/faculty-member/perignon-christophe)
 * [Sébastien Saurin](https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=4582330)
+* [Awais Sani](https://www.linkedin.com/in/awais-hussain-sani-87a35757/)
+* [Gaëtan Brison](https://www.linkedin.com/in/gaetan-brison/)
 
 
 
