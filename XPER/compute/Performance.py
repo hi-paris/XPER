@@ -182,7 +182,10 @@ class ModelPerformance():
 
         else:
             if N_coalition_sampled is None:
-                N_coalition_sampled = (2**p) - 2
+                if self.X_test.shape[1] > 10:
+                    N_coalition_sampled = 2048 + (2*p)
+                else:
+                    N_coalition_sampled = (2**p) - 2
 
             Contrib_Kernel = XPER_choice(
                 y=self.y_test,
