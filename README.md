@@ -94,6 +94,8 @@ print("Performance Metrics: ", round(PM, 3))
 ```
 <img src="images/perf.png" alt="metrics" width="200">
 
+**For use cases above 10 feature variables it is advised to used the default option kernel=True for computation efficiency** ➡️
+
 ```python
 # Option 1 - Kernel True
 # Calculate XPER values for the model's performance
