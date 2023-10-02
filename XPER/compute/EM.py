@@ -305,7 +305,7 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
     #         Benchmark_ind[s, :] = extra_results[4]
     #         EM_ind[s, :] = extra_results[5]
 
-    with concurrent.futures.ProcessPoolExecutor() as executor:
+    with concurrent.futures.ThreadPoolExecutor() as executor:
 
         if kernel == True:
            

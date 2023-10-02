@@ -10,7 +10,6 @@ import math
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from math import comb
 
 
 class OptimizationClass:
@@ -121,15 +120,11 @@ class OptimizationClass:
 
         if kernel == True:
             # Specific to Kernel XPER
-
-            len_S = len(S)
-            weight_s = (p - 1) / (comb(p, len_S) * len_S * (p - len_S))
-            # weight_s = (p - 1) / (
-            #     (math.factorial(p) / (math.factorial(len(S)) * math.factorial(p - len(S)))) * (len(S)) * (
-            #         p - len(S)))
+            weight_s = (p - 1) / (
+                (math.factorial(p) / (math.factorial(len(S)) * math.factorial(p - len(S)))) * (len(S)) * (
+                    p - len(S)))
         else:
-            len_S = len(S)
-            weight_s = ((math.factorial(len_S)) * (math.factorial(p - len_S - 1))) / math.factorial(p)
+            weight_s = ((math.factorial(len(S))) * (math.factorial(p - len(S) - 1))) / math.factorial(p)
 
         G_i_j = []  # Empty list to store G(y_i, x_ij, x_i^S; delta)
 
@@ -158,28 +153,58 @@ class OptimizationClass:
             # Code specific to the measure
 
             if Eval_Metric == ["AUC"]:
-                # Reduce copy operations
                 X_shuffle_combination = X_shuffle.copy()
-                X_shuffle_combination[:, S] = X[:, S]
+                X_shuffle_combination[:, S] = X[:, S].copy()  # Change the value of the feature
+                # values shuffled in column S to the feature values not shuffled
 
                 y_hat_tirage = model_predict(X_shuffle_combination, model)
+                # N predictions / for all individuals
+
                 y_hat_proba_i = model_predict(X_tirage_i, model)
+                # N predictions / Individual i feature values in subset S
 
-                # No need to put into a dataframe just to repeat the values later.
-                y_hat_tirage_repeated = np.tile(y_hat_tirage, (N, 1))
-                y_repeated = np.tile(y, (N, 1))
+                y_hat_proba_i = pd.DataFrame(y_hat_proba_i, columns=["proba"])
+                # Put the predictions made from Individual i feature values in subset S in
+                # a DataFrame / Column name "proba"
 
-                df_temp = pd.DataFrame({
-                    "proba": y_hat_proba_i,
-                    "tirage": y_hat_tirage_repeated[:, 0],  # Assuming y_hat_tirage is a 1D array
-                    "y": y_repeated[:, 0]
-                })
+                ####
 
-                # Use vectorized operations instead of .apply() for improved performance
-                mean_values_1 = np.mean((1 - df_temp["y"].values) * (df_temp["proba"].values > df_temp["tirage"].values))
-                mean_values_2 = np.mean(df_temp["y"].values * (1 - (df_temp["proba"].values > df_temp["tirage"].values)))
+                y_hat_tirage = pd.DataFrame({"tirage": [y_hat_tirage]})
+                # Put the predictions made from all individuals feature values in
+                # subset S (shuffled values) in a DataFrame / Column name "tirage"
 
-                G = (y[j] * mean_values_1 + (1 - y[j]) * mean_values_2) / globals()['delta_1']
+                y_hat_tirage = pd.DataFrame(np.repeat(y_hat_tirage.values, N, axis=0), columns=["tirage"])
+                # Create a DataFrame where each row contains all of the predictions
+                # from all individuals feature values in subset S (shuffled values)
+                # Necessary to use the method apply on a DataFrame to implement a function
+                # on each row. Specifically, we want to compute the number of concordant
+                # pairs for each individual in the database.
+
+                ####
+
+                y_temp = pd.DataFrame({"y": [y]})  # DataFrame with target values / column name "y"
+
+                y_temp = pd.DataFrame(np.repeat(y_temp.values, N, axis=0), columns=["y"])
+                # As for the object "y_hat_tirage" we create a DataFrame where each
+                # row contains all of the target values. Necessary to use the method
+                # apply on a DataFrame to implement a function on each row.
+                # Specifically, we want to compute the number of concordant
+                # pairs for each individual in the database.
+
+                df_temp = pd.concat([y_hat_proba_i, y_hat_tirage, y_temp], axis=1)
+
+                delta_n1 = df_temp.apply(
+                    lambda row: np.mean((1 - row["y"]) * (row["proba"] > row["tirage"])), axis=1)
+                # Compute delta_n1 for individual i / scalar value
+
+                delta_n2 = df_temp.apply(
+                    lambda row: np.mean(row["y"] * (1 - (row["proba"] > row["tirage"]))), axis=1)
+                # Compute delta_n2 for individual i / scalar value
+
+                G = (y[j] * delta_n1 + (1 - y[j]) * delta_n2) / globals()['delta_1']  # delta_1 created with globals()['delta_{}'.format(d)] // different from delta_n1
+                # Compute the individual i contribution to the performance metric
+                # for the subset S and without knowing the feature value of interest of
+                # individual i
 
             elif Eval_Metric == ["BS"]:
                 y_pred_i = model_predict(X_tirage_i, model)
@@ -254,28 +279,62 @@ class OptimizationClass:
                 # to the one of individual i
 
                 if Eval_Metric == ["AUC"]:
-                  # Reduce copy operations
                     X_shuffle_combination_vinteret = X_shuffle_combination.copy()
-                    X_shuffle_combination_vinteret[:, var_interet] = X[:, var_interet]
+                    X_shuffle_combination_vinteret[:, var_interet] = X[:, var_interet].copy()
+                    # Change the value of the feature of interest in the shuffled database
+                    # to the one of individual i
 
                     y_hat_tirage_vinteret = model_predict(X_shuffle_combination_vinteret, model)
-                    y_hat_proba_i_vinteret = model_predict(X_tirage_i_vinteret, model)
+                    # N predictions / for all individuals
 
-                    # No need to put into a dataframe just to repeat the values later.
-                    y_hat_tirage_vinteret_repeated = np.tile(y_hat_tirage_vinteret, (N, 1))
-                    y_repeated = np.tile(y, (N, 1))
+                    y_hat_proba_i_vinteret = model_predict(X_tirage_i_vinteret, model)  # N predictions
+                    # N predictions / Individual i feature values in subset S
 
-                    df_temp_vinteret = pd.DataFrame({
-                        "proba": y_hat_proba_i_vinteret,
-                        "tirage": y_hat_tirage_vinteret_repeated[:, 0],  # Assuming y_hat_tirage_vinteret is a 1D array
-                        "y": y_repeated[:, 0]
-                    })
+                    y_hat_proba_i_vinteret = pd.DataFrame(y_hat_proba_i_vinteret, columns=["proba"])
+                    # Put the predictions made from Individual i feature values in subset S in
+                    # a DataFrame / Column name "proba"
 
-                    # Use vectorized operations instead of .apply() for improved performance
-                    mean_values_1_vinteret = np.mean((1 - df_temp_vinteret["y"].values) * (df_temp_vinteret["proba"].values > df_temp_vinteret["tirage"].values))
-                    mean_values_2_vinteret = np.mean(df_temp_vinteret["y"].values * (1 - (df_temp_vinteret["proba"].values > df_temp_vinteret["tirage"].values)))
+                    ####
 
-                    G_vinteret = (y[j] * mean_values_1_vinteret + (1 - y[j]) * mean_values_2_vinteret) / globals()['delta_1']
+                    y_hat_tirage_vinteret = pd.DataFrame({"tirage": [y_hat_tirage_vinteret]})
+                    # Put the predictions made from all individuals feature values in
+                    # subset S (shuffled values) in a DataFrame / Column name "tirage"
+
+                    y_hat_tirage_vinteret = pd.DataFrame(
+                        np.repeat(y_hat_tirage_vinteret.values, N, axis=0), columns=["tirage"])
+                    # Create a DataFrame where each row contains all of the predictions
+                    # from all individuals feature values in subset S (shuffled values)
+                    # Necessary to use the method apply on a DataFrame to implement a function
+                    # on each row. Specifically, we want to compute the number of concordant
+                    # pairs for each individual in the database.
+
+                    ####
+
+                    y_temp_vinteret = pd.DataFrame({"y": [y]})  # DataFrame with target values / column name "y"
+
+                    y_temp_vinteret = pd.DataFrame(np.repeat(y_temp_vinteret.values, N, axis=0), columns=["y"])
+                    # As for the object "y_hat_tirage" we create a DataFrame where each
+                    # row contrains all of the target values. Necessary to use the method
+                    # apply on a DataFrame to implement a function on each row.
+                    # Specifically, we want to compute the number of concordant
+                    # pairs for each individual in the database.
+
+                    df_temp_vinteret = pd.concat([y_hat_proba_i_vinteret, y_hat_tirage_vinteret, y_temp_vinteret],
+                                                 axis=1)
+
+                    delta_n1_vinteret = df_temp_vinteret.apply(
+                        lambda row: np.mean((1 - row["y"]) * (row["proba"] > row["tirage"])), axis=1)
+                    # Compute delta_n1 for individual i / scalar value
+
+                    delta_n2_vinteret = df_temp_vinteret.apply(
+                        lambda row: np.mean(row["y"] * (1 - (row["proba"] > row["tirage"]))), axis=1)
+                    # Compute delta_n2 for individual i / scalar value
+
+                    G_vinteret = (y[j] * delta_n1_vinteret + (1 - y[j]) * delta_n2_vinteret) / globals()[
+                        'delta_1']  # delta_1 created with globals()['delta_{}'.format(d)] // different from delta_n1
+                    # Compute the individual i contribution to the performance metric
+                    # for the subset S while knowing the feature value of interest of
+                    # individual i
 
                 elif Eval_Metric == ["BS"]:
                     y_pred_i_vinteret = model_predict(X_tirage_i_vinteret, model)
