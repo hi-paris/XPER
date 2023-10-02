@@ -123,7 +123,7 @@ labels = list(loan.drop(columns='Loan_Status').columns)
 ```python
 viz.bar_plot(XPER_values=XPER_values, X_test=pd.DataFrame(X_test), labels=labels, p=6,percentage=True)
 ```
-![sample](images/chart3.png)
+![sample](images/chart8.png)
 
 
 ##### Beeswarn plot
