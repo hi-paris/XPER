@@ -72,7 +72,7 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
     ### writting the sample method at row level:
     import numpy as np
 
-    def sample_data(X, y, fraction=0.10):
+    def sample_data(X, y, fraction=0.50):
         """
         Randomly sample a fraction of rows from datasets X and y.
 
@@ -122,13 +122,13 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
         
         return X[sample_indices], y[sample_indices]
 
-    X, y = sample_data(X, y, 0.10)
+    X, y = sample_data(X, y, 0.50)
 
     if (getattr(model,"predict_proba","No") != "No") and (getattr(model,"predict","No") != "No"):
         # The model includes a "predict_proba" method and a "predict" method
         # The predict method returns the predicted class 
         
-        if Eval_Metric[0] in ["AUC","BS"]: # Use "predict_proba"
+        if Eval_Metric[0] in ["AUC","BS","SHAP"]: # Use "predict_proba"
             
             
             if intercept == True: # If an intercept is on the first column of the database
@@ -167,7 +167,7 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
         # the predict method returns estimated probabilities of the positive
         # class.
         
-        if Eval_Metric[0] in ["R2","MSE","MAE","AUC","BS"]: 
+        if Eval_Metric[0] in ["R2","MSE","MAE","AUC","BS","SHAP"]: 
             # Use the predict method, do not need to specify a threshold 
             # to transform predicted probabilities into predicted class 
             # for classification models (without a predict_proba method).
