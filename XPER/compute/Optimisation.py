@@ -389,7 +389,6 @@ class OptimizationClass:
                     G_vinteret = 1 - ((y[j] - y_hat_pred_i_vinteret) ** 2) / globals()['delta_1']
 
             ###
-
             G_i_j.append(G)
 
             if kernel != True:
