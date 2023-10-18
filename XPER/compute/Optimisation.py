@@ -256,11 +256,6 @@ class OptimizationClass:
                 y_pred_i = model_predict(X_tirage_i, model)
                 G = 1 - ((y[j] - y_pred_i) ** 2) / globals()['delta_1']
 
-            elif Eval_Metric == ["SHAP"]:
-           
-                G = model_predict(X_tirage_i,model)
-
-
             if kernel != True:
                 # =============================================================================
                 # Code specific to the exact computation because we compute the XPER
@@ -393,10 +388,7 @@ class OptimizationClass:
                     y_hat_pred_i_vinteret = model_predict(X_tirage_i_vinteret, model)
                     G_vinteret = 1 - ((y[j] - y_hat_pred_i_vinteret) ** 2) / globals()['delta_1']
 
-                elif Eval_Metric == ["SHAP"]:
-                    G_vinteret = model_predict(X_tirage_i_vinteret,model)
             ###
-
             G_i_j.append(G)
 
             if kernel != True:

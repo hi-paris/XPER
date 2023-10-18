@@ -72,9 +72,10 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
     ### writting the sample method at row level:
     import numpy as np
 
-    def sample_data(X, y, fraction=0.50):
+    def sample_data(X, y, sample_size=1000):
         """
-        Randomly sample a fraction of rows from datasets X and y.
+        Randomly sample a fixed number of rows from datasets X and y, unless the dataset 
+        size is below the threshold, in which case the original data is returned.
 
         Parameters
         ----------
@@ -82,16 +83,15 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
             The input data array of shape (n_samples, n_features).
         y : ndarray
             The target values array of shape (n_samples,).
-        fraction : float, optional (default=0.10)
-            The fraction of data to sample from X and y. 
-            Must be between 0 and 1.
+        sample_size : int, optional (default=1000)
+            The number of data rows to sample from X and y.
 
         Returns
         -------
         X_sample : ndarray
-            The sampled data array from X of shape (fraction*n_samples, n_features).
+            The sampled data array from X of shape (sample_size, n_features) or the original X if below threshold.
         y_sample : ndarray
-            The sampled target values array from y of shape (fraction*n_samples,).
+            The sampled target values array from y of shape (sample_size,) or the original y if below threshold.
 
         Raises
         ------
@@ -107,28 +107,32 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
         --------
         >>> X = np.array([[1, 2], [3, 4], [5, 6], [7, 8], [9, 10]])
         >>> y = np.array([1, 2, 3, 4, 5])
-        >>> X_sample, y_sample = sample_data(X, y, 0.20)
+        >>> X_sample, y_sample = sample_data(X, y)
         >>> print(X_sample)
         >>> print(y_sample)
         """
         assert len(X) == len(y), "X and y should have the same number of rows"
         
+        if len(X) <= sample_size:
+            return X, y
+            
         # Generate random indices
         indices = np.arange(len(X))
         np.random.shuffle(indices)
         
-        sample_size = int(len(X) * fraction)
         sample_indices = indices[:sample_size]
         
         return X[sample_indices], y[sample_indices]
 
-    X, y = sample_data(X, y, 0.50)
+    # Example usage:
+    X, y = sample_data(X, y)
+
 
     if (getattr(model,"predict_proba","No") != "No") and (getattr(model,"predict","No") != "No"):
         # The model includes a "predict_proba" method and a "predict" method
         # The predict method returns the predicted class 
         
-        if Eval_Metric[0] in ["AUC","BS","SHAP"]: # Use "predict_proba"
+        if Eval_Metric[0] in ["AUC","BS"]: # Use "predict_proba"
             
             
             if intercept == True: # If an intercept is on the first column of the database
@@ -167,7 +171,7 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
         # the predict method returns estimated probabilities of the positive
         # class.
         
-        if Eval_Metric[0] in ["R2","MSE","MAE","AUC","BS","SHAP"]: 
+        if Eval_Metric[0] in ["R2","MSE","MAE","AUC","BS"]: 
             # Use the predict method, do not need to specify a threshold 
             # to transform predicted probabilities into predicted class 
             # for classification models (without a predict_proba method).
