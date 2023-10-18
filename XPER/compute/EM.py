@@ -69,65 +69,6 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
     # of the inputs (X).
     # =============================================================================
 
-    ### writting the sample method at row level:
-    import numpy as np
-
-    def sample_data(X, y, sample_size=1000):
-        """
-        Randomly sample a fixed number of rows from datasets X and y, unless the dataset 
-        size is below the threshold, in which case the original data is returned.
-
-        Parameters
-        ----------
-        X : ndarray
-            The input data array of shape (n_samples, n_features).
-        y : ndarray
-            The target values array of shape (n_samples,).
-        sample_size : int, optional (default=1000)
-            The number of data rows to sample from X and y.
-
-        Returns
-        -------
-        X_sample : ndarray
-            The sampled data array from X of shape (sample_size, n_features) or the original X if below threshold.
-        y_sample : ndarray
-            The sampled target values array from y of shape (sample_size,) or the original y if below threshold.
-
-        Raises
-        ------
-        AssertionError
-            If the number of rows in X and y do not match.
-
-        Notes
-        -----
-        The sampling is random, so different calls can produce different results.
-        For reproducibility, set a random seed before calling the function, e.g., `np.random.seed(42)`.
-
-        Examples
-        --------
-        >>> X = np.array([[1, 2], [3, 4], [5, 6], [7, 8], [9, 10]])
-        >>> y = np.array([1, 2, 3, 4, 5])
-        >>> X_sample, y_sample = sample_data(X, y)
-        >>> print(X_sample)
-        >>> print(y_sample)
-        """
-        assert len(X) == len(y), "X and y should have the same number of rows"
-        
-        if len(X) <= sample_size:
-            return X, y
-            
-        # Generate random indices
-        indices = np.arange(len(X))
-        np.random.shuffle(indices)
-        
-        sample_indices = indices[:sample_size]
-        
-        return X[sample_indices], y[sample_indices]
-
-    # Example usage:
-    X, y = sample_data(X, y)
-
-
     if (getattr(model,"predict_proba","No") != "No") and (getattr(model,"predict","No") != "No"):
         # The model includes a "predict_proba" method and a "predict" method
         # The predict method returns the predicted class 
