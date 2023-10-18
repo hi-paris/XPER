@@ -14,9 +14,6 @@ import sys
 import warnings
 warnings.filterwarnings("ignore")
 
-
-
-
 class ModelPerformance():
     """
     Class to evaluate the performance of a model using various evaluation metrics.
@@ -33,6 +30,32 @@ class ModelPerformance():
             y_test (ndarray): Test set labels.
             model : Model used for predictions.
         """
+
+        #def sample_data(X, y, sample_size=1000):
+        #assert len(X) == len(y), "X and y should have the same number of rows"
+        sample_size = 850
+        print(type(X_train))
+        if len(X_train) <= sample_size:
+                X_train = X_train
+                y_train = y_train
+                X_test = X_test
+                y_test = y_test
+
+        else:
+            indices = np.arange(len(X_train))
+            np.random.shuffle(indices)
+            sample_indices = indices[:sample_size]
+            X_train = X_train[sample_indices]
+            y_train = y_train[sample_indices]
+
+            sample_size_test = 150
+            indices_test = np.arange(len(X_test))
+            np.random.shuffle(indices_test)
+            sample_indices_test = indices_test[:sample_size_test]
+            X_test = X_test[sample_indices_test]
+            y_test = y_test[sample_indices_test]
+
+
         self.X_train = X_train
         self.y_train = y_train
         self.X_test = X_test
