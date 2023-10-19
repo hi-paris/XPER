@@ -242,8 +242,8 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
         combination_list.pop(0) #Remove the first coalition to avoid infinite weight
         combination_list.pop(-1) #Remove the last coalition to avoid infinite weight
 
-        combination_list_sampled = random.sample(combination_list, N_coalition_sampled)
-        
+        #combination_list_sampled = random.sample(combination_list, N_coalition_sampled)
+        combination_list_sampled = combination_list[:N_coalition_sampled]
     else:
     
         variable = liste.copy()      # Copy the list with numbers from 1 to p
