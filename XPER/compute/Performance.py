@@ -19,7 +19,7 @@ class ModelPerformance():
     Class to evaluate the performance of a model using various evaluation metrics.
     """
 
-    def __init__(self, X_train, y_train, X_test, y_test, model):
+    def __init__(self, X_train, y_train, X_test, y_test, model,sample_size):
         """
         Initialize the ModelEvaluator instance.
 
@@ -201,10 +201,10 @@ class ModelPerformance():
 
         else:
             if N_coalition_sampled is None:
-                if self.X_test.shape[1] > 11:
-                    N_coalition_sampled = 2048 + (2*p)
-                elif self.X_test.shape[1]==11:
-                    N_coalition_sampled = 1024 + (2*p)
+                if self.X_test.shape[1] > 10:
+                    N_coalition_sampled = 1024 #+ (2*p)
+                #elif self.X_test.shape[1]==11:
+                #    N_coalition_sampled = 1024 #+ (2*p)
                 else:
                     N_coalition_sampled = (2**p) - 2
 
