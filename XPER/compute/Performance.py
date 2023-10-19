@@ -19,7 +19,7 @@ class ModelPerformance():
     Class to evaluate the performance of a model using various evaluation metrics.
     """
 
-    def __init__(self, X_train, y_train, X_test, y_test, model,sample_size):
+    def __init__(self, X_train, y_train, X_test, y_test, model,sample_size=1000):
         """
         Initialize the ModelEvaluator instance.
 
@@ -31,24 +31,16 @@ class ModelPerformance():
             model : Model used for predictions.
         """
 
-        sample_size = 850
-        if len(X_train) <= sample_size:
-                X_train = X_train
-                y_train = y_train
+        if len(X_test) <= sample_size:
                 X_test = X_test
                 y_test = y_test
         else:
-            indices = np.arange(len(X_train))
+            indices = np.arange(len(X_test))
             np.random.shuffle(indices)
             sample_indices = indices[:sample_size]
-            X_train = X_train.iloc[sample_indices]
-            y_train = y_train.iloc[sample_indices]
-            sample_size_test = 150
-            indices_test = np.arange(len(X_test))
-            np.random.shuffle(indices_test)
-            sample_indices_test = indices_test[:sample_size_test]
-            X_test = X_test.iloc[sample_indices_test]
-            y_test = y_test.iloc[sample_indices_test]
+            X_test = X_test.iloc[sample_indices]
+            y_test = y_test.iloc[sample_indices]
+
         self.X_train = X_train.values
         self.y_train = y_train.values
         self.X_test = X_test.values
