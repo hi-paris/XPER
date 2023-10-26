@@ -244,7 +244,7 @@ class visualizationClass(ModelPerformance):
             # We pick the value of the individual performance metric value for individual
             # "ind_i" and we round the number to the 2nd decimal.
             
-        X = pd.Series(np.round(X_test[ind_i,:],3),index=variable_name).astype(object)
+        X = pd.Series(np.round(X_test.iloc[ind_i,:],3),index=variable_name).astype(object)
             # Feature values of individual "ind_i" in a pandas series object with the
             # index being equal to the name of the variable ("variable_name"). 
             # Dtype object allows to have both integers and floats on the same pandas series
