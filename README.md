@@ -74,12 +74,6 @@ model = gridXGBOOST.fit(X_train, y_train)
 #### 3️⃣ Monitor Performance 📈
 
 ```python
-# Convert the training and testing data from Pandas DataFrames to NumPy arrays
-X_train = X_train.values
-y_train = y_train.values
-X_test = X_test.values
-y_test = y_test.values
-
 from XPER.compute.Performance import ModelPerformance
 
 # Define the evaluation metric(s) to be used
