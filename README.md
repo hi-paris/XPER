@@ -95,14 +95,14 @@ print("Performance Metrics: ", round(PM, 3))
 # Calculate XPER values for the model's performance
 XPER_values = XPER.calculate_XPER_values(["AUC"])
 ```
-<img src="images/false.png" alt="metrics" width="300">
+<img src="images/true.png" alt="metrics" width="300">
 
 ```python
 # Option 2 - Kernel False
 # Calculate XPER values for the model's performance
 XPER_values = XPER.calculate_XPER_values(["AUC"],kernel=False)
 ```
-<img src="images/true.png" alt="metrics" width="300">
+<img src="images/false.png" alt="metrics" width="300">
 
 #### 4️⃣ Visualisation 📊
 
