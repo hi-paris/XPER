@@ -80,7 +80,7 @@ from XPER.compute.Performance import ModelPerformance
 XPER = ModelPerformance(X_train, y_train, X_test, y_test, model)
 
 # Evaluate the model performance using the specified metric(s)
-PM = XPER.evaluate(["Precision"])
+PM = XPER.evaluate(["AUC"])
 
 # Print the performance metrics
 print("Performance Metrics: ", round(PM, 3))
@@ -93,15 +93,16 @@ print("Performance Metrics: ", round(PM, 3))
 ```python
 # Option 1 - Kernel True
 # Calculate XPER values for the model's performance
-XPER_values = XPER.calculate_XPER_values(["Precision"])
+XPER_values = XPER.calculate_XPER_values(["AUC"])
 ```
+<img src="images/false.png" alt="metrics" width="300">
 
 ```python
 # Option 2 - Kernel False
 # Calculate XPER values for the model's performance
-XPER_values = XPER.calculate_XPER_values(["Precision"],kernel=False)
+XPER_values = XPER.calculate_XPER_values(["AUC"],kernel=False)
 ```
-<img src="images/kernel-false.png" alt="metrics" width="300">
+<img src="images/true.png" alt="metrics" width="300">
 
 #### 4️⃣ Visualisation 📊
 
@@ -125,7 +126,7 @@ viz.bar_plot(XPER_values=XPER_values, X_test=pd.DataFrame(X_test), labels=labels
 ```python
 viz.beeswarn_plot(XPER_values=XPER_values,X_test=pd.DataFrame(X_test),labels=labels)
 ```
-![sample](images/bis.png)
+![sample](images/be.png)
 
 ##### Force plot
 
