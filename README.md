@@ -86,7 +86,7 @@ PM = XPER.evaluate(["AUC"])
 print("Performance Metrics: ", round(PM, 3))
 
 ```
-<img src="images/perf.png" alt="metrics" width="200">
+<img src="images/perf2.png" alt="metrics" width="200">
 
 **For use cases above 10 feature variables it is advised to use the default option kernel=True for computation efficiency** ➡️
 
