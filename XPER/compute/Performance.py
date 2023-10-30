@@ -192,26 +192,27 @@ class ModelPerformance():
             return phi_j, phi_i_j
 
         else:
-            if N_coalition_sampled is None:
-                if self.X_test.shape[1] > 10:
-                    N_coalition_sampled = 1024 #+ (2*p)
-                #elif self.X_test.shape[1]==11:
-                #    N_coalition_sampled = 1024 #+ (2*p)
-                else:
-                    N_coalition_sampled = (2**p) - 2
+            for _ in tqdm(range(1), desc="Performing Computation", leave=True):
+                if N_coalition_sampled is None:
+                    if self.X_test.shape[1] > 10:
+                        N_coalition_sampled = 2 * p + 2048
+                    #elif self.X_test.shape[1]==11:
+                    #    N_coalition_sampled = 1024 #+ (2*p)
+                    else:
+                        N_coalition_sampled = (2**p) - 2
 
-            Contrib_Kernel = XPER_choice(
-                y=self.y_test,
-                X=self.X_test,
-                model=self.model,
-                Eval_Metric=Eval_Metric,
-                N_coalition_sampled=N_coalition_sampled,
-                CFP=CFP,
-                CFN=CFN,
-                intercept=intercept,
-                kernel=kernel
-            )
+                Contrib_Kernel = XPER_choice(
+                    y=self.y_test,
+                    X=self.X_test,
+                    model=self.model,
+                    Eval_Metric=Eval_Metric,
+                    N_coalition_sampled=N_coalition_sampled,
+                    CFP=CFP,
+                    CFN=CFN,
+                    intercept=intercept,
+                    kernel=kernel
+                )
 
-            phi, phi_i_j = Contrib_Kernel
+                phi, phi_i_j = Contrib_Kernel
 
             return phi, phi_i_j
