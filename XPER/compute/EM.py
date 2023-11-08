@@ -22,6 +22,64 @@ import statsmodels.api as sm
 from concurrent.futures import ProcessPoolExecutor
 
 
+def main(nb_var):
+  
+    # Draw a number randomly from 1 to (nb_var-1)
+   
+    random_int = random.randint(1, nb_var-1)
+   
+    # Create a list which contains "random_int" elements. Each element is
+    # a scalar from 1 to nb_var
+   
+    elements = makelist(random_int,nb_var)
+  
+    return elements
+
+
+def makelist(random_int,nb_var):
+   
+    num_list = []
+   
+    for count in range(random_int):
+       
+        num_list.append(random.randint(1,nb_var)) # Length of the variable
+       
+    return num_list
+
+
+def sampled_coalitions(N_coalition_sampled, nb_var):
+  
+    # Condition to avoid an infinity loop
+
+    nb_coal_max = 2**(p) - 2
+   
+    if N_coalition_sampled <= nb_coal_max:
+   
+        while_condition = N_coalition_sampled
+       
+    else: # If the number of coalitions to sample is higher than possible
+          # as computed with "nb_coal_max" then we set the number of coalitions
+          # sampled to "nb_coal_max".
+       
+        while_condition = nb_coal_max
+   
+    combination = set() # We use a set to avoid having duplicates
+  
+    # While the number of coalitions created is inferior to the number of coalitions
+    # to create, i.e., "N_coalition_sampled" we continue to create new coalitions.
+   
+    while len(combination) < while_condition:
+       
+        tuples = tuple(set(sorted(main(nb_var)))) # set to avoid duplicate values
+      
+        combination.add(tuples)
+      
+    combination = list(combination) # List containing tuples representing
+                                    # the coaltions of variable.
+  
+    return combination
+
+
     
 
 def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled = 1000,
@@ -232,18 +290,19 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
     
     if kernel == True:
         
-        liste = list(range(p))
-        liste = [x+1 for x in liste] # To move index from (0,p-1) to (1,p)
+        # liste = list(range(p))
+        # liste = [x+1 for x in liste] # To move index from (0,p-1) to (1,p)
 
-        variable = liste.copy()
+        # variable = liste.copy()
+        
+        # combination_list = [list(combinations(variable, combination)) for combination in range(len(variable)+1)]
+        # combination_list = list(chain.from_iterable(combination_list))
+        # combination_list.pop(0) #Remove the first coalition to avoid infinite weight
+        # combination_list.pop(-1) #Remove the last coalition to avoid infinite weight
 
-        combination_list = [list(combinations(variable, combination)) for combination in range(len(variable)+1)]
-        combination_list = list(chain.from_iterable(combination_list))
-        combination_list.pop(0) #Remove the first coalition to avoid infinite weight
-        combination_list.pop(-1) #Remove the last coalition to avoid infinite weight
-
-        #combination_list_sampled = random.sample(combination_list, N_coalition_sampled)
-        combination_list_sampled = combination_list[:N_coalition_sampled]
+        # #combination_list_sampled = random.sample(combination_list, N_coalition_sampled)
+        # combination_list_sampled = combination_list[:N_coalition_sampled]
+        combination_list_sampled = sampled_coalitions(N_coalition_sampled=N_coalition_sampled, nb_var=p)
     else:
     
         variable = liste.copy()      # Copy the list with numbers from 1 to p
