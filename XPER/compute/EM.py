@@ -51,7 +51,7 @@ def sampled_coalitions(N_coalition_sampled, nb_var):
   
     # Condition to avoid an infinity loop
 
-    nb_coal_max = 2**(p) - 2
+    nb_coal_max = 2**(nb_var) - 2
    
     if N_coalition_sampled <= nb_coal_max:
    
@@ -302,7 +302,10 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled 
 
         # #combination_list_sampled = random.sample(combination_list, N_coalition_sampled)
         # combination_list_sampled = combination_list[:N_coalition_sampled]
+
         combination_list_sampled = sampled_coalitions(N_coalition_sampled=N_coalition_sampled, nb_var=p)
+        print(len(combination_list_sampled))
+
     else:
     
         variable = liste.copy()      # Copy the list with numbers from 1 to p
