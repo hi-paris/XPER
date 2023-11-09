@@ -194,7 +194,10 @@ class ModelPerformance():
         else:
             for _ in tqdm(range(1), desc="Performing Computation", leave=True):
                 if N_coalition_sampled is None:
-                    if self.X_test.shape[1] > 10:
+                    if self.X_test.shape[1] == 11:
+                        N_coalition_sampled = 2046
+
+                    elif self.X_test.shape[1] > 11:
                         N_coalition_sampled = 2 * p + 2048
                     #elif self.X_test.shape[1]==11:
                     #    N_coalition_sampled = 1024 #+ (2*p)
@@ -215,4 +218,4 @@ class ModelPerformance():
 
                 phi, phi_i_j = Contrib_Kernel
 
-            return phi, phi_i_j
+        return phi, phi_i_j
