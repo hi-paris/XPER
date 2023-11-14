@@ -169,6 +169,32 @@ class OptimizationClass:
 
                 ####
 
+                # Calculate the complement of y_hat_tirage and store it in one_y_hat_tirage
+                one_y_hat_tirage=1-y_hat_tirage
+
+                # Extract the values of the first column of y_hat_proba_i and transpose the result
+                y_hat_proba_i_vec=y_hat_proba_i.values.T[0,:] 
+
+                # Initialize empty lists to store delta_n1 and delta_n2 values
+                delta_n1_=[]
+                delta_n2_=[]
+
+                # Iterate over each probability in y_hat_proba_i_vec
+                for pob in y_hat_proba_i_vec: 
+                    # Calculate delta_n1: mean of one_y_hat_tirage for values greater than y_hat_tirage
+                    delta_n1_.append(np.mean(one_y_hat_tirage*(pob > y_hat_tirage)))  
+
+                    # Calculate delta_n2: mean of y for values less than or equal to y_hat_tirage
+                    delta_n2_.append(np.mean(y*(1-(pob > y_hat_tirage)))) 
+                
+
+                # Convert the lists to pandas Series
+                delta_n1=pd.Series(delta_n1_)
+                delta_n2=pd.Series(delta_n2_)
+
+
+                
+                """
                 y_hat_tirage = pd.DataFrame({"tirage": [y_hat_tirage]})
                 # Put the predictions made from all individuals feature values in
                 # subset S (shuffled values) in a DataFrame / Column name "tirage"
@@ -200,6 +226,7 @@ class OptimizationClass:
                 delta_n2 = df_temp.apply(
                     lambda row: np.mean(row["y"] * (1 - (row["proba"] > row["tirage"]))), axis=1)
                 # Compute delta_n2 for individual i / scalar value
+                """
 
                 G = (y[j] * delta_n1 + (1 - y[j]) * delta_n2) / globals()['delta_1']  # delta_1 created with globals()['delta_{}'.format(d)] // different from delta_n1
                 # Compute the individual i contribution to the performance metric
