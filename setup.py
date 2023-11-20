@@ -45,6 +45,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/hi-paris/XPER',
-    version='0.0.73',
+    version='0.0.74',
     zip_safe=False,
 )
