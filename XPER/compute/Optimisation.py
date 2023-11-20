@@ -169,8 +169,8 @@ class OptimizationClass:
 
                 ####
 
-                # Calculate the complement of y_hat_tirage and store it in one_y_hat_tirage
-                one_y_hat_tirage=1-y_hat_tirage
+                # Calculate the complement of y_hat_tirage and store it in one_y
+                one_y=1-y 
 
                 # Extract the values of the first column of y_hat_proba_i and transpose the result
                 y_hat_proba_i_vec=y_hat_proba_i.values.T[0,:] 
@@ -182,7 +182,7 @@ class OptimizationClass:
                 # Iterate over each probability in y_hat_proba_i_vec
                 for pob in y_hat_proba_i_vec: 
                     # Calculate delta_n1: mean of one_y_hat_tirage for values greater than y_hat_tirage
-                    delta_n1_.append(np.mean(one_y_hat_tirage*(pob > y_hat_tirage)))  
+                    delta_n1_.append(np.mean(one_y*(pob > y_hat_tirage)))  
 
                     # Calculate delta_n2: mean of y for values less than or equal to y_hat_tirage
                     delta_n2_.append(np.mean(y*(1-(pob > y_hat_tirage)))) 
