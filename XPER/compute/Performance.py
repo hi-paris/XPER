@@ -19,7 +19,7 @@ class ModelPerformance():
     Class to evaluate the performance of a model using various evaluation metrics.
     """
 
-    def __init__(self, X_train, y_train, X_test, y_test, model,sample_size=1000):
+    def __init__(self, X_train, y_train, X_test, y_test, model,sample_size=1000,seed=42):
         """
         Initialize the ModelEvaluator instance.
 
@@ -36,6 +36,7 @@ class ModelPerformance():
                 y_test = y_test
         else:
             indices = np.arange(len(X_test))
+            np.random.seed(seed)
             np.random.shuffle(indices)
             sample_indices = indices[:sample_size]
             X_test = X_test.iloc[sample_indices]
