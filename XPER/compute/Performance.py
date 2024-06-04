@@ -192,7 +192,9 @@ class ModelPerformance():
                 phi_i_j = contrib[1].copy()
                 df_phi_i_j.iloc[:, i] = phi_i_j.copy()
 
-            phi_i_j = pd.concat([benchmark_ind, df_phi_i_j], axis=1).values
+            phi_i_j = pd.concat([benchmark_ind, df_phi_i_j], axis=1).values.astype(
+                np.float64
+            )
 
             return phi_j, phi_i_j
 
