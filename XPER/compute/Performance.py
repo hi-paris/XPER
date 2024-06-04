@@ -2,9 +2,8 @@
 #                               Packages
 # =============================================================================
 from XPER.compute.EM import XPER_choice
-from sklearn.metrics import roc_auc_score,brier_score_loss,balanced_accuracy_score,accuracy_score
+from sklearn.metrics import roc_auc_score,brier_score_loss,balanced_accuracy_score,accuracy_score,r2_score, mean_squared_error, mean_absolute_error
 import numpy as np
-from sklearn.metrics import mean_squared_error, mean_absolute_error
 from datetime import datetime
 import pandas as pd 
 from tqdm import tqdm
@@ -19,7 +18,7 @@ class ModelPerformance():
     Class to evaluate the performance of a model using various evaluation metrics.
     """
 
-    def __init__(self, X_train, y_train, X_test, y_test, model,sample_size=1000,seed=42):
+    def __init__(self, X_train, y_train, X_test, y_test, model,sample_size=500,seed=42):
         """
         Initialize the ModelEvaluator instance.
 
@@ -39,13 +38,13 @@ class ModelPerformance():
             np.random.seed(seed)
             np.random.shuffle(indices)
             sample_indices = indices[:sample_size]
-            X_test = X_test.iloc[sample_indices]
-            y_test = y_test.iloc[sample_indices]
+            X_test = X_test[sample_indices]
+            y_test = y_test[sample_indices]
 
-        self.X_train = X_train.values
-        self.y_train = y_train.values
-        self.X_test = X_test.values
-        self.y_test = y_test.values
+        self.X_train = X_train
+        self.y_train = y_train
+        self.X_test = X_test
+        self.y_test = y_test
         self.model = model
 
 
@@ -56,9 +55,11 @@ class ModelPerformance():
         Evaluate the performance of the model using various evaluation metrics.
 
         Parameters:
-            Eval_Metric (str or list): Evaluation metric(s) to compute. Options: "AUC", "Accuracy",
-                "Balanced_accuracy", "BS" (Brier Score), "MC" (Misclassification Cost),
-                "Sensitivity", "Specificity", "Precision".
+            Eval_Metric (str or list): Evaluation metric(s) to compute. 
+                Options in alphabetical order: 
+                    - for regression models: "MAE", "MSE", "R2", "RMSE". 
+                    - for classification models: "AUC", "Accuracy", "Balanced_accuracy", "BS" (Brier Score), "MC" (Misclassification Cost),
+                                                 "Precision", "Sensitivity", "Specificity".
             CFP: Cost of false positive.
             CFN: Cost of false negative.
 
@@ -73,6 +74,9 @@ class ModelPerformance():
         if Eval_Metric == ["MSE"]:
             y_pred = model.predict(self.X_test)
             PM = mean_squared_error(self.y_test, y_pred)
+        elif Eval_Metric == ["R2"]:
+            y_pred = model.predict(self.X_test)
+            PM = r2_score(self.y_test, y_pred)
         elif Eval_Metric == ["RMSE"]:
             y_pred = model.predict(self.X_test)
             PM = np.sqrt(mean_squared_error(self.y_test, y_pred))
