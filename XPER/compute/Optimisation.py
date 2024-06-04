@@ -192,42 +192,6 @@ class OptimizationClass:
                 delta_n1=pd.Series(delta_n1_)
                 delta_n2=pd.Series(delta_n2_)
 
-
-                
-                """
-                y_hat_tirage = pd.DataFrame({"tirage": [y_hat_tirage]})
-                # Put the predictions made from all individuals feature values in
-                # subset S (shuffled values) in a DataFrame / Column name "tirage"
-
-                y_hat_tirage = pd.DataFrame(np.repeat(y_hat_tirage.values, N, axis=0), columns=["tirage"])
-                # Create a DataFrame where each row contains all of the predictions
-                # from all individuals feature values in subset S (shuffled values)
-                # Necessary to use the method apply on a DataFrame to implement a function
-                # on each row. Specifically, we want to compute the number of concordant
-                # pairs for each individual in the database.
-
-                ####
-
-                y_temp = pd.DataFrame({"y": [y]})  # DataFrame with target values / column name "y"
-
-                y_temp = pd.DataFrame(np.repeat(y_temp.values, N, axis=0), columns=["y"])
-                # As for the object "y_hat_tirage" we create a DataFrame where each
-                # row contains all of the target values. Necessary to use the method
-                # apply on a DataFrame to implement a function on each row.
-                # Specifically, we want to compute the number of concordant
-                # pairs for each individual in the database.
-
-                df_temp = pd.concat([y_hat_proba_i, y_hat_tirage, y_temp], axis=1)
-
-                delta_n1 = df_temp.apply(
-                    lambda row: np.mean((1 - row["y"]) * (row["proba"] > row["tirage"])), axis=1)
-                # Compute delta_n1 for individual i / scalar value
-
-                delta_n2 = df_temp.apply(
-                    lambda row: np.mean(row["y"] * (1 - (row["proba"] > row["tirage"]))), axis=1)
-                # Compute delta_n2 for individual i / scalar value
-                """
-
                 G = (y[j] * delta_n1 + (1 - y[j]) * delta_n2) / globals()['delta_1']  # delta_1 created with globals()['delta_{}'.format(d)] // different from delta_n1
                 # Compute the individual i contribution to the performance metric
                 # for the subset S and without knowing the feature value of interest of
@@ -415,7 +379,6 @@ class OptimizationClass:
                     y_hat_pred_i_vinteret = model_predict(X_tirage_i_vinteret, model)
                     G_vinteret = 1 - ((y[j] - y_hat_pred_i_vinteret) ** 2) / globals()['delta_1']
 
-            ###
             G_i_j.append(G)
 
             if kernel != True:
@@ -427,8 +390,6 @@ class OptimizationClass:
                 Metric_ind_j_vinteret[:, j] = np.sum(G_vinteret) / N
 
             time_elapsed_AUC = datetime.now() - start_time_AUC
-
-            # print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed_AUC))
 
         Metric_s = np.sum(G_i_j) / ((N) ** 2)  # np.mean(Metric_ind_j)
 
