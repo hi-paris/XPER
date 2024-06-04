@@ -206,8 +206,7 @@ class ModelPerformance():
 
                     elif self.X_test.shape[1] > 11:
                         N_coalition_sampled = 2 * p + 2048
-                    #elif self.X_test.shape[1]==11:
-                    #    N_coalition_sampled = 1024 #+ (2*p)
+                        
                     else:
                         N_coalition_sampled = (2**p) - 2
 
