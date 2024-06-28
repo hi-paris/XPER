@@ -42,7 +42,6 @@ import XPER
 
 ```python
 
-import XPER
 from XPER.datasets.load_data import loan_status
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -50,7 +49,7 @@ from sklearn.model_selection import train_test_split
 loan = loan_status().iloc[:, :6]
 
 X = loan.drop(columns='Loan_Status')
-Y = pd.DataFrame(loan['Loan_Status'])
+Y = pd.Series(loan['Loan_Status'])
 
 X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.15, random_state=3)
 ```
@@ -77,10 +76,10 @@ model = gridXGBOOST.fit(X_train, y_train)
 from XPER.compute.Performance import ModelPerformance
 
 # Define the evaluation metric(s) to be used
-XPER = ModelPerformance(X_train, y_train, X_test, y_test, model)
+XPER_ = ModelPerformance(X_train.values, y_train.values, X_test.values, y_test.values, model)
 
 # Evaluate the model performance using the specified metric(s)
-PM = XPER.evaluate(["AUC"])
+PM = XPER_.evaluate(["AUC"])
 
 # Print the performance metrics
 print("Performance Metrics: ", round(PM, 3))
@@ -93,14 +92,14 @@ print("Performance Metrics: ", round(PM, 3))
 ```python
 # Option 1 - Kernel True
 # Calculate XPER values for the model's performance
-XPER_values = XPER.calculate_XPER_values(["AUC"])
+XPER_values = XPER_.calculate_XPER_values(["AUC"])
 ```
 <img src="images/true.png" alt="metrics" width="300">
 
 ```python
 # Option 2 - Kernel False
 # Calculate XPER values for the model's performance
-XPER_values = XPER.calculate_XPER_values(["AUC"],kernel=False)
+XPER_values = XPER_.calculate_XPER_values(["AUC"],kernel=False)
 ```
 <img src="images/false.png" alt="metrics" width="300">
 
