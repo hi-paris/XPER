@@ -125,7 +125,7 @@ class ModelPerformance():
 
         return PM
 
-    def calculate_XPER_values(self, Eval_Metric, CFP=None, CFN=None, N_coalition_sampled=None, kernel=True, intercept=False):
+    def calculate_XPER_values(self, Eval_Metric, CFP=None, CFN=None, N_coalition_sampled=None, kernel=True, intercept=False, execution_type="ThreadPoolExecutor"):
         """
         Calculates XPER (Extended Partial-Expected Ranking) values for each feature based on the given inputs.
 
@@ -167,7 +167,8 @@ class ModelPerformance():
                     CFP=CFP,
                     CFN=CFN,
                     intercept=intercept,
-                    kernel=kernel
+                    kernel=kernel,
+                    execution_type=execution_type
                 )
 
                 progress_bar.update(1)
@@ -219,9 +220,17 @@ class ModelPerformance():
                     CFP=CFP,
                     CFN=CFN,
                     intercept=intercept,
-                    kernel=kernel
+                    kernel=kernel,
+                    execution_type=execution_type
                 )
 
                 phi, phi_i_j = Contrib_Kernel
 
         return phi, phi_i_j
+
+
+if __name__ == '__main__':
+    # Assuming you have X_train, y_train, X_test, y_test, and a trained model
+    XPER = ModelPerformance(X_train, y_train, X_test, y_test, model)
+    XPER_values = XPER.calculate_XPER_values(["AUC"], execution_type="ProcessPoolExecutor")
+    print(XPER_values)
