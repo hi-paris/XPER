@@ -1,7 +1,7 @@
-Beta module
-===========
+setup module
+============
 
-.. automodule:: Beta
+.. automodule:: setup
    :members:
    :undoc-members:
    :show-inheritance:
