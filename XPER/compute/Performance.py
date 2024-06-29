@@ -229,8 +229,3 @@ class ModelPerformance():
         return phi, phi_i_j
 
 
-if __name__ == '__main__':
-    # Assuming you have X_train, y_train, X_test, y_test, and a trained model
-    XPER = ModelPerformance(X_train, y_train, X_test, y_test, model)
-    XPER_values = XPER.calculate_XPER_values(["AUC"], execution_type="ProcessPoolExecutor")
-    print(XPER_values)

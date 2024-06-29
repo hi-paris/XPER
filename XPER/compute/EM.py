@@ -206,7 +206,7 @@ def XPER_choice(y, X, model, Eval_Metric, var_interet=None, N_coalition_sampled=
 
     executor_class = ThreadPoolExecutor if execution_type == "ThreadPoolExecutor" else ProcessPoolExecutor
     
-    with executor_class() as executor:
+    with executor_class(max_workers=60) as executor:
         if kernel == True:
             results = [executor.submit(OptimizationClass.loop_choice, s, combination_list_sampled, p, X, y, model, model_predict, delta, Metric, Metric_ind, N, X_shuffle, Eval_Metric=Eval_Metric, Metric_vinteret=None, Metric_ind_vinteret=None, var_interet=None, CFP=CFP, CFN=CFN, kernel=True) for s in list(range(N_coalition_sampled))]
         else: # if exact computation
