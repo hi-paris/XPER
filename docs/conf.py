@@ -6,19 +6,20 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'XPER'
-copyright = '2023, Sebastien Saurin, Christophe Hurlin, Christophe Perignon, supported by Awais Sani and Gaëtan Brison'
-author = 'Sebastien Saurin, Christophe Hurlin, Christophe Perignon, supported by Awais Sani and Gaëtan Brison'
-release = '0.0.1'
+import os 
+import sys
+
+sys.path.insert(0,os.path.abspath(".."))
+
+project = 'XPER Documentation'
+copyright = '2024, Sebastien Saurin, Sullivan Hué, Christophe Hurlin, Christophe Perignon'
+author = 'Sebastien Saurin, Sullivan Hué, Christophe Hurlin, Christophe Perignon'
+release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon'
-]
+extensions = ["sphinx.ext.todo","sphinx.ext.viewcode","sphinx.ext.autodoc"]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
