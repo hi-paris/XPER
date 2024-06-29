@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XPER.compute.Optimisation &#8212; XPER Documentation 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=12dfc556" />
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for XPER.compute.Optimisation</h1><div class="highlight"><pre>
+<span></span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Thu May  5 19:56:18 2022</span>
+
+<span class="sd">@author: S79158</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+
+<div class="viewcode-block" id="OptimizationClass">
+<a class="viewcode-back" href="../../../XPER.compute.html#XPER.compute.Optimisation.OptimizationClass">[docs]</a>
+<span class="k">class</span> <span class="nc">OptimizationClass</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">combination_list_sampled</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">Pred_Formula</span><span class="p">,</span> <span class="n">delta_n3</span><span class="p">,</span> <span class="n">Metric</span><span class="p">,</span> <span class="n">Metric_ind</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">X_shuffle</span><span class="p">,</span> <span class="n">Metric_vinteret</span><span class="p">,</span> <span class="n">Metric_ind_vinteret</span><span class="p">,</span> <span class="n">var_interet</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">combination_list_sampled</span> <span class="o">=</span> <span class="n">combination_list_sampled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Pred_Formula</span> <span class="o">=</span> <span class="n">Pred_Formula</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta_n3</span> <span class="o">=</span> <span class="n">delta_n3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Metric</span> <span class="o">=</span> <span class="n">Metric</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Metric_ind</span> <span class="o">=</span> <span class="n">Metric_ind</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">N</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X_shuffle</span> <span class="o">=</span> <span class="n">X_shuffle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Metric_vinteret</span> <span class="o">=</span> <span class="n">Metric_vinteret</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Metric_ind_vinteret</span> <span class="o">=</span> <span class="n">Metric_ind_vinteret</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_interet</span> <span class="o">=</span> <span class="n">var_interet</span>
+   
+<div class="viewcode-block" id="OptimizationClass.model_predict1">
+<a class="viewcode-back" href="../../../XPER.compute.html#XPER.compute.Optimisation.OptimizationClass.model_predict1">[docs]</a>
+    <span class="k">def</span> <span class="nf">model_predict1</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        X: feature values but exclude the variable of interest</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Number of observations</span>
+        <span class="n">intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># Array of the form: array([[1],[1],...,[1]])</span>
+        <span class="n">X_intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">intercept</span><span class="p">,</span> <span class="n">X</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># The intercept is supposed to be in the first column of the database</span>
+        <span class="c1"># as mentioned in the function when the parameter intercept = True</span>
+        <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_intercept</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OptimizationClass.model_predict2">
+<a class="viewcode-back" href="../../../XPER.compute.html#XPER.compute.Optimisation.OptimizationClass.model_predict2">[docs]</a>
+    <span class="k">def</span> <span class="nf">model_predict2</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        X: feature values but exclude the variable of interest</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Number of observations</span>
+        <span class="n">intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># Array of the form: array([[1],[1],...,[1]])</span>
+        <span class="n">X_intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">intercept</span><span class="p">,</span> <span class="n">X</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># The intercept is supposed to be in the first column of the database</span>
+        <span class="c1"># as mentioned in the function when the parameter intercept = True</span>
+        <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_intercept</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="OptimizationClass.model_predict3">
+<a class="viewcode-back" href="../../../XPER.compute.html#XPER.compute.Optimisation.OptimizationClass.model_predict3">[docs]</a>
+    <span class="k">def</span> <span class="nf">model_predict3</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># only keep the predicted probabilities</span></div>
+
+                                              <span class="c1"># for the positive class (P(y=1|X))</span>
+
+<div class="viewcode-block" id="OptimizationClass.model_predict4">
+<a class="viewcode-back" href="../../../XPER.compute.html#XPER.compute.Optimisation.OptimizationClass.model_predict4">[docs]</a>
+    <span class="k">def</span> <span class="nf">model_predict4</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OptimizationClass.model_predict5">
+<a class="viewcode-back" href="../../../XPER.compute.html#XPER.compute.Optimisation.OptimizationClass.model_predict5">[docs]</a>
+    <span class="k">def</span> <span class="nf">model_predict5</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        X: feature values but exclude the variable of interest</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Number of observations</span>
+        <span class="n">intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># Array of the form: array([[1],[1],...,[1]])</span>
+        <span class="n">X_intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">intercept</span><span class="p">,</span> <span class="n">X</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># The intercept is supposed to be in the first column of the database</span>
+        <span class="c1"># as mentioned in the function when the parameter intercept = True</span>
+        <span class="n">pred_proba</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_intercept</span><span class="p">)</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="n">pred_proba</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="p">(</span><span class="n">pred</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pred</span></div>
+
+
+<div class="viewcode-block" id="OptimizationClass.model_predict6">
+<a class="viewcode-back" href="../../../XPER.compute.html#XPER.compute.Optimisation.OptimizationClass.model_predict6">[docs]</a>
+    <span class="k">def</span> <span class="nf">model_predict6</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="n">pred_proba</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="n">pred_proba</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="p">(</span><span class="n">pred</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pred</span></div>
+
+
+<div class="viewcode-block" id="OptimizationClass.loop_choice">
+<a class="viewcode-back" href="../../../XPER.compute.html#XPER.compute.Optimisation.OptimizationClass.loop_choice">[docs]</a>
+    <span class="k">def</span> <span class="nf">loop_choice</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">combination_list_sampled</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">model_predict</span><span class="p">,</span>
+                    <span class="n">delta</span><span class="p">,</span> <span class="n">Metric</span><span class="p">,</span> <span class="n">Metric_ind</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">X_shuffle</span><span class="p">,</span>
+                    <span class="n">Metric_vinteret</span><span class="p">,</span> <span class="n">Metric_ind_vinteret</span><span class="p">,</span> <span class="n">var_interet</span><span class="p">,</span>
+                    <span class="n">Eval_Metric</span><span class="p">,</span> <span class="n">CFP</span><span class="p">,</span> <span class="n">CFN</span><span class="p">,</span>
+                    <span class="n">kernel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        s : number of the iteration (coalition)</span>
+<span class="sd">        combination_list_sampled : combination of features in which to compute the</span>
+<span class="sd">                                   marginal effect on the AUC</span>
+<span class="sd">        p : number of features</span>
+<span class="sd">        X : feature values</span>
+<span class="sd">        y : target values</span>
+<span class="sd">        model_predict : predictions of the estimated model</span>
+<span class="sd">        delta : nuisance parameter</span>
+<span class="sd">        Metric : AUC(s) computed without the variable of interest for each combination</span>
+<span class="sd">                 of feature (filled as it goes along the loop)</span>
+<span class="sd">        Metric_ind : Individual AUC computed without the variable of interest for</span>
+<span class="sd">                     each combination of feature (filled as it goes along the loop)</span>
+<span class="sd">        N : Sample size</span>
+<span class="sd">        X_shuffle : Feature values shuffled / Only for the AUC for the moment</span>
+<span class="sd">        Metric_vinteret : AUC(s) computed with the variable of interest for each</span>
+<span class="sd">                          combination of feature (filled as it goes along the loop)</span>
+<span class="sd">        Metric_ind_vinteret : Individual AUC computed with the variable of interest</span>
+<span class="sd">                              for each combination of feature</span>
+<span class="sd">                              (filled as it goes along the loop)</span>
+<span class="sd">        var_interet : number of the variable of interest</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">import</span> <span class="nn">math</span>
+        <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+        <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">delta</span><span class="p">):</span>
+            <span class="nb">globals</span><span class="p">()[</span><span class="s1">&#39;delta_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">v</span>
+
+        <span class="n">S</span> <span class="o">=</span> <span class="n">combination_list_sampled</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>  <span class="c1"># Retrieve the sth combination of features</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">S</span><span class="p">]</span>  <span class="c1"># To move index from (1,p) to (0,p-1)</span>
+
+        <span class="k">if</span> <span class="n">kernel</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># Specific to Kernel XPER</span>
+            <span class="n">weight_s</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">))</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">))))</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span>
+                    <span class="n">p</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">weight_s</span> <span class="o">=</span> <span class="p">((</span><span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">)))</span> <span class="o">*</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="n">G_i_j</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Empty list to store G(y_i, x_ij, x_i^S; delta)</span>
+
+        <span class="k">if</span> <span class="n">kernel</span> <span class="o">!=</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">G_i_j_vinteret</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Empty list to store G(y_i, x_i^S; delta)</span>
+
+        <span class="n">Metric_ind_j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span>
+        <span class="c1"># row vector of size N to store E_Xsbar[G(y_i, x_ij, x_i^S; delta)]</span>
+
+        <span class="k">if</span> <span class="n">kernel</span> <span class="o">!=</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">Metric_ind_j_vinteret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span>
+            <span class="c1"># row vector of size N to store E_x_j,Xsbar[G(y_i, x_ij, x_i^S; delta)]</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>  <span class="c1"># Loop for each individual</span>
+            <span class="n">start_time_AUC</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+            <span class="c1"># =====================================================================</span>
+            <span class="c1">#      Variable of interest unknown/ feature values of the variable of</span>
+            <span class="c1">#                interest is unknown for individual i</span>
+            <span class="c1"># =====================================================================</span>
+
+            <span class="n">X_tirage_i</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Feature values</span>
+            <span class="n">X_tirage_i</span><span class="p">[:,</span> <span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">S</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Change the values of feature S for all individuals</span>
+            <span class="c1"># to the corresponding value of individual j</span>
+
+            <span class="c1"># Code specific to the measure</span>
+
+            <span class="k">if</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;AUC&quot;</span><span class="p">]:</span>
+                <span class="n">X_shuffle_combination</span> <span class="o">=</span> <span class="n">X_shuffle</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">X_shuffle_combination</span><span class="p">[:,</span> <span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">S</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Change the value of the feature</span>
+                <span class="c1"># values shuffled in column S to the feature values not shuffled</span>
+
+                <span class="n">y_hat_tirage</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_shuffle_combination</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="c1"># N predictions / for all individuals</span>
+
+                <span class="n">y_hat_proba_i</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="c1"># N predictions / Individual i feature values in subset S</span>
+
+                <span class="n">y_hat_proba_i</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">y_hat_proba_i</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;proba&quot;</span><span class="p">])</span>
+                <span class="c1"># Put the predictions made from Individual i feature values in subset S in</span>
+                <span class="c1"># a DataFrame / Column name &quot;proba&quot;</span>
+
+                <span class="c1">####</span>
+
+                <span class="c1"># Calculate the complement of y_hat_tirage and store it in one_y</span>
+                <span class="n">one_y</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span> 
+
+                <span class="c1"># Extract the values of the first column of y_hat_proba_i and transpose the result</span>
+                <span class="n">y_hat_proba_i_vec</span><span class="o">=</span><span class="n">y_hat_proba_i</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> 
+
+                <span class="c1"># Initialize empty lists to store delta_n1 and delta_n2 values</span>
+                <span class="n">delta_n1_</span><span class="o">=</span><span class="p">[]</span>
+                <span class="n">delta_n2_</span><span class="o">=</span><span class="p">[]</span>
+
+                <span class="c1"># Iterate over each probability in y_hat_proba_i_vec</span>
+                <span class="k">for</span> <span class="n">pob</span> <span class="ow">in</span> <span class="n">y_hat_proba_i_vec</span><span class="p">:</span> 
+                    <span class="c1"># Calculate delta_n1: mean of one_y_hat_tirage for values greater than y_hat_tirage</span>
+                    <span class="n">delta_n1_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">one_y</span><span class="o">*</span><span class="p">(</span><span class="n">pob</span> <span class="o">&gt;</span> <span class="n">y_hat_tirage</span><span class="p">)))</span>  
+
+                    <span class="c1"># Calculate delta_n2: mean of y for values less than or equal to y_hat_tirage</span>
+                    <span class="n">delta_n2_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="p">(</span><span class="n">pob</span> <span class="o">&gt;</span> <span class="n">y_hat_tirage</span><span class="p">))))</span> 
+                
+
+                <span class="c1"># Convert the lists to pandas Series</span>
+                <span class="n">delta_n1</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">delta_n1_</span><span class="p">)</span>
+                <span class="n">delta_n2</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">delta_n2_</span><span class="p">)</span>
+
+                <span class="n">G</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">delta_n1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">delta_n2</span><span class="p">)</span> <span class="o">/</span> <span class="nb">globals</span><span class="p">()[</span><span class="s1">&#39;delta_1&#39;</span><span class="p">]</span>  <span class="c1"># delta_1 created with globals()[&#39;delta_{}&#39;.format(d)] // different from delta_n1</span>
+                <span class="c1"># Compute the individual i contribution to the performance metric</span>
+                <span class="c1"># for the subset S and without knowing the feature value of interest of</span>
+                <span class="c1"># individual i</span>
+
+            <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;BS&quot;</span><span class="p">]:</span>
+                <span class="n">y_pred_i</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_pred_i</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+            <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;Balanced_accuracy&quot;</span><span class="p">]:</span>
+                <span class="n">y_hat_pred_i</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">y_hat_pred_i</span> <span class="o">*</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="nb">globals</span><span class="p">()[</span><span class="s1">&#39;delta_1&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_hat_pred_i</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="nb">globals</span><span class="p">()[</span>
+                    <span class="s1">&#39;delta_2&#39;</span><span class="p">]))</span>
+
+            <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;Accuracy&quot;</span><span class="p">]:</span>
+                <span class="n">y_hat_pred_i</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_hat_pred_i</span> <span class="o">*</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">+</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_hat_pred_i</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+
+            <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;Sensitivity&quot;</span><span class="p">]:</span>
+                <span class="n">y_hat_pred_i</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_hat_pred_i</span> <span class="o">*</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="nb">globals</span><span class="p">()[</span><span class="s1">&#39;delta_1&#39;</span><span class="p">]</span>
+
+            <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;Specificity&quot;</span><span class="p">]:</span>
+                <span class="n">y_hat_pred_i</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_hat_pred_i</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span> <span class="o">/</span> <span class="nb">globals</span><span class="p">()[</span><span class="s1">&#39;delta_1&#39;</span><span class="p">]</span>
+
+            <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;Precision&quot;</span><span class="p">]:</span>
+                <span class="n">X_shuffle_combination</span> <span class="o">=</span> <span class="n">X_shuffle</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">X_shuffle_combination</span><span class="p">[:,</span> <span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">S</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Change the value of the feature</span>
+                <span class="c1"># values shuffled in column S to the feature values not shuffled</span>
+
+                <span class="n">y_hat_tirage</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_shuffle_combination</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="c1"># N predictions / for all individuals</span>
+                
+                <span class="n">delta_n1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_hat_tirage</span><span class="p">)</span>
+                
+                <span class="n">y_hat_pred_i</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_hat_pred_i</span> <span class="o">*</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="n">delta_n1</span>
+
+            <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;MC&quot;</span><span class="p">]:</span>
+                <span class="n">y_hat_pred_i</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">CFP</span> <span class="o">*</span> <span class="p">((</span><span class="n">y_hat_pred_i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="n">CFN</span> <span class="o">*</span> <span class="p">((</span><span class="n">y_hat_pred_i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)))</span>
+
+            <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;MSE&quot;</span><span class="p">]:</span>
+                <span class="n">y_pred_i</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_pred_i</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+            <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;MAE&quot;</span><span class="p">]:</span>
+                <span class="n">y_pred_i</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_pred_i</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;R2&quot;</span><span class="p">]:</span>
+                <span class="n">y_pred_i</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">((</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_pred_i</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="nb">globals</span><span class="p">()[</span><span class="s1">&#39;delta_1&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">kernel</span> <span class="o">!=</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="c1"># =============================================================================</span>
+                <span class="c1"># Code specific to the exact computation because we compute the XPER</span>
+                <span class="c1"># value for each variable one by one whereas when using Kernel XPER we</span>
+                <span class="c1"># compute them all at once without computing the performance metric with</span>
+                <span class="c1"># the variable of interest in each coalition.</span>
+                <span class="c1"># =============================================================================</span>
+
+                <span class="c1"># =====================================================================</span>
+                <span class="c1">#      Variable of interest known / feature values of the variable of</span>
+                <span class="c1">#                interest is known for individual i</span>
+                <span class="c1"># =====================================================================</span>
+
+                <span class="n">X_tirage_i_vinteret</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Feature values</span>
+                <span class="n">X_tirage_i_vinteret</span><span class="p">[:,</span> <span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">S</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="c1"># Change the values of feature S for all individuals</span>
+                <span class="c1"># to the corresponding value of individual j</span>
+
+                <span class="n">X_tirage_i_vinteret</span><span class="p">[:,</span> <span class="n">var_interet</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">var_interet</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="c1"># Change the value of the variable of interest, for all individuals,</span>
+                <span class="c1"># to the one of individual i</span>
+
+                <span class="k">if</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;AUC&quot;</span><span class="p">]:</span>
+                    <span class="n">X_shuffle_combination_vinteret</span> <span class="o">=</span> <span class="n">X_shuffle_combination</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">X_shuffle_combination_vinteret</span><span class="p">[:,</span> <span class="n">var_interet</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">var_interet</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="c1"># Change the value of the feature of interest in the shuffled database</span>
+                    <span class="c1"># to the one of individual i</span>
+
+                    <span class="n">y_hat_tirage_vinteret</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_shuffle_combination_vinteret</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="c1"># N predictions / for all individuals</span>
+
+                    <span class="n">y_hat_proba_i_vinteret</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i_vinteret</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>  <span class="c1"># N predictions</span>
+                    <span class="c1"># N predictions / Individual i feature values in subset S</span>
+
+                    <span class="n">y_hat_proba_i_vinteret</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">y_hat_proba_i_vinteret</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;proba&quot;</span><span class="p">])</span>
+                    <span class="c1"># Put the predictions made from Individual i feature values in subset S in</span>
+                    <span class="c1"># a DataFrame / Column name &quot;proba&quot;</span>
+
+                    <span class="c1">####</span>
+
+                    <span class="n">y_hat_tirage_vinteret</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;tirage&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">y_hat_tirage_vinteret</span><span class="p">]})</span>
+                    <span class="c1"># Put the predictions made from all individuals feature values in</span>
+                    <span class="c1"># subset S (shuffled values) in a DataFrame / Column name &quot;tirage&quot;</span>
+
+                    <span class="n">y_hat_tirage_vinteret</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">y_hat_tirage_vinteret</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;tirage&quot;</span><span class="p">])</span>
+                    <span class="c1"># Create a DataFrame where each row contains all of the predictions</span>
+                    <span class="c1"># from all individuals feature values in subset S (shuffled values)</span>
+                    <span class="c1"># Necessary to use the method apply on a DataFrame to implement a function</span>
+                    <span class="c1"># on each row. Specifically, we want to compute the number of concordant</span>
+                    <span class="c1"># pairs for each individual in the database.</span>
+
+                    <span class="c1">####</span>
+
+                    <span class="n">y_temp_vinteret</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">y</span><span class="p">]})</span>  <span class="c1"># DataFrame with target values / column name &quot;y&quot;</span>
+
+                    <span class="n">y_temp_vinteret</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">y_temp_vinteret</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">])</span>
+                    <span class="c1"># As for the object &quot;y_hat_tirage&quot; we create a DataFrame where each</span>
+                    <span class="c1"># row contrains all of the target values. Necessary to use the method</span>
+                    <span class="c1"># apply on a DataFrame to implement a function on each row.</span>
+                    <span class="c1"># Specifically, we want to compute the number of concordant</span>
+                    <span class="c1"># pairs for each individual in the database.</span>
+
+                    <span class="n">df_temp_vinteret</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">y_hat_proba_i_vinteret</span><span class="p">,</span> <span class="n">y_hat_tirage_vinteret</span><span class="p">,</span> <span class="n">y_temp_vinteret</span><span class="p">],</span>
+                                                 <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+                    <span class="n">delta_n1_vinteret</span> <span class="o">=</span> <span class="n">df_temp_vinteret</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                        <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;proba&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;tirage&quot;</span><span class="p">])),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="c1"># Compute delta_n1 for individual i / scalar value</span>
+
+                    <span class="n">delta_n2_vinteret</span> <span class="o">=</span> <span class="n">df_temp_vinteret</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                        <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;proba&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;tirage&quot;</span><span class="p">]))),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="c1"># Compute delta_n2 for individual i / scalar value</span>
+
+                    <span class="n">G_vinteret</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">delta_n1_vinteret</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">delta_n2_vinteret</span><span class="p">)</span> <span class="o">/</span> <span class="nb">globals</span><span class="p">()[</span>
+                        <span class="s1">&#39;delta_1&#39;</span><span class="p">]</span>  <span class="c1"># delta_1 created with globals()[&#39;delta_{}&#39;.format(d)] // different from delta_n1</span>
+                    <span class="c1"># Compute the individual i contribution to the performance metric</span>
+                    <span class="c1"># for the subset S while knowing the feature value of interest of</span>
+                    <span class="c1"># individual i</span>
+
+                <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;BS&quot;</span><span class="p">]:</span>
+                    <span class="n">y_pred_i_vinteret</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i_vinteret</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="n">G_vinteret</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_pred_i_vinteret</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+                <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;Balanced_accuracy&quot;</span><span class="p">]:</span>
+                    <span class="n">y_hat_pred_i_vinteret</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i_vinteret</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="n">G_vinteret</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">y_hat_pred_i_vinteret</span> <span class="o">*</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="nb">globals</span><span class="p">()[</span><span class="s1">&#39;delta_1&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span>
+                                <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_hat_pred_i_vinteret</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="nb">globals</span><span class="p">()[</span><span class="s1">&#39;delta_2&#39;</span><span class="p">]))</span>
+
+                <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;Accuracy&quot;</span><span class="p">]:</span>
+                    <span class="n">y_hat_pred_i_vinteret</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i_vinteret</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="n">G_vinteret</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_hat_pred_i_vinteret</span> <span class="o">*</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">+</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_hat_pred_i_vinteret</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+
+                <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;Sensitivity&quot;</span><span class="p">]:</span>
+                    <span class="n">y_hat_pred_i_vinteret</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i_vinteret</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="n">G_vinteret</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_hat_pred_i_vinteret</span> <span class="o">*</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="nb">globals</span><span class="p">()[</span><span class="s1">&#39;delta_1&#39;</span><span class="p">]</span>
+
+                <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;Specificity&quot;</span><span class="p">]:</span>
+                    <span class="n">y_hat_pred_i_vinteret</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i_vinteret</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="n">G_vinteret</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_hat_pred_i_vinteret</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span> <span class="o">/</span> <span class="nb">globals</span><span class="p">()[</span><span class="s1">&#39;delta_1&#39;</span><span class="p">]</span>
+
+                <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;Precision&quot;</span><span class="p">]:</span>
+                    <span class="n">X_shuffle_combination_vinteret</span> <span class="o">=</span> <span class="n">X_shuffle_combination</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">X_shuffle_combination_vinteret</span><span class="p">[:,</span> <span class="n">var_interet</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">var_interet</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="c1"># Change the value of the feature of interest in the shuffled database</span>
+                    <span class="c1"># to the one of individual i</span>
+
+                    <span class="n">y_hat_tirage_vinteret</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_shuffle_combination_vinteret</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="c1"># N predictions / for all individuals</span>
+
+                    <span class="n">delta_n1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_hat_tirage_vinteret</span><span class="p">)</span>
+                    
+                    <span class="n">y_hat_pred_i_vinteret</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i_vinteret</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="n">G_vinteret</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_hat_pred_i_vinteret</span> <span class="o">*</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="n">delta_n1</span>
+
+                <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;MC&quot;</span><span class="p">]:</span>
+                    <span class="n">y_hat_pred_i_vinteret</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i_vinteret</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="n">G_vinteret</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">CFP</span> <span class="o">*</span> <span class="p">((</span><span class="n">y_hat_pred_i_vinteret</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="n">CFN</span> <span class="o">*</span> <span class="p">(</span>
+                                <span class="p">(</span><span class="n">y_hat_pred_i_vinteret</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)))</span>
+
+                <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;MSE&quot;</span><span class="p">]:</span>
+                    <span class="n">y_hat_pred_i_vinteret</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i_vinteret</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="n">G_vinteret</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_hat_pred_i_vinteret</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+                <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;MAE&quot;</span><span class="p">]:</span>
+                    <span class="n">y_hat_pred_i_vinteret</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i_vinteret</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="n">G_vinteret</span> <span class="o">=</span> <span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_hat_pred_i_vinteret</span><span class="p">)</span>
+
+                <span class="k">elif</span> <span class="n">Eval_Metric</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;R2&quot;</span><span class="p">]:</span>
+                    <span class="n">y_hat_pred_i_vinteret</span> <span class="o">=</span> <span class="n">model_predict</span><span class="p">(</span><span class="n">X_tirage_i_vinteret</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="n">G_vinteret</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">((</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_hat_pred_i_vinteret</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="nb">globals</span><span class="p">()[</span><span class="s1">&#39;delta_1&#39;</span><span class="p">]</span>
+
+            <span class="n">G_i_j</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">kernel</span> <span class="o">!=</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">G_i_j_vinteret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">G_vinteret</span><span class="p">)</span>
+
+            <span class="n">Metric_ind_j</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">G</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+
+            <span class="k">if</span> <span class="n">kernel</span> <span class="o">!=</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">Metric_ind_j_vinteret</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">G_vinteret</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+
+            <span class="n">time_elapsed_AUC</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time_AUC</span>
+
+        <span class="n">Metric_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">G_i_j</span><span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">N</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># np.mean(Metric_ind_j)</span>
+
+        <span class="k">if</span> <span class="n">kernel</span> <span class="o">!=</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">Metric_s_vinteret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">G_i_j_vinteret</span><span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">N</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># np.mean(Metric_ind_j_vinteret)</span>
+
+            <span class="c1"># =============================================================================</span>
+            <span class="c1"># Code specific to the exact computation because in this setting we have the</span>
+            <span class="c1"># empty and the &quot;complete&quot; coalition whereas in the Kernel case we do not</span>
+            <span class="c1"># take them into account to avoid giving an infinite weight to the coalition</span>
+            <span class="c1"># =============================================================================</span>
+
+            <span class="k">if</span> <span class="n">S</span> <span class="o">==</span> <span class="p">[]:</span>  <span class="c1"># If empty coalitions (feature values unknown)</span>
+                <span class="n">phi_0</span> <span class="o">=</span> <span class="n">Metric_s</span>  <span class="c1"># Benchmark of the AUC</span>
+                <span class="n">phi_i_0</span> <span class="o">=</span> <span class="n">Metric_ind_j</span>  <span class="c1"># &quot;Individual&quot; benchmarks of the AUC</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">phi_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="n">phi_i_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span>
+                <span class="n">phi_i_0</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="o">==</span> <span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">E_XY</span> <span class="o">=</span> <span class="n">Metric_s_vinteret</span>  <span class="c1"># Observed AUC</span>
+                <span class="n">E_XY_i</span> <span class="o">=</span> <span class="n">Metric_ind_j_vinteret</span>  <span class="c1"># Observed AUC_i</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">E_XY</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="n">E_XY_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span>
+                <span class="n">E_XY_i</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+            <span class="k">return</span> <span class="n">s</span><span class="p">,</span> <span class="n">weight_s</span><span class="p">,</span> <span class="n">Metric_s</span><span class="p">,</span> <span class="n">Metric_ind_j</span><span class="p">,</span> <span class="n">Metric_s_vinteret</span><span class="p">,</span> <span class="n">Metric_ind_j_vinteret</span><span class="p">,</span> <span class="n">phi_0</span><span class="p">,</span> <span class="n">E_XY</span><span class="p">,</span> <span class="n">phi_i_0</span><span class="p">,</span> <span class="n">E_XY_i</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="n">s</span><span class="p">,</span> <span class="n">weight_s</span><span class="p">,</span> <span class="n">Metric_s</span><span class="p">,</span> <span class="n">Metric_ind_j</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">XPER Documentation</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">XPER</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Sebastien Saurin, Sullivan Hué, Christophe Hurlin, Christophe Perignon.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XPER.viz package &mdash; XPER Documentation 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="setup module" href="setup.html" />
+    <link rel="prev" title="XPER.datasets package" href="XPER.datasets.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XPER Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">XPER</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="XPER.html">XPER package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="XPER.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="XPER.compute.html">XPER.compute package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="XPER.datasets.html">XPER.datasets package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">XPER.viz package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="XPER.html#module-XPER">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XPER Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">XPER</a></li>
+          <li class="breadcrumb-item"><a href="XPER.html">XPER package</a></li>
+      <li class="breadcrumb-item active">XPER.viz package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/XPER.viz.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="xper-viz-package">
+<h1>XPER.viz package<a class="headerlink" href="#xper-viz-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-XPER.viz.Visualisation">
+<span id="xper-viz-visualisation-module"></span><h2>XPER.viz.Visualisation module<a class="headerlink" href="#module-XPER.viz.Visualisation" title="Link to this heading"></a></h2>
+<p>Created on Fri Jun 16 10:41:10 2023</p>
+<p>&#64;author: sebsa</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="XPER.viz.Visualisation.visualizationClass">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">XPER.viz.Visualisation.</span></span><span class="sig-name descname"><span class="pre">visualizationClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">XPER_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">XPER_v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">XPER_v_ind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">benchmark_v_ind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/viz/Visualisation.html#visualizationClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.viz.Visualisation.visualizationClass" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="XPER.compute.html#XPER.compute.Performance.ModelPerformance" title="XPER.compute.Performance.ModelPerformance"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelPerformance</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="XPER.viz.Visualisation.visualizationClass.bar_plot">
+<span class="sig-name descname"><span class="pre">bar_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/viz/Visualisation.html#visualizationClass.bar_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.viz.Visualisation.visualizationClass.bar_plot" title="Link to this definition"></a></dt>
+<dd><p>Create a bar plot to visualize contributions.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>XPER_values<span class="classifier">numpy.ndarray</span></dt><dd><p>Array of contributions.</p>
+</dd>
+<dt>X_test<span class="classifier">pandas.DataFrame</span></dt><dd><p>Test data used for labeling the plot.</p>
+</dd>
+<dt>labels<span class="classifier">list</span></dt><dd><p>List of labels for the contributions.</p>
+</dd>
+<dt>p<span class="classifier">int</span></dt><dd><p>Number of top contributions to display.</p>
+</dd>
+<dt>percentage<span class="classifier">bool, optional</span></dt><dd><p>If True, contributions are shown as percentages. Default is True.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<p>None</p>
+</section>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">XPER_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Label 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Label 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Label 3&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bar_plot</span><span class="p">(</span><span class="n">XPER_values</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="notes">
+<h3>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h3>
+<p>This function creates a horizontal bar plot to visualize contributions. The contributions are provided as an array
+in <cite>XPER_values</cite>, which represents the contributions of each feature or metric. The <cite>X_test</cite> DataFrame is used to
+label the plot based on the column names. The <cite>labels</cite> list provides additional labels for the contributions.
+The <cite>p</cite> parameter determines the number of top contributions to display.</p>
+<p>If <cite>percentage</cite> is True, the contributions are shown as percentages of the total contribution. Otherwise, the
+contributions are displayed as absolute values.</p>
+<p>The plot is created using plotly.graph_objects and plotly.express libraries. The bars are colored using a gradient
+from RGB(249, 218, 37) to RGB(99, 2, 164). The y-axis displays the labels and the x-axis represents the contribution
+values. The plot is displayed using fig.show().</p>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="XPER.viz.Visualisation.visualizationClass.beeswarn_plot">
+<span class="sig-name descname"><span class="pre">beeswarn_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/viz/Visualisation.html#visualizationClass.beeswarn_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.viz.Visualisation.visualizationClass.beeswarn_plot" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="XPER.viz.Visualisation.visualizationClass.draw_higher_lower_element">
+<span class="sig-name descname"><span class="pre">draw_higher_lower_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset_text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/viz/Visualisation.html#visualizationClass.draw_higher_lower_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.viz.Visualisation.visualizationClass.draw_higher_lower_element" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="XPER.viz.Visualisation.visualizationClass.draw_labels">
+<span class="sig-name descname"><span class="pre">draw_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perf_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_perc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/viz/Visualisation.html#visualizationClass.draw_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.viz.Visualisation.visualizationClass.draw_labels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="XPER.viz.Visualisation.visualizationClass.force_plot">
+<span class="sig-name descname"><span class="pre">force_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(8,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_perc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/viz/Visualisation.html#visualizationClass.force_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.viz.Visualisation.visualizationClass.force_plot" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-XPER.viz">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-XPER.viz" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="XPER.datasets.html" class="btn btn-neutral float-left" title="XPER.datasets package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="setup.html" class="btn btn-neutral float-right" title="setup module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sebastien Saurin, Sullivan Hué, Christophe Hurlin, Christophe Perignon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
