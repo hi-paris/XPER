@@ -1,8 +1,6 @@
 XPER.compute package
 ====================
 
-Submodules
-----------
 
 XPER.compute.EM module
 ----------------------

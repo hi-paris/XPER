@@ -12,8 +12,8 @@ import sys
 sys.path.insert(0,os.path.abspath(".."))
 
 project = 'XPER Documentation'
-copyright = '2024, Sebastien Saurin, Sullivan Hué, Christophe Hurlin, Christophe Perignon'
-author = 'Sebastien Saurin, Sullivan Hué, Christophe Hurlin, Christophe Perignon'
+copyright = '2024, Sebastien Saurin, Sullivan Hué, Christophe Hurlin, Christophe Perignon (Research) & Awais Sani, Gaëtan Brison (Engineering)'
+author = 'Sebastien Saurin, Sullivan Hué, Christophe Hurlin, Christophe Perignon (Research) & Awais Sani, Gaëtan Brison (Engineering)'
 release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
