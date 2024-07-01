@@ -1,8 +1,20 @@
-XPER
-====
+
+
+XPER package
+============
+
 
 .. toctree::
    :maxdepth: 4
 
-   XPER
-   setup
+   XPER.compute
+   XPER.datasets
+   XPER.viz
+
+Module contents
+---------------
+
+.. automodule:: XPER
+   :members:
+   :undoc-members:
+   :show-inheritance:
