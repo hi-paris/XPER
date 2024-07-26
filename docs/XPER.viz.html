@@ -93,9 +93,7 @@
             <div itemprop="articleBody">
               <section id="xper-viz-package">
                 <h1>XPER.viz package<a class="headerlink" href="#xper-viz-package" title="Link to this heading"></a></h1>
-                <section id="submodules">
-                  <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
-                </section>
+
                 <section id="module-XPER.viz.Visualisation">
                   <span id="xper-viz-visualisation-module"></span><h2>XPER.viz.Visualisation module<a class="headerlink" href="#module-XPER.viz.Visualisation" title="Link to this heading"></a></h2>
                   
@@ -125,17 +123,13 @@
                       </section>
                       <section id="examples">
                         <h3>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
-                        <pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+                        <pre>
 <span class="kn">from</span> <span class="nn">XPER.viz.Visualisation</span> <span class="kn">import</span> <span class="n">visualizationClass</span> <span class="k">as</span> <span class="n">viz</span>
-
-<span class="n">XPER_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
-<span class="n">X_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]})</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Label 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Label 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Label 3&#39;</span><span class="p">]</span>
-<span class="n">p</span> <span class="o">=</span> <span class="mi">2</span>
-
-<span class="n">viz</span><span class="o">.</span><span class="n">bar_plot</span><span class="p">(</span><span class="n">XPER_values</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
-                        </pre>
+                          
+<span class="n">labels</span> <span class="o">=</span> <span class="k">list</span>(<span class="n">loan</span>.<span class="n">drop</span>(<span class="n">columns</span><span class="o">=</span><span class="s1">'Loan_Status'</span>).<span class="n">columns</span>)
+<span class="n">viz</span>.<span class="n">bar_plot</span>(<span class="n">XPER_values</span><span class="o">=</span><span class="n">XPER_values</span>, <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span>, <span class="n">labels</span><span class="o">=</span><span class="n">labels</span>, <span class="n">p</span><span class="o">=</span><span class="mi">5</span>, <span class="n">percentage</span><span class="o">=</span><span class="bp">True</span>)
+                          </pre>
+                          
                         <h3>Example output:<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
                         <img src="_static/images/bar.png" alt="Sample data visualization" style="width:600px;height:auto;">
                       </section>
@@ -170,16 +164,12 @@
                       </section>
                       <section id="examples">
                         <h3>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
-                        <pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+                        <pre>
 <span class="kn">from</span> <span class="nn">XPER.viz.Visualisation</span> <span class="kn">import</span> <span class="n">visualizationClass</span> <span class="k">as</span> <span class="n">viz</span>
-
-<span class="n">XPER_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
-<span class="n">X_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]})</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Label 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Label 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Label 3&#39;</span><span class="p">]</span>
-
-<span class="n">viz</span><span class="o">.</span><span class="n">beeswarn_plot</span><span class="p">(</span><span class="n">XPER_values</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
-                        </pre>
+                          
+<span class="n">labels</span> <span class="o">=</span> <span class="k">list</span>(<span class="n">loan</span>.<span class="n">drop</span>(<span class="n">columns</span><span class="o">=</span><span class="s1">'Loan_Status'</span>).<span class="n">columns</span>)
+<span class="n">viz</span>.<span class="n">beeswarn_plot</span>(<span class="n">XPER_values</span><span class="o">=</span><span class="n">XPER_values</span>, <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span>, <span class="n">labels</span><span class="o">=</span><span class="n">labels</span>)
+                          </pre>
                         <h3>Example output:<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
                         <img src="_static/images/beeswarn.png" alt="Sample beeswarn plot visualization" style="width:600px;height:auto;">
                       </section>
@@ -216,17 +206,12 @@
                       </section>
                       <section id="examples">
                         <h3>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
-                        <pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+                        <pre>
 <span class="kn">from</span> <span class="nn">XPER.viz.Visualisation</span> <span class="kn">import</span> <span class="n">visualizationClass</span> <span class="k">as</span> <span class="n">viz</span>
-
-<span class="n">XPER_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
-<span class="n">X_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]})</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Feature 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Feature 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Feature 3&#39;</span><span class="p">]</span>
-<span class="n">instance</span> <span class="o">=</span> <span class="mi">1</span>
-
-<span class="n">viz</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span><span class="n">XPER_values</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">figsize</span><span class="p">=(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-                        </pre>
+                          
+<span class="n">labels</span> <span class="o">=</span> <span class="k">list</span>(<span class="n">loan</span>.<span class="n">drop</span>(<span class="n">columns</span><span class="o">=</span><span class="s1">'Loan_Status'</span>).<span class="n">columns</span>)
+<span class="n">viz</span>.<span class="n">force_plot</span>(<span class="n">XPER_values</span><span class="o">=</span><span class="n">XPER_values</span>, <span class="n">instance</span><span class="o">=</span><span class="mi">1</span>, <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span>, <span class="n">variable_name</span><span class="o">=</span><span class="n">labels</span>, <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+                          </pre>
                         <h3>Example output:<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
                         <img src="_static/images/force.png" alt="Sample force plot visualization" style="width:600px;height:auto;">
                       </section>
