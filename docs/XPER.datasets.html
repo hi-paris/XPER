@@ -1,28 +1,40 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>XPER.datasets package &mdash; XPER Documentation 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+  <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+  <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+  <link rel="stylesheet" href="_static/css/theme.css">
+  <style>
+    /* Code block styling */
+    pre {
+        background-color: #f4f4f4;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+    code {
+        font-family: Consolas, "Courier New", monospace;
+    }
+    /* Syntax highlighting */
+    .kn { color: #0000FF; font-weight: bold; } /* keywords */
+    .nn { color: #228B22; } /* modules */
+    .n { color: #000000; } /* variables and function names */
+    .mi { color: #009999; } /* numbers */
+    .o { color: #DD0000; font-weight: bold; } /* operators */
+    .p { color: #000000; } /* punctuation */
 
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=8d563738"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="XPER.viz package" href="XPER.viz.html" />
-    <link rel="prev" title="XPER.compute package" href="XPER.compute.html" /> 
+    .variable-name {
+            color: #D9534F; /* Nice red color */
+            font-weight: bold;
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: Consolas, "Courier New", monospace;
+        }
+</style>
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -30,150 +42,269 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-          
-          
           <a href="index.html" class="icon icon-home">
             XPER Documentation
           </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">XPER</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="XPER.html">XPER package</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="XPER.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="XPER.compute.html">XPER.compute package</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">XPER.datasets package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="XPER.viz.html">XPER.viz package</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="XPER.html#module-XPER">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
-</ul>
-</li>
-</ul>
-
+          <div role="search">
+            <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+              <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
+        </div>
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+          <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+          <ul class="current">
+            <li class="toctree-l1 current"><a class="reference internal" href="modules.html">XPER</a><ul class="current">
+              <li class="toctree-l2 current"><a class="reference internal" href="XPER.html">XPER package</a><ul class="current">
+                <li class="toctree-l3 current"><a class="reference internal" href="XPER.html#subpackages">Subpackages</a><ul class="current">
+                  <li class="toctree-l4"><a class="reference internal" href="XPER.compute.html">XPER.compute package</a></li>
+                  <li class="toctree-l4 current"><a class="current reference internal" href="#">XPER.datasets package</a></li>
+                  <li class="toctree-l4"><a class="reference internal" href="XPER.viz.html">XPER.viz package</a></li>
+                </ul>
+              </li>
+              <li class="toctree-l3"><a class="reference internal" href="XPER.html#module-XPER">Module contents</a></li>
+            </ul>
+          </li>
+          <li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
+          </ul>
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">XPER Documentation</a>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">XPER Documentation</a>
       </nav>
 
       <div class="wy-nav-content">
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="modules.html">XPER</a></li>
-          <li class="breadcrumb-item"><a href="XPER.html">XPER package</a></li>
-      <li class="breadcrumb-item active">XPER.datasets package</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/XPER.datasets.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <section id="xper-datasets-package">
-<h1>XPER.datasets package<a class="headerlink" href="#xper-datasets-package" title="Link to this heading"></a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
-</section>
-<section id="module-XPER.datasets.load_data">
-<span id="xper-datasets-load-data-module"></span><h2>XPER.datasets.load_data module<a class="headerlink" href="#module-XPER.datasets.load_data" title="Link to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="XPER.datasets.load_data.adult">
-<span class="sig-prename descclassname"><span class="pre">XPER.datasets.load_data.</span></span><span class="sig-name descname"><span class="pre">adult</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/datasets/load_data.html#adult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.datasets.load_data.adult" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="XPER.datasets.load_data.boston">
-<span class="sig-prename descclassname"><span class="pre">XPER.datasets.load_data.</span></span><span class="sig-name descname"><span class="pre">boston</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/datasets/load_data.html#boston"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.datasets.load_data.boston" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="XPER.datasets.load_data.iris">
-<span class="sig-prename descclassname"><span class="pre">XPER.datasets.load_data.</span></span><span class="sig-name descname"><span class="pre">iris</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/datasets/load_data.html#iris"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.datasets.load_data.iris" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="XPER.datasets.load_data.loan_status">
-<span class="sig-prename descclassname"><span class="pre">XPER.datasets.load_data.</span></span><span class="sig-name descname"><span class="pre">loan_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/datasets/load_data.html#loan_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.datasets.load_data.loan_status" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</section>
-<section id="module-XPER.datasets.sample">
-<span id="xper-datasets-sample-module"></span><h2>XPER.datasets.sample module<a class="headerlink" href="#module-XPER.datasets.sample" title="Link to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="XPER.datasets.sample.sample_generation">
-<span class="sig-prename descclassname"><span class="pre">XPER.datasets.sample.</span></span><span class="sig-name descname"><span class="pre">sample_generation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">123456</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pct_train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta_0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/datasets/sample.html#sample_generation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.datasets.sample.sample_generation" title="Link to this definition"></a></dt>
-<dd><p>Generate a synthetic dataset for binary classification using a multivariate normal distribution.</p>
-<dl>
-<dt>Parameters:</dt><dd><p>N (int): Size of the sample (default: 500)
-p (int): Number of explanatory variables (default: 6)
-seed (int): Random seed for reproducibility (default: 123456)
-pct_train (float): Percentage of the dataset devoted to the training of the algorithm (default: 70%)
-mean (ndarray): Vector of size p containing the expected value of the variables (default: np.array([0, 0, …, 0, 0]))
-cov (ndarray): Covariance matrix of size p x p  (default: array([[1.5, 0. , 0. , 0. , 0. , 0. ],</p>
-<blockquote>
-<div><p>[0. , 1.5, 0. , 0. , 0. , 0. ],
-[…],
-[0. , 0. , 0. , 0. , 0. , 1.5]]) )</p>
-</div></blockquote>
-<p>beta (ndarray): Vector of parameters of size p (default: np.array([0.5, 0.5, …, 0.5, 0.5])
-beta_0 (float): Intercept value (default: 0.75)</p>
-</dd>
-<dt>Returns:</dt><dd><p>X_train (ndarray): Training set features
-y_train (ndarray): Training set labels
-X_test (ndarray): Test set features
-y_test (ndarray): Test set labels
-N (int): Size of the sample (default: 500)
-p (int): Number of explanatory variables (default: 6)
-seed (int): Random seed used</p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-<section id="module-XPER.datasets">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-XPER.datasets" title="Link to this heading"></a></h2>
-</section>
-</section>
-
-
-           </div>
+            <ul class="wy-breadcrumbs">
+              <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+              <li class="breadcrumb-item"><a href="modules.html">XPER</a></li>
+              <li class="breadcrumb-item"><a href="XPER.html">XPER package</a></li>
+              <li class="breadcrumb-item active">XPER.datasets package</li>
+              <li class="wy-breadcrumbs-aside">
+                <a href="_sources/XPER.datasets.rst.txt" rel="nofollow"> View page source</a>
+              </li>
+            </ul>
+            <hr/>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="XPER.compute.html" class="btn btn-neutral float-left" title="XPER.compute package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="XPER.viz.html" class="btn btn-neutral float-right" title="XPER.viz package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div itemprop="articleBody">
+              <section id="xper-datasets-package">
+                <h1>XPER.datasets package<a class="headerlink" href="#xper-datasets-package" title="Link to this heading"></a></h1>
+                <section id="submodules"></section>
+                <section id="module-XPER.datasets.load_data">
+                  <span id="xper-datasets-load-data-module"></span>
+                  <h2>XPER.datasets.load_data module<a class="headerlink" href="#module-XPER.datasets.load_data" title="Link to this heading"></a></h2>
+                  
+                  <!-- Documentation for each function -->
+                  
+                  <!-- adult() function -->
+                  <dl class="py function">
+                    <dt class="sig sig-object py" id="XPER.datasets.load_data.adult">
+                      <span class="sig-prename descclassname"><span class="pre">XPER.datasets.load_data.</span></span>
+                      <span class="sig-name descname"><span class="pre">adult</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span>
+                      <a class="reference internal" href="_modules/XPER/datasets/load_data.html#adult"><span class="viewcode-link"><span class="pre">[source]</span></span></a>
+                      <a class="headerlink" href="#XPER.datasets.load_data.adult" title="Link to this definition"></a>
+                    </dt>
+                    <dd>
+                      <p>Load and return the UCI Adult dataset (classification).</p>
+                      <p>This dataset contains census data on individuals from the U.S. and is often used for binary classification tasks to predict whether an individual's income exceeds $50,000 per year.</p>
+                      <p><strong>Returns:</strong></p>
+                      <ul>
+                        <li><code>pandas.DataFrame</code>: A DataFrame containing the dataset with the following features:
+                          <ul>
+                            <li><span class="variable-name">age</span>: Age of the individual.</li>
+                            <li><span class="variable-name">workclass</span>: Work class of the individual.</li>
+                            <li><span class="variable-name">fnlwgt</span>: Final weight.</li>
+                            <li><span class="variable-name">education</span>: Education level.</li>
+                            <li><span class="variable-name">education-num</span>: Number of years of education.</li>
+                            <li><span class="variable-name">marital-status</span>: Marital status.</li>
+                            <li><span class="variable-name">occupation</span>: Occupation of the individual.</li>
+                            <li><span class="variable-name">relationship</span>: Relationship status.</li>
+                            <li><span class="variable-name">race</span>: Race of the individual.</li>
+                            <li><span class="variable-name">sex</span>: Gender of the individual.</li>
+                            <li><span class="variable-name">capital-gain</span>: Capital gain.</li>
+                            <li><span class="variable-name">capital-loss</span>: Capital loss.</li>
+                            <li><span class="variable-name">hours-per-week</span>: Hours worked per week.</li>
+                            <li><span class="variable-name">native-country</span>: Native country.</li>
+                            <li><span class="variable-name">income</span>: Income level (target variable, >50K or <=50K).</li>
+                        </ul>
+                        </li>
+                      </ul>
+                      <p><strong>Examples:</strong></p>
+                      <pre id="codecell5"><span></span><span class="kn">from</span> <span class="nn">XPER.datasets.load_data</span> <span class="kn">import</span> <span class="n">adult</span>
 
-  <hr/>
+<span class="n">df</span> <span class="o">=</span> <span class="n">adult</span><span class="p">()</span>
+<span class="n">df</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+                                </pre>
+                      <p><strong>Example output:</strong></p>
+                      <img src="_static/images/adult.png" alt="Sample data visualization" style="width:600px;height:auto;">
+        
+                      <p><strong>References:</strong></p>
+                      <ul>
+                        <li>UCI Machine Learning Repository: <a href="https://archive.ics.uci.edu/ml/datasets/Adult">https://archive.ics.uci.edu/ml/datasets/Adult</a></li>
+                      </ul>
+                    </dd>
+                  </dl>
 
-  <div role="contentinfo">
-    <p>&#169; Copyright 2024, Sebastien Saurin, Sullivan Hué, Christophe Hurlin, Christophe Perignon.</p>
-  </div>
+                  <!-- boston() function -->
+                  <dl class="py function">
+                    <dt class="sig sig-object py" id="XPER.datasets.load_data.boston">
+                      <span class="sig-prename descclassname"><span class="pre">XPER.datasets.load_data.</span></span>
+                      <span class="sig-name descname"><span class="pre">boston</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span>
+                      <a class="reference internal" href="_modules/XPER/datasets/load_data.html#boston"><span class="viewcode-link"><span class="pre">[source]</span></span></a>
+                      <a class="headerlink" href="#XPER.datasets.load_data.boston" title="Link to this definition"></a>
+                    </dt>
+                    <dd>
+                      <p>Load and return the Boston Housing dataset (regression).</p>
+                      <p>This dataset contains information collected by the U.S. Census Service concerning housing in the area of Boston, Massachusetts, used for predicting house prices.</p>
+                      <p><strong>Returns:</strong></p>
+                      <ul>
+                        <li><code>pandas.DataFrame</code>: A DataFrame containing the dataset with the following features:
+                          <ul>
+                            <li><span class="variable-name">CRIM</span>: per capita crime rate by town.</li>
+                            <li><span class="variable-name">ZN</span>: proportion of residential land zoned for lots over 25,000 sq. ft.</li>
+                            <li><span class="variable-name">INDUS</span>: proportion of non-retail business acres per town.</li>
+                            <li><span class="variable-name">CHAS</span>: Charles River dummy variable (1 if tract bounds river; 0 otherwise).</li>
+                            <li><span class="variable-name">NOX</span>: nitric oxides concentration (parts per 10 million).</li>
+                            <li><span class="variable-name">RM</span>: average number of rooms per dwelling.</li>
+                            <li><span class="variable-name">AGE</span>: proportion of owner-occupied units built prior to 1940.</li>
+                            <li><span class="variable-name">DIS</span>: weighted distances to five Boston employment centers.</li>
+                            <li><span class="variable-name">RAD</span>: index of accessibility to radial highways.</li>
+                            <li><span class="variable-name">TAX</span>: full-value property tax rate per $10,000.</li>
+                            <li><span class="variable-name">PTRATIO</span>: pupil-teacher ratio by town.</li>
+                            <li><span class="variable-name">LSTAT</span>: percentage of lower status of the population.</li>
+                            <li><span class="variable-name">MEDV</span>: Median value of owner-occupied homes in $1000s (target variable).</li>
+                        </ul>
+                        </li>
+                      </ul>
+                      <p><strong>Examples:</strong></p>
+                      <pre id="codecell6"><span></span><span class="kn">from</span> <span class="nn">XPER.datasets.load_data</span> <span class="kn">import</span> <span class="n">boston</span>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+<span class="n">df</span> <span class="o">=</span> <span class="n">boston</span><span class="p">()</span>
+<span class="n">df</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+                                </pre>
+                      <p><strong>Example output:</strong></p>
+                      <img src="_static/images/boston.png" alt="Sample data visualization" style="width:600px;height:auto;">
+        
+                      <p><strong>References:</strong></p>
+                      <ul>
+                        <li>UCI Machine Learning Repository: <a href="https://archive.ics.uci.edu/ml/datasets/Housing">https://archive.ics.uci.edu/ml/datasets/Housing</a></li>
+                      </ul>
+                    </dd>
+                  </dl>
 
-</footer>
+                  <!-- iris() function -->
+                  <dl class="py function">
+                    <dt class="sig sig-object py" id="XPER.datasets.load_data.iris">
+                      <span class="sig-prename descclassname"><span class="pre">XPER.datasets.load_data.</span></span>
+                      <span class="sig-name descname"><span class="pre">iris</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span>
+                      <a class="reference internal" href="_modules/XPER/datasets/load_data.html#iris"><span class="viewcode-link"><span class="pre">[source]</span></a>
+                      <a class="headerlink" href="#XPER.datasets.load_data.iris" title="Link to this definition"></a>
+                    </dt>
+                    <dd>
+                      <p>Load and return the Iris dataset (classification).</p>
+                      <p>This is a famous dataset that includes 150 observations of iris flowers, with features such as sepal length, sepal width, petal length, and petal width, used to classify the flowers into three species: setosa, versicolor, and virginica.</p>
+                      <p><strong>Returns:</strong></p>
+                      <ul>
+                        <li><code>pandas.DataFrame</code>: A DataFrame containing the dataset with the following features:
+                          <ul>
+                            <li><span class="variable-name">sepal_length</span>: Sepal length in cm.</li>
+                            <li><span class="variable-name">sepal_width</span>: Sepal width in cm.</li>
+                            <li><span class="variable-name">petal_length</span>: Petal length in cm.</li>
+                            <li><span class="variable-name">petal_width</span>: Petal width in cm.</li>
+                            <li><span class="variable-name">species</span>: Species of iris (setosa, versicolor, virginica).</li>
+                        </ul>
+                        </li>
+                      </ul>
+                      <p><strong>Examples:</strong></p>
+                      <pre id="codecell7"><span></span><span class="kn">from</span> <span class="nn">XPER.datasets.load_data</span> <span class="kn">import</span> <span class="n">iris</span>
+<span class="n">iris</span> <span class="o">=</span> <span class="n">iris</span><span class="p">()</span>
+<span class="c"># Create a DataFrame with the data and feature names</span>
+<span class="n">iris_df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">iris</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">iris</span><span class="p">.</span><span class="n">feature_names</span><span class="p">)</span>
+<span class="n">iris_df</span><span class="p">[</span><span class="s">'target'</span><span class="p">]</span> <span class="o">=</span> <span class="n">iris</span><span class="p">.</span><span class="n">target</span>
+
+<span class="c"># Display the first few rows of the dataset</span>
+<span class="n">iris_df</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+                                </pre>
+                      <p><strong>Example output:</strong></p>
+                      <img src="_static/images/iris.png" alt="Sample data visualization" style="width:600px;height:auto;">
+        
+                      <p><strong>References:</strong></p>
+                      <ul>
+                        <li>UCI Machine Learning Repository: <a href="https://archive.ics.uci.edu/ml/datasets/Iris">https://archive.ics.uci.edu/ml/datasets/Iris</a></li>
+                      </ul>
+                    </dd>
+                  </dl>
+
+                  <!-- loan_status() function -->
+                  <dl class="py function">
+                    <dt class="sig sig-object py" id="XPER.datasets.load_data.loan_status">
+                      <span class="sig-prename descclassname"><span class="pre">XPER.datasets.load_data.</span></span>
+                      <span class="sig-name descname"><span class="pre">loan_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span>
+                      <a class="reference internal" href="_modules/XPER/datasets/load_data.html#loan_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a>
+                      <a class="headerlink" href="#XPER.datasets.load_data.loan_status" title="Link to this definition"></a>
+                    </dt>
+                    <dd>
+                      <p>Load and return the Loan Status dataset (classification).</p>
+                      <p>This dataset includes financial and demographic data for individuals who have applied for loans. It's used to predict whether a loan will be approved or rejected.</p>
+                      <p><strong>Returns:</strong></p>
+                      <ul>
+                        <li><code>pandas.DataFrame</code>: A DataFrame containing the dataset with the following features:
+                          <ul>
+                            <li><span class="variable-name">loan_id</span>: Unique identifier for the loan.</li>
+                            <li><span class="variable-name">applicant_income</span>: Income of the applicant.</li>
+                            <li><span class="variable-name">coapplicant_income</span>: Income of the co-applicant.</li>
+                            <li><span class="variable-name">loan_amount</span>: Amount of the loan.</li>
+                            <li><span class="variable-name">loan_amount_term</span>: Term of the loan in months.</li>
+                            <li><span class="variable-name">credit_history</span>: Credit history of the applicant (1 if good, 0 if bad).</li>
+                            <li><span class="variable-name">property_area</span>: Area where the property is located (urban, semiurban, rural).</li>
+                            <li><span class="variable-name">loan_status</span>: Loan status (Y for approved, N for not approved).</li>
+                        </ul>
+                        </li>
+                      </ul>
+                      <p><strong>Examples:</strong></p>
+        <pre id="codecell4"><span></span><span class="kn">from</span> <span class="nn">XPER.datasets.load_data</span> <span class="kn">import</span> <span class="n">loan_status</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">loan_status</span><span class="p">()</span>
+<span class="n">df</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+        </pre>
+                      <p><strong>Example output:</strong></p>
+                        <img src="_static/images/loan.png" alt="Sample data visualization" style="width:600px;height:auto;">
+        
+                      <p><strong>References:</strong></p>
+                      <ul>
+                        <li>Kaggle Dataset: <a href="https://www.kaggle.com/datasets/loanstats">https://www.kaggle.com/datasets/loanstats</a></li>
+                      </ul>
+                    </dd>
+                  </dl>
+
+                </section>
+                <section id="module-XPER.datasets">
+                  <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-XPER.datasets" title="Link to this heading"></a></h2>
+                </section>
+              </section>
+            </div>
+          </div>
+          <footer>
+            <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+              <a href="XPER.compute.html" class="btn btn-neutral float-left" title="XPER.compute package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+              <a href="XPER.viz.html" class="btn btn-neutral float-right" title="XPER.viz package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+            </div>
+            <hr/>
+            <div role="contentinfo">
+              <p>&#169; Copyright 2024, Sebastien Saurin, Sullivan Hué, Christophe Hurlin, Christophe Perignon.</p>
+            </div>
+            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+              <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+              provided by <a href="https://readthedocs.org">Read the Docs</a>.
+          </footer>
         </div>
       </div>
     </section>
