@@ -1,328 +1,200 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>XPER.compute package &mdash; XPER Documentation 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+  <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+  <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+  <link rel="stylesheet" href="_static/css/theme.css">
+  <style>
+    /* Code block styling */
+    pre {
+        background-color: #f4f4f4;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+    code {
+        font-family: Consolas, "Courier New", monospace;
+    }
+    /* Syntax highlighting */
+    .kn { color: #0000FF; font-weight: bold; } /* keywords */
+    .nn { color: #228B22; } /* modules */
+    .n { color: #000000; } /* variables and function names */
+    .mi { color: #009999; } /* numbers */
+    .o { color: #DD0000; font-weight: bold; } /* operators */
+    .p { color: #000000; } /* punctuation */
 
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=8d563738"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="XPER.datasets package" href="XPER.datasets.html" />
-    <link rel="prev" title="XPER package" href="XPER.html" /> 
+    .variable-name {
+        color: #D9534F; /* Nice red color */
+        font-weight: bold;
+        background-color: #f4f4f4;
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-family: Consolas, "Courier New", monospace;
+    }
+  </style>
 </head>
-
 <body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="index.html" class="icon icon-home">
-            XPER Documentation
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">XPER</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="XPER.html">XPER package</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="XPER.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l4 current"><a class="current reference internal" href="#">XPER.compute package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="XPER.datasets.html">XPER.datasets package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="XPER.viz.html">XPER.viz package</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="XPER.html#module-XPER">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
-</ul>
-</li>
-</ul>
-
+        <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home">XPER Documentation</a>
+          <div role="search">
+            <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+              <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
+        </div>
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+          <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+          <ul class="current">
+            <li class="toctree-l1 current"><a class="reference internal" href="modules.html">XPER</a><ul class="current">
+              <li class="toctree-l2 current"><a class="reference internal" href="XPER.html">XPER package</a><ul class="current">
+                <li class="toctree-l3 current"><a class="reference internal" href="XPER.html#subpackages">Subpackages</a><ul class="current">
+                  <li class="toctree-l4 current"><a class="current reference internal" href="#">XPER.compute package</a></li>
+                  <li class="toctree-l4"><a class="reference internal" href="XPER.datasets.html">XPER.datasets package</a></li>
+                  <li class="toctree-l4"><a class="reference internal" href="XPER.viz.html">XPER.viz package</a></li>
+                </ul>
+              </li>
+              <li class="toctree-l3"><a class="reference internal" href="XPER.html#module-XPER">Module contents</a></li>
+            </ul>
+          </li>
+          <li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
+          </ul>
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">XPER Documentation</a>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">XPER Documentation</a>
       </nav>
-
       <div class="wy-nav-content">
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="modules.html">XPER</a></li>
-          <li class="breadcrumb-item"><a href="XPER.html">XPER package</a></li>
-      <li class="breadcrumb-item active">XPER.compute package</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/XPER.compute.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <section id="xper-compute-package">
-<h1>XPER.compute package<a class="headerlink" href="#xper-compute-package" title="Link to this heading"></a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
-</section>
-<section id="module-XPER.compute.EM">
-<span id="xper-compute-em-module"></span><h2>XPER.compute.EM module<a class="headerlink" href="#module-XPER.compute.EM" title="Link to this heading"></a></h2>
-<p>Created on Thu May  5 19:56:18 2022</p>
-<p>&#64;author: S79158</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="XPER.compute.EM.XPER_choice">
-<span class="sig-prename descclassname"><span class="pre">XPER.compute.EM.</span></span><span class="sig-name descname"><span class="pre">XPER_choice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Eval_Metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_interet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_coalition_sampled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CFP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CFN</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">execution_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ThreadPoolExecutor'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/EM.html#XPER_choice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.EM.XPER_choice" title="Link to this definition"></a></dt>
-<dd><p>y: target variable. Format = array
-X: Features values. Format = array
-Eval_Metric: One of the following metrics at the moment</p>
-<blockquote>
-<div><p>[“AUC”,”BS”,”Balanced_accuracy”,”Accuracy”,”MC”].
-MC = missclassications cost. Must specify a value for CFP and</p>
-<blockquote>
-<div><p>CFN in this case</p>
-</div></blockquote>
-</div></blockquote>
-<dl class="simple">
-<dt>var_interet: None only for Kernel estimation because it computes all of </dt><dd><p>the XPER values at once. Otherwise, integer with the corresponding
-number of the variable of interest.</p>
-</dd>
-<dt>N_coalition_sampled: Number of coalitions to consider to compute XPER values</dt><dd><p>Reminds that for exact computation it requires 2**(p-1)
-coalitions and for the kernel 2**p coalitions.</p>
-</dd>
-</dl>
-<p>CFP (cost false positive) : specific to the missclassication cost
-CFN (cost false negative) : specific to the missclassication cost
-intercept=True : The model includes an intercept in the first column of the</p>
-<blockquote>
-<div><p>database (X)</p>
-</div></blockquote>
-<p>kernel: if true the kernel SHAP/XPER method is implemented
-execution_type: Choose between “ThreadPoolExecutor” and “ProcessPoolExecutor”</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="XPER.compute.EM.main">
-<span class="sig-prename descclassname"><span class="pre">XPER.compute.EM.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb_var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/EM.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.EM.main" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="XPER.compute.EM.makelist">
-<span class="sig-prename descclassname"><span class="pre">XPER.compute.EM.</span></span><span class="sig-name descname"><span class="pre">makelist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">random_int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/EM.html#makelist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.EM.makelist" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="XPER.compute.EM.sampled_coalitions">
-<span class="sig-prename descclassname"><span class="pre">XPER.compute.EM.</span></span><span class="sig-name descname"><span class="pre">sampled_coalitions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N_coalition_sampled</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/EM.html#sampled_coalitions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.EM.sampled_coalitions" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</section>
-<section id="module-XPER.compute.Optimisation">
-<span id="xper-compute-optimisation-module"></span><h2>XPER.compute.Optimisation module<a class="headerlink" href="#module-XPER.compute.Optimisation" title="Link to this heading"></a></h2>
-<p>Created on Thu May  5 19:56:18 2022</p>
-<p>&#64;author: S79158</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="XPER.compute.Optimisation.OptimizationClass">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">XPER.compute.Optimisation.</span></span><span class="sig-name descname"><span class="pre">OptimizationClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combination_list_sampled</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Pred_Formula</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_n3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Metric_ind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_shuffle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Metric_vinteret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Metric_ind_vinteret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_interet</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/Optimisation.html#OptimizationClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.Optimisation.OptimizationClass" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="XPER.compute.Optimisation.OptimizationClass.loop_choice">
-<span class="sig-name descname"><span class="pre">loop_choice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">combination_list_sampled</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_predict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Metric_ind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_shuffle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Metric_vinteret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Metric_ind_vinteret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_interet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Eval_Metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CFP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CFN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/Optimisation.html#OptimizationClass.loop_choice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.Optimisation.OptimizationClass.loop_choice" title="Link to this definition"></a></dt>
-<dd><p>s : number of the iteration (coalition)
-combination_list_sampled : combination of features in which to compute the</p>
-<blockquote>
-<div><p>marginal effect on the AUC</p>
-</div></blockquote>
-<p>p : number of features
-X : feature values
-y : target values
-model_predict : predictions of the estimated model
-delta : nuisance parameter
-Metric : AUC(s) computed without the variable of interest for each combination</p>
-<blockquote>
-<div><p>of feature (filled as it goes along the loop)</p>
-</div></blockquote>
-<dl class="simple">
-<dt>Metric_ind<span class="classifier">Individual AUC computed without the variable of interest for</span></dt><dd><p>each combination of feature (filled as it goes along the loop)</p>
-</dd>
-</dl>
-<p>N : Sample size
-X_shuffle : Feature values shuffled / Only for the AUC for the moment
-Metric_vinteret : AUC(s) computed with the variable of interest for each</p>
-<blockquote>
-<div><p>combination of feature (filled as it goes along the loop)</p>
-</div></blockquote>
-<dl class="simple">
-<dt>Metric_ind_vinteret<span class="classifier">Individual AUC computed with the variable of interest</span></dt><dd><p>for each combination of feature
-(filled as it goes along the loop)</p>
-</dd>
-</dl>
-<p>var_interet : number of the variable of interest</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="XPER.compute.Optimisation.OptimizationClass.model_predict1">
-<span class="sig-name descname"><span class="pre">model_predict1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/Optimisation.html#OptimizationClass.model_predict1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.Optimisation.OptimizationClass.model_predict1" title="Link to this definition"></a></dt>
-<dd><p>X: feature values but exclude the variable of interest</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="XPER.compute.Optimisation.OptimizationClass.model_predict2">
-<span class="sig-name descname"><span class="pre">model_predict2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/Optimisation.html#OptimizationClass.model_predict2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.Optimisation.OptimizationClass.model_predict2" title="Link to this definition"></a></dt>
-<dd><p>X: feature values but exclude the variable of interest</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="XPER.compute.Optimisation.OptimizationClass.model_predict3">
-<span class="sig-name descname"><span class="pre">model_predict3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/Optimisation.html#OptimizationClass.model_predict3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.Optimisation.OptimizationClass.model_predict3" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="XPER.compute.Optimisation.OptimizationClass.model_predict4">
-<span class="sig-name descname"><span class="pre">model_predict4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/Optimisation.html#OptimizationClass.model_predict4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.Optimisation.OptimizationClass.model_predict4" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="XPER.compute.Optimisation.OptimizationClass.model_predict5">
-<span class="sig-name descname"><span class="pre">model_predict5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/Optimisation.html#OptimizationClass.model_predict5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.Optimisation.OptimizationClass.model_predict5" title="Link to this definition"></a></dt>
-<dd><p>X: feature values but exclude the variable of interest</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="XPER.compute.Optimisation.OptimizationClass.model_predict6">
-<span class="sig-name descname"><span class="pre">model_predict6</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/Optimisation.html#OptimizationClass.model_predict6"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.Optimisation.OptimizationClass.model_predict6" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-XPER.compute.Performance">
-<span id="xper-compute-performance-module"></span><h2>XPER.compute.Performance module<a class="headerlink" href="#module-XPER.compute.Performance" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="XPER.compute.Performance.ModelPerformance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">XPER.compute.Performance.</span></span><span class="sig-name descname"><span class="pre">ModelPerformance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/Performance.html#ModelPerformance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.Performance.ModelPerformance" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Class to evaluate the performance of a model using various evaluation metrics.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="XPER.compute.Performance.ModelPerformance.calculate_XPER_values">
-<span class="sig-name descname"><span class="pre">calculate_XPER_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Eval_Metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CFP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CFN</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_coalition_sampled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">execution_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ThreadPoolExecutor'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/Performance.html#ModelPerformance.calculate_XPER_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.Performance.ModelPerformance.calculate_XPER_values" title="Link to this definition"></a></dt>
-<dd><p>Calculates XPER (Extended Partial-Expected Ranking) values for each feature based on the given inputs.</p>
-<dl>
-<dt>Parameters:</dt><dd><p>Eval_Metric: Name of the performance metric.
-CFP: Cost of false positive.
-CFN: Cost of false negative.
-N_coalition_sampled: Number of coalitions considered to compute the XPER values.</p>
-<blockquote>
-<div><p>Minimum = 1 and maximum = (2**p) - 2.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>kernel: True if we approximate the XPER values (appropriate when the number of features is large),</dt><dd><p>False otherwise.</p>
-</dd>
-</dl>
-<p>intercept: True if the model and the features include an intercept, False otherwise.</p>
-</dd>
-<dt>Returns:</dt><dd><dl class="simple">
-<dt>tuple: A tuple containing the following elements:</dt><dd><ul class="simple">
-<li><dl class="simple">
-<dt>phi (numpy.ndarray): Array of shape (n_features + 1) containing the XPER value of each feature</dt><dd><p>and the benchmark value of the performance metric (first value).</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>phi_i_j (numpy.ndarray): Array of shape (n_samples, n_features + 1) containing the individual XPER</dt><dd><p>values of each feature for all individuals and the corresponding benchmark values of the performance
-metric (first column).</p>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="XPER.compute.Performance.ModelPerformance.evaluate">
-<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Eval_Metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CFP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CFN</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/XPER/compute/Performance.html#ModelPerformance.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#XPER.compute.Performance.ModelPerformance.evaluate" title="Link to this definition"></a></dt>
-<dd><p>Evaluate the performance of the model using various evaluation metrics.</p>
-<dl>
-<dt>Parameters:</dt><dd><dl class="simple">
-<dt>Eval_Metric (str or list): Evaluation metric(s) to compute. </dt><dd><dl class="simple">
-<dt>Options in alphabetical order: </dt><dd><ul class="simple">
-<li><p>for regression models: “MAE”, “MSE”, “R2”, “RMSE”.</p></li>
-<li><dl class="simple">
-<dt>for classification models: “AUC”, “Accuracy”, “Balanced_accuracy”, “BS” (Brier Score), “MC” (Misclassification Cost),</dt><dd><p>“Precision”, “Sensitivity”, “Specificity”.</p>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</dd>
-</dl>
-<p>CFP: Cost of false positive.
-CFN: Cost of false negative.</p>
-</dd>
-<dt>Returns:</dt><dd><p>PM (float): Performance measure(s) computed based on the specified evaluation metric(s).</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-XPER.compute">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-XPER.compute" title="Link to this heading"></a></h2>
-</section>
-</section>
-
-
-           </div>
+            <ul class="wy-breadcrumbs">
+              <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+              <li class="breadcrumb-item"><a href="modules.html">XPER</a></li>
+              <li class="breadcrumb-item"><a href="XPER.html">XPER package</a></li>
+              <li class="breadcrumb-item active">XPER.compute package</li>
+              <li class="wy-breadcrumbs-aside">
+                <a href="_sources/XPER.compute.rst.txt" rel="nofollow">View page source</a>
+              </li>
+            </ul>
+            <hr/>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="XPER.html" class="btn btn-neutral float-left" title="XPER package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="XPER.datasets.html" class="btn btn-neutral float-right" title="XPER.datasets package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div itemprop="articleBody">
+              <section id="xper-compute-package">
+                <h1>XPER.compute package<a class="headerlink" href="#xper-compute-package" title="Link to this heading"></a></h1>
 
-  <hr/>
+                <section id="module-XPER.compute.Performance">
 
-  <div role="contentinfo">
-    <p>&#169; Copyright 2024, Sebastien Saurin, Sullivan Hué, Christophe Hurlin, Christophe Perignon.</p>
-  </div>
+                  <dl class="py function">
+                    <dt class="sig sig-object py" id="XPER.compute.Performance.evaluate">
+                      <span class="sig-prename descclassname"><span class="pre">XPER.compute.Performance.</span></span>
+                      <span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Eval_Metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CFP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CFN</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span>
+                      <a class="reference internal" href="_modules/XPER/compute/Performance.html#ModelPerformance.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a>
+                      <a class="headerlink" href="#XPER.compute.Performance.evaluate" title="Link to this definition"></a>
+                    </dt>
+                    <dd>
+                      <p>Evaluate the performance of the model using various evaluation metrics.</p>
+                      <section id="parameters">
+                        <h5>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h5>
+                        <dl class="simple">
+                          <dt>Eval_Metric<span class="classifier">str or list</span></dt><dd><p>Evaluation metric(s) to compute. Options include: "AUC", "Accuracy", "Balanced_accuracy", "BS" (Brier Score), "MC" (Misclassification Cost), "Precision", "Sensitivity", "Specificity".</p></dd>
+                          <dt>CFP<span class="classifier">float</span></dt><dd><p>Cost of false positive.</p></dd>
+                          <dt>CFN<span class="classifier">float</span></dt><dd><p>Cost of false negative.</p></dd>
+                        </dl>
+                      </section>
+                      <section id="returns">
+                        <h5>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h5>
+                        <p><strong>Performance Metrics</strong>: Computed performance metrics for the model.</p>
+                      </section>
+                      <section id="examples">
+                        <h5>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h5>
+                        <pre>
+<span class="kn">from</span> <span class="nn">XPER.compute.Performance</span> <span class="kn">import</span> <span class="n">ModelPerformance</span>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+<span class="n">XPER</span> <span class="o">=</span> <span class="n">ModelPerformance</span>(<span class="n">X_train</span>.<span class="n">values</span>, <span class="n">y_train</span>.<span class="n">values</span>, <span class="n">X_test</span>.<span class="n">values</span>, <span class="n">y_test</span>.<span class="n">values</span>, <span class="n">model</span>)
+<span class="n">PM</span> <span class="o">=</span> <span class="n">XPER</span>.<span class="n">evaluate</span>([<span class="s">'AUC'</span>])
+<span class="n">print</span>(<span class="s">"Performance Metrics: "</span>, <span class="n">round</span>(<span class="n">PM</span>, <span class="mi">3</span>))
+                        </pre>
+                      </section>
+                    </dd>
+                  </dl>
+                  <h5>Example output:<a class="headerlink" href="#examples" title="Link to this heading"></a></h5>
+                  <img src="_static/images/perf2.png" alt="Sample data visualization" style="width:300px;height:auto;">
+                  <dl class="py function">
+                    <dt class="sig sig-object py" id="XPER.compute.Performance.calculate_XPER_values">
+                      <span class="sig-prename descclassname"><span class="pre">XPER.compute.Performance.</span></span>
+                      <span class="sig-name descname"><span class="pre">calculate_XPER_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Eval_Metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CFP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CFN</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_coalition_sampled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">execution_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ThreadPoolExecutor'</span></span></em><span class="sig-paren">)</span>
+                      <a class="reference internal" href="_modules/XPER/compute/Performance.html#ModelPerformance.calculate_XPER_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a>
+                      <a class="headerlink" href="#XPER.compute.Performance.calculate_XPER_values" title="Link to this definition"></a>
+                    </dt>
+                    <dd>
+                      <p>Calculate XPER values for the model's performance.</p>
+                      <section id="parameters">
+                        <h5>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h5>
+                        <dl class="simple">
+                          <dt>Eval_Metric<span class="classifier">str or list</span></dt><dd><p>Evaluation metric(s) for XPER calculation. Options include: "AUC", "Accuracy", etc.</p></dd>
+                          <dt>CFP<span class="classifier">float</span></dt><dd><p>Cost of false positive.</p></dd>
+                          <dt>CFN<span class="classifier">float</span></dt><dd><p>Cost of false negative.</p></dd>
+                          <dt>N_coalition_sampled<span class="classifier">int</span></dt><dd><p>Number of coalitions to consider in XPER calculation.</p></dd>
+                          <dt>kernel<span class="classifier">bool, optional</span></dt><dd><p>If <code>True</code>, use kernel approximation for XPER values. Default is <code>True</code>.</p></dd>
+                          <dt>intercept<span class="classifier">bool, optional</span></dt><dd><p>If <code>True</code>, include intercept in model. Default is <code>False</code>.</p></dd>
+                          <dt>execution_type<span class="classifier">str, optional</span></dt><dd><p>Execution type for computation, "ThreadPoolExecutor" or "ProcessPoolExecutor". Default is "ThreadPoolExecutor".</p></dd>
+                        </dl>
+                      </section>
+                      <section id="returns">
+                        <h5>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h5>
+                        <p><strong>XPER values</strong>: Computed XPER values for the specified metrics.</p>
+                      </section>
+                      <section id="examples">
+                        <h5>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h5>
+                        <pre>
+<span class="kn">from</span> <span class="nn">XPER.compute.Performance</span> <span class="kn">import</span> <span class="n">ModelPerformance</span>
 
-</footer>
+<span class="n">XPER</span> <span class="o">=</span> <span class="n">ModelPerformance</span>(<span class="n">X_train</span>.<span class="n">values</span>, <span class="n">y_train</span>.<span class="n">values</span>, <span class="n">X_test</span>.<span class="n">values</span>, <span class="n">y_test</span>.<span class="n">values</span>, <span class="n">model</span>)
+
+<span class="c1"># Option 1 - Kernel = True</span>
+<span class="n">XPER_values</span> <span class="o">=</span> <span class="n">XPER</span>.<span class="n">calculate_XPER_values</span>([<span class="s">'AUC'</span>])
+<span class="n">XPER_values</span> <span class="o">=</span> <span class="n">XPER</span>.<span class="n">calculate_XPER_values</span>([<span class="s">'AUC'</span>], <span class="n">execution_type</span><span class="o">=</span><span class="s">'ProcessPoolExecutor'</span>)
+
+<span class="c1"># Option 2 - Kernel = False</span>
+<span class="n">XPER_values</span> <span class="o">=</span> <span class="n">XPER</span>.<span class="n">calculate_XPER_values</span>([<span class="s">'AUC'</span>], <span class="n">kernel</span><span class="o">=</span><span class="bp">False</span>)
+                        </pre>
+                      </section>
+                    </dd>
+                  </dl>
+                </section>
+                <section id="examples"></section>
+                  <h5>Kernel True:<a class="headerlink" href="#examples" title="Link to this heading"></a></h5>
+                  <img src="_static/images/perf3.png" alt="Sample data visualization" style="width:500px;height:auto;">
+                  <h5>Kernel False:<a class="headerlink" href="#examples" title="Link to this heading"></a></h5>
+                  <img src="_static/images/perf4.png" alt="Sample data visualization" style="width:500px;height:auto;">
+              </section>
+            </div>
+          </div>
+          <footer>
+            <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+              <a href="XPER.datasets.html" class="btn btn-neutral float-left" title="XPER.datasets package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+              <a href="setup.html" class="btn btn-neutral float-right" title="setup module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+            </div>
+            <hr/>
+            <div role="contentinfo">
+              <p>&#169; Copyright 2024, Sebastien Saurin, Sullivan Hué, Christophe Hurlin, Christophe Perignon.</p>
+            </div>
+            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+              <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+              provided by <a href="https://readthedocs.org">Read the Docs</a>.
+          </footer>
         </div>
       </div>
     </section>
@@ -332,6 +204,5 @@ CFN: Cost of false negative.</p>
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script> 
-
 </body>
 </html>
