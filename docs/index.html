@@ -109,7 +109,7 @@ and <strong>contributing</strong>  to <strong>XPER</strong>, details on the API,
 <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="_images/dataset.png" src="_images/dataset.png" />
+<img src="_static/images/dataset.png" />
 <p><strong>2️⃣ Load the trained model or train your model ⚙️</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xgboost</span> <span class="kn">import</span> <span class="n">XGBClassifier</span>
 <span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
@@ -134,20 +134,20 @@ and <strong>contributing</strong>  to <strong>XPER</strong>, details on the API,
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performance Metrics: &quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">PM</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_images/perf2.png"><img alt="metrics" src="_images/perf2.png" style="width: 200px;" /></a>
+<a class="reference internal image-reference" href="_static/images/perf2.png"><img alt="metrics" src="_static/images/perf2.png" style="width: 200px;" /></a>
 <p><strong>For use cases above 10 feature variables it is advised to use the default option kernel=True for computation efficiency</strong> ➡️</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Option 1 - Kernel True</span>
 <span class="c1"># Calculate XPER values for the model&#39;s performance</span>
 <span class="n">XPER_values</span> <span class="o">=</span> <span class="n">XPER_</span><span class="o">.</span><span class="n">calculate_XPER_values</span><span class="p">([</span><span class="s2">&quot;AUC&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_images/true.png"><img alt="metrics" src="_images/true.png" style="width: 300px;" /></a>
+<a class="reference internal image-reference" href="_static/images/true.png"><img alt="metrics" src="_static/images/true.png" style="width: 300px;" /></a>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Option 2 - Kernel False</span>
 <span class="c1"># Calculate XPER values for the model&#39;s performance</span>
 <span class="n">XPER_values</span> <span class="o">=</span> <span class="n">XPER_</span><span class="o">.</span><span class="n">calculate_XPER_values</span><span class="p">([</span><span class="s2">&quot;AUC&quot;</span><span class="p">],</span> <span class="n">kernel</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_images/false.png"><img alt="metrics" src="_images/false.png" style="width: 300px;" /></a>
+<a class="reference internal image-reference" href="_static/images/false.png"><img alt="metrics" src="_static/images/false.png" style="width: 300px;" /></a>
 <p><strong>4️⃣ Visualisation 📊</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">XPER.viz.Visualisation</span> <span class="kn">import</span> <span class="n">visualizationClass</span> <span class="k">as</span> <span class="n">viz</span>
@@ -159,17 +159,17 @@ and <strong>contributing</strong>  to <strong>XPER</strong>, details on the API,
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">viz</span><span class="o">.</span><span class="n">bar_plot</span><span class="p">(</span><span class="n">XPER_values</span><span class="o">=</span><span class="n">XPER_values</span><span class="p">,</span> <span class="n">X_test</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">percentage</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="_images/bar.png" src="_images/bar.png" />
+<img alt="_static/images/bar.png" src="_static/images/bar.png" />
 <p>Beeswarn plot</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">viz</span><span class="o">.</span><span class="n">beeswarn_plot</span><span class="p">(</span><span class="n">XPER_values</span><span class="o">=</span><span class="n">XPER_values</span><span class="p">,</span> <span class="n">X_test</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="_images/be.png" src="_images/be.png" />
+<img alt="_static/images/be.png" src="_static/images/be.png" />
 <p>Force plot</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">viz</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span><span class="n">XPER_values</span><span class="o">=</span><span class="n">XPER_values</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span> <span class="n">variable_name</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="_images/force.png" src="_images/force.png" />
+<img alt="_static/images/force.png" src="_static/images/force.png" />
 </section>
 <section id="reference">
 <h2>Reference<a class="headerlink" href="#reference" title="Link to this heading"></a></h2>
