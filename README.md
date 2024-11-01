@@ -1,7 +1,7 @@
 ![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)
 ![Python 3.8](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10-blue)
 [![Downloads](https://img.shields.io/pypi/dm/XPER)](https://pypi.org/project/XPER/)
-[![PyPI Version](https://img.shields.io/pypi/v/carte-ai)](https://pypi.org/project/xper/)
+[![PyPI Version](https://img.shields.io/pypi/v/xper)](https://pypi.org/project/xper/)
 [![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
