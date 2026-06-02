@@ -18,7 +18,7 @@ import pandas as pd
 import statsmodels.api as sm
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 import xgboost as xgb
-
+from tqdm import tqdm
 
 def main(nb_var):
     # Draw a number randomly from 1 to (nb_var-1)
@@ -69,6 +69,7 @@ def XPER_choice(
     intercept=True,
     kernel=True,
     execution_type="ThreadPoolExecutor",
+    chunk_size=1
 ):  # Add the kernel parameter
     """
     y: target variable. Format = array
@@ -182,7 +183,7 @@ def XPER_choice(
     #
     # =============================================================================
 
-    print("Seed XPER:", seed)
+    #print("Seed XPER:", seed)
 
     random.seed(seed)  # Fix the seed
     p = np.size(X, 1)  # Number of variables
@@ -277,11 +278,13 @@ def XPER_choice(
     )
 
     with executor_class(max_workers=60) as executor:
+        s_batches = list(OptimizationClass.make_batches(range(N_coalition_sampled), chunk_size))
+
         if kernel == True:
             results = [
                 executor.submit(
-                    OptimizationClass.loop_choice,
-                    s,
+                    OptimizationClass.loop_choice_batch,
+                    s_batch,# s,
                     combination_list_sampled,
                     p,
                     X,
@@ -301,13 +304,13 @@ def XPER_choice(
                     CFN=CFN,
                     kernel=True,
                 )
-                for s in list(range(N_coalition_sampled))
+                for s_batch in s_batches # for s in list(range(N_coalition_sampled))
             ]
         else:  # if exact computation
             results = [
                 executor.submit(
                     OptimizationClass.loop_choice,
-                    s,
+                    s_batch, # s,
                     combination_list_sampled,
                     p,
                     X,
@@ -327,22 +330,33 @@ def XPER_choice(
                     CFN=CFN,
                     kernel=False,
                 )
-                for s in list(range(N_coalition_sampled))
+                for s_batch in s_batches # s in list(range(N_coalition_sampled))
             ]
 
-        for result in concurrent.futures.as_completed(results):
-            res = result.result()
-            s = res[0]
-            weight[s, :] = res[1]
-            Metric[s] = res[2]
-            Metric_ind[s, :] = res[3]
-            if kernel != True:
-                Metric_vinteret[s] = res[4]
-                Metric_ind_vinteret[s, :] = res[5]
-                benchmark[s] = res[6]
-                sample_EM[s] = res[7]
-                Benchmark_ind[s, :] = res[8]
-                EM_ind[s, :] = res[9]
+        with tqdm(total=N_coalition_sampled,
+          desc=f"Coalitions" if kernel == True else f"Coalitions for variable {var_interet+1}",
+          unit="coalition",
+          leave=True,
+          position=0) as pbars:
+            for result in concurrent.futures.as_completed(results):
+                batch_results = result.result()
+
+                pbars.update(len(batch_results))
+                
+                #pbars.update(1)
+                #res = result.result()
+                for res in batch_results:
+                    s = res[0]
+                    weight[s, :] = res[1]
+                    Metric[s] = res[2]
+                    Metric_ind[s, :] = res[3]
+                    if kernel != True:
+                        Metric_vinteret[s] = res[4]
+                        Metric_ind_vinteret[s, :] = res[5]
+                        benchmark[s] = res[6]
+                        sample_EM[s] = res[7]
+                        Benchmark_ind[s, :] = res[8]
+                        EM_ind[s, :] = res[9]
 
     if kernel == True:
         weight = np.asarray(weight)

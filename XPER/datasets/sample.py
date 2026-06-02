@@ -1,11 +1,15 @@
-
 import random
+
 import numpy as np
-from sklearn.metrics import roc_auc_score
-from scipy.stats import norm
 import statsmodels.api as sm
-#def sample_generation(N=500, p=6, seed=123456, pct_train=0.7, mean=np.repeat(0, p), cov=np.repeat(1.5,p)*np.eye(p), beta=np.repeat(0.5,p), beta_0=0.75):
-def sample_generation(N=500, p=6, seed=123456, pct_train=0.7, mean=None, cov=None, beta=None, beta_0=None):
+from scipy.stats import norm
+from sklearn.metrics import roc_auc_score
+
+
+# def sample_generation(N=500, p=6, seed=123456, pct_train=0.7, mean=np.repeat(0, p), cov=np.repeat(1.5,p)*np.eye(p), beta=np.repeat(0.5,p), beta_0=0.75):
+def sample_generation(
+    N=500, p=6, seed=123456, pct_train=0.7, mean=None, cov=None, beta=None, beta_0=None
+):
     """
     Generate a synthetic dataset for binary classification using a multivariate normal distribution.
 
@@ -21,7 +25,7 @@ def sample_generation(N=500, p=6, seed=123456, pct_train=0.7, mean=None, cov=Non
                                                                          [0. , 0. , 0. , 0. , 0. , 1.5]]) )
         beta (ndarray): Vector of parameters of size p (default: np.array([0.5, 0.5, ..., 0.5, 0.5])
         beta_0 (float): Intercept value (default: 0.75)
-        
+
     Returns:
         X_train (ndarray): Training set features
         y_train (ndarray): Training set labels
@@ -42,7 +46,7 @@ def sample_generation(N=500, p=6, seed=123456, pct_train=0.7, mean=None, cov=Non
     # Set the random seed for reproducibility
     random.seed(seed)
     np.random.seed(seed)
-    
+
     X = np.random.multivariate_normal(mean, cov, N)
 
     # Simulate the model
@@ -60,8 +64,8 @@ def sample_generation(N=500, p=6, seed=123456, pct_train=0.7, mean=None, cov=Non
     y[y <= 0] = 0
 
     # Train/Test split
-    
-    N_train = int(pct_train* N)  # 70% of the sample for training
+
+    N_train = int(pct_train * N)  # 70% of the sample for training
 
     X_train = X[:N_train, :]
     y_train = y[:N_train]

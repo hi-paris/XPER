@@ -225,6 +225,7 @@ class ModelPerformance:
         kernel=True,
         intercept=False,
         execution_type="ThreadPoolExecutor",
+        chunk_size=10,
         seed=42,
     ):
         """
@@ -240,6 +241,21 @@ class ModelPerformance:
                 False otherwise.
             intercept: True if the model and the features include an intercept, False otherwise.
             seed (int): Random seed for reproducibility.
+            chunk_size : int, default=1
+                Number of coalition indices `s` grouped into a single submitted future.
+                Using `chunk_size > 1` reduces the number of futures submitted to the
+                executor, which can lower scheduling/management overhead and make the
+                tqdm progress estimate more stable.
+
+                Trade-off:
+                - smaller values, e.g. 1 or 2, give smoother progress updates and better
+                load balancing when coalition runtimes are heterogeneous;
+
+                - larger values, e.g. 5 or 10, reduce executor overhead but progress is
+                updated only when a whole batch completes.
+
+                `chunk_size=1` is equivalent to the original behavior: one future per
+                coalition.
 
         Returns:
             tuple: A tuple containing the following elements:
@@ -256,8 +272,6 @@ class ModelPerformance:
 
         if kernel is False:
             N_coalition_sampled = 2 ** (p - 1)
-            total_iterations = p
-            progress_bar = tqdm(total=total_iterations, desc="Performing computation")
             for var in range(p):
                 Contrib = XPER_choice(
                     y=self.y_test,
@@ -271,18 +285,14 @@ class ModelPerformance:
                     intercept=intercept,
                     kernel=kernel,
                     execution_type=execution_type,
+                    chunk_size=chunk_size,
                     seed=seed,
                 )
-
-                progress_bar.update(1)
-                sys.stdout.flush()
                 if var == 0:
                     all_phi_j.append(Contrib[2])
 
                 all_contrib.append(Contrib)
                 all_phi_j.append(Contrib[0])
-            progress_bar.close()
-            time_elapsed = datetime.now() - start_time
             phi_j = np.insert(all_phi_j[1:], 0, all_phi_j[0])
 
             benchmark_ind = pd.DataFrame(
@@ -305,31 +315,32 @@ class ModelPerformance:
             return phi_j, phi_i_j
 
         else:
-            for _ in tqdm(range(1), desc="Performing Computation", leave=True):
-                if N_coalition_sampled is None:
-                    if self.X_test.shape[1] == 11:
-                        N_coalition_sampled = 2046
+            #for _ in tqdm(range(1), desc="Performing Computation", leave=True):
+            if N_coalition_sampled is None:
+                if self.X_test.shape[1] == 11:
+                    N_coalition_sampled = 2046
 
-                    elif self.X_test.shape[1] > 11:
-                        N_coalition_sampled = 2 * p + 2048
+                elif self.X_test.shape[1] > 11:
+                    N_coalition_sampled = 2 * p + 2048
 
-                    else:
-                        N_coalition_sampled = (2**p) - 2
+                else:
+                    N_coalition_sampled = (2**p) - 2
 
-                Contrib_Kernel = XPER_choice(
-                    y=self.y_test,
-                    X=self.X_test,
-                    model=self.model,
-                    Eval_Metric=Eval_Metric,
-                    N_coalition_sampled=N_coalition_sampled,
-                    CFP=CFP,
-                    CFN=CFN,
-                    intercept=intercept,
-                    kernel=kernel,
-                    execution_type=execution_type,
-                    seed=seed,
-                )
+            Contrib_Kernel = XPER_choice(
+                y=self.y_test,
+                X=self.X_test,
+                model=self.model,
+                Eval_Metric=Eval_Metric,
+                N_coalition_sampled=N_coalition_sampled,
+                CFP=CFP,
+                CFN=CFN,
+                intercept=intercept,
+                kernel=kernel,
+                execution_type=execution_type,
+                chunk_size=chunk_size,
+                seed=seed,
+            )
 
-                phi, phi_i_j = Contrib_Kernel
+            phi, phi_i_j = Contrib_Kernel
 
         return phi, phi_i_j
