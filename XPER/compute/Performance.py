@@ -229,7 +229,7 @@ class ModelPerformance:
         kernel=True,
         intercept=False,
         execution_type="ThreadPoolExecutor",
-        chunk_size=10,
+        chunk_size=1,
         seed=42,
     ):
         """
