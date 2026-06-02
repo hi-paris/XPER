@@ -1,26 +1,27 @@
 # =============================================================================
 #                               Packages
 # =============================================================================
-from XPER.compute.EM import XPER_choice
-from sklearn.metrics import (
-    roc_auc_score,
-    brier_score_loss,
-    balanced_accuracy_score,
-    accuracy_score,
-    r2_score,
-    mean_squared_error,
-    mean_absolute_error,
-)
-import numpy as np
-from datetime import datetime
-import pandas as pd
-from tqdm import tqdm
-import warnings
 import sys
-
 import warnings
+from datetime import datetime
 
-#warnings.filterwarnings("ignore")
+import numpy as np
+import pandas as pd
+from sklearn.metrics import (
+    accuracy_score,
+    balanced_accuracy_score,
+    brier_score_loss,
+    mean_absolute_error,
+    mean_squared_error,
+    r2_score,
+    roc_auc_score,
+)
+from tqdm import tqdm
+
+from XPER.compute.EM import XPER_choice
+
+# warnings.filterwarnings("ignore")
+
 
 def _to_numpy(arr):
     if isinstance(arr, np.ndarray):
@@ -105,32 +106,35 @@ class ModelPerformance:
 
             elif isinstance(X_train, pd.DataFrame):
                 self.input = "df"
-                
+
                 warnings.warn(
-                "The input data was provided as a pandas DataFrame. "
-                "For internal computations, the data will be converted to NumPy arrays to improve speed. "
-                "However, because the model may have been trained with DataFrame feature names, "
-                "predictions may require converting arrays back to DataFrames, which can slow down repeated "
-                "prediction calls. If your model can make predictions directly from NumPy arrays without "
-                "raising feature-name or dtype errors, provide X_train and X_test directly as NumPy arrays "
-                "for faster computation.",
-                UserWarning,
-                stacklevel=2,
-            )
+                    "The input data was provided as a pandas DataFrame. "
+                    "For internal computations, the data will be converted to NumPy arrays to improve speed. "
+                    "However, because the model may have been trained with DataFrame feature names, "
+                    "predictions may require converting arrays back to DataFrames, which can slow down repeated "
+                    "prediction calls. If your model can make predictions directly from NumPy arrays without "
+                    "raising feature-name or dtype errors, provide X_train and X_test directly as NumPy arrays "
+                    "for faster computation.",
+                    UserWarning,
+                    stacklevel=2,
+                )
 
             else:
                 raise TypeError("X_train must be a NumPy array or a pandas DataFrame.")
 
             self.metadata = metadata_train
 
-        def predict(self, X,):
+        def predict(
+            self,
+            X,
+        ):
             if self.input == "array":
                 return self.model.predict(X)
 
             if self.input == "df":
                 X = _to_df(X, self.metadata)
                 return self.model.predict(X)
-            
+
         def predict_proba(self, X):
             if self.input == "array":
                 return self.model.predict_proba(X)
@@ -315,7 +319,7 @@ class ModelPerformance:
             return phi_j, phi_i_j
 
         else:
-            #for _ in tqdm(range(1), desc="Performing Computation", leave=True):
+            # for _ in tqdm(range(1), desc="Performing Computation", leave=True):
             if N_coalition_sampled is None:
                 if self.X_test.shape[1] == 11:
                     N_coalition_sampled = 2046

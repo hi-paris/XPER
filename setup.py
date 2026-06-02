@@ -1,5 +1,7 @@
 """The setup script."""
 
+from typing import List
+
 from setuptools import find_packages, setup
 
 # from pathlib import Path
@@ -8,22 +10,21 @@ from setuptools import find_packages, setup
 
 # history = (HERE / "History.rst").read_text(encoding="utf-8")
 
-from typing import List
 
 requirements: List[str] = [
-        "numpy",
-        "pandas",
-        "scipy",
-        "scikit-learn",
-        "shap",
-        "seaborn",
-        "matplotlib",
-        "xgboost",
-        "statsmodels",
-        "tqdm",
-        "plotly",
-    ]
-test_requirements: List[str]= []
+    "numpy",
+    "pandas",
+    "scipy",
+    "scikit-learn",
+    "shap",
+    "seaborn",
+    "matplotlib",
+    "xgboost",
+    "statsmodels",
+    "tqdm",
+    "plotly",
+]
+test_requirements: List[str] = []
 
 setup(
     author="""Sebastien Saurin, Christophe Hurlin, Christophe Perignon,
