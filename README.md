@@ -121,7 +121,7 @@ labels = list(loan.drop(columns='Loan_Status').columns)
 ```python
 viz.bar_plot(XPER_values=XPER_values, X_test=pd.DataFrame(X_test), labels=labels, p=6,percentage=True)
 ```
-![sample](images/bar.png)
+![sample](images/bar_.png)
 
 
 ##### Beeswarn plot
@@ -129,14 +129,14 @@ viz.bar_plot(XPER_values=XPER_values, X_test=pd.DataFrame(X_test), labels=labels
 ```python
 viz.beeswarn_plot(XPER_values=XPER_values,X_test=pd.DataFrame(X_test),labels=labels)
 ```
-![sample](images/be.png)
+![sample](images/be_.png)
 
 ##### Force plot
 
 ```python
 viz.force_plot(XPER_values=XPER_values, instance=1, X_test=X_test, variable_name=labels, figsize=(16,4))
 ```
-![sample](images/force.png)
+![sample](images/force_.png)
 
 ### 03 Acknowledgements
 
