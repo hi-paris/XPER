@@ -2,42 +2,90 @@
 #                               Packages
 # =============================================================================
 from XPER.compute.EM import XPER_choice
-from sklearn.metrics import roc_auc_score,brier_score_loss,balanced_accuracy_score,accuracy_score,r2_score, mean_squared_error, mean_absolute_error
+from sklearn.metrics import (
+    roc_auc_score,
+    brier_score_loss,
+    balanced_accuracy_score,
+    accuracy_score,
+    r2_score,
+    mean_squared_error,
+    mean_absolute_error,
+)
 import numpy as np
 from datetime import datetime
-import pandas as pd 
+import pandas as pd
 from tqdm import tqdm
 import warnings
 import sys
 
 import warnings
-warnings.filterwarnings("ignore")
 
-class ModelPerformance():
+#warnings.filterwarnings("ignore")
+
+def _to_numpy(arr):
+    if isinstance(arr, np.ndarray):
+        return arr
+    if isinstance(arr, (pd.DataFrame, pd.Series)):
+        return arr.to_numpy()
+    return arr.to_numpy()
+
+
+def _metadata(arr):
+    if isinstance(arr, (np.ndarray, pd.Series)):
+        return None
+
+    if isinstance(arr, pd.DataFrame):
+        metadata = {
+            "columns": arr.columns,
+            "dtypes": arr.dtypes,
+        }
+        return metadata
+
+    return None
+
+
+def _to_df(arr, metadata):
+
+    if metadata is None:
+
+        return arr
+
+    df = pd.DataFrame(arr, columns=metadata["columns"])
+
+    if "dtypes" in metadata:
+
+        for col, dtype in metadata["dtypes"].items():
+
+            df[col] = df[col].astype(dtype)
+
+    return df
+
+
+class ModelPerformance:
     """
     Class to evaluate the performance of a model using various evaluation metrics.
     """
 
-    def __init__(self, X_train, y_train, X_test, y_test, model,sample_size=500,seed=42):
-        """
-        Initialize the ModelEvaluator instance.
+    def __init__(
+        self, X_train, y_train, X_test, y_test, model, sample_size=500, seed=42
+    ):
 
-        Parameters:
-            X_train (ndarray): Training set features.
-            y_train (ndarray): Training set labels.
-            X_test (ndarray): Test set features.
-            y_test (ndarray): Test set labels.
-            model : Model used for predictions.
-        """
+        self.metadata_train = _metadata(X_train)
+        self.metadata_test = _metadata(X_test)
 
-        if len(X_test) <= sample_size:
-                X_test = X_test
-                y_test = y_test
-        else:
+        self.model = self._model(model, X_train, self.metadata_train)
+
+        X_train = _to_numpy(X_train)
+        X_test = _to_numpy(X_test)
+        y_train = _to_numpy(y_train)
+        y_test = _to_numpy(y_test)
+
+        if len(X_test) > sample_size:
             indices = np.arange(len(X_test))
             np.random.seed(seed)
             np.random.shuffle(indices)
             sample_indices = indices[:sample_size]
+
             X_test = X_test[sample_indices]
             y_test = y_test[sample_indices]
 
@@ -45,19 +93,60 @@ class ModelPerformance():
         self.y_train = y_train
         self.X_test = X_test
         self.y_test = y_test
-        self.model = model
 
+    class _model:
 
+        def __init__(self, model, X_train, metadata_train):
 
+            self.model = model
+
+            if isinstance(X_train, np.ndarray):
+                self.input = "array"
+
+            elif isinstance(X_train, pd.DataFrame):
+                self.input = "df"
+                
+                warnings.warn(
+                "The input data was provided as a pandas DataFrame. "
+                "For internal computations, the data will be converted to NumPy arrays to improve speed. "
+                "However, because the model may have been trained with DataFrame feature names, "
+                "predictions may require converting arrays back to DataFrames, which can slow down repeated "
+                "prediction calls. If your model can make predictions directly from NumPy arrays without "
+                "raising feature-name or dtype errors, provide X_train and X_test directly as NumPy arrays "
+                "for faster computation.",
+                UserWarning,
+                stacklevel=2,
+            )
+
+            else:
+                raise TypeError("X_train must be a NumPy array or a pandas DataFrame.")
+
+            self.metadata = metadata_train
+
+        def predict(self, X,):
+            if self.input == "array":
+                return self.model.predict(X)
+
+            if self.input == "df":
+                X = _to_df(X, self.metadata)
+                return self.model.predict(X)
+            
+        def predict_proba(self, X):
+            if self.input == "array":
+                return self.model.predict_proba(X)
+
+            if self.input == "df":
+                X = _to_df(X, self.metadata)
+                return self.model.predict_proba(X)
 
     def evaluate(self, Eval_Metric, CFP=None, CFN=None):
         """
         Evaluate the performance of the model using various evaluation metrics.
 
         Parameters:
-            Eval_Metric (str or list): Evaluation metric(s) to compute. 
-                Options in alphabetical order: 
-                    - for regression models: "MAE", "MSE", "R2", "RMSE". 
+            Eval_Metric (str or list): Evaluation metric(s) to compute.
+                Options in alphabetical order:
+                    - for regression models: "MAE", "MSE", "R2", "RMSE".
                     - for classification models: "AUC", "Accuracy", "Balanced_accuracy", "BS" (Brier Score), "MC" (Misclassification Cost),
                                                  "Precision", "Sensitivity", "Specificity".
             CFP: Cost of false positive.
@@ -85,47 +174,59 @@ class ModelPerformance():
             PM = mean_absolute_error(self.y_test, y_pred)
         elif Eval_Metric == ["AUC"]:
             y_hat_proba = model.predict_proba(self.X_test)[:, 1]
-            y_pred = (y_hat_proba > 0.5)
+            y_pred = y_hat_proba > 0.5
             PM = roc_auc_score(self.y_test, y_hat_proba)
         elif Eval_Metric == ["Accuracy"]:
             y_hat_proba = model.predict_proba(self.X_test)[:, 1]
-            y_pred = (y_hat_proba > 0.5)
+            y_pred = y_hat_proba > 0.5
             PM = accuracy_score(self.y_test, y_pred)
         elif Eval_Metric == ["Balanced_accuracy"]:
             y_hat_proba = model.predict_proba(self.X_test)[:, 1]
-            y_pred = (y_hat_proba > 0.5)
+            y_pred = y_hat_proba > 0.5
             PM = balanced_accuracy_score(self.y_test, y_pred)
         elif Eval_Metric == ["BS"]:
             y_hat_proba = model.predict_proba(self.X_test)[:, 1]
-            y_pred = (y_hat_proba > 0.5)
+            y_pred = y_hat_proba > 0.5
             PM = -brier_score_loss(self.y_test, y_hat_proba)
         elif Eval_Metric == ["MC"]:
             y_hat_proba = model.predict_proba(self.X_test)[:, 1]
-            y_pred = (y_hat_proba > 0.5)
+            y_pred = y_hat_proba > 0.5
             N = len(y_pred)
             FP, FN = np.zeros(shape=N), np.zeros(shape=(N))
             for i in range(N):
-                FP[i] = (y_pred[i] == 0 and self.y_test[i] == 1)
-                FN[i] = (y_pred[i] == 1 and self.y_test[i] == 0)
+                FP[i] = y_pred[i] == 0 and self.y_test[i] == 1
+                FN[i] = y_pred[i] == 1 and self.y_test[i] == 0
             FPR = np.mean(FP)
             FNR = np.mean(FN)
             PM = -(CFP * FPR + CFN * FNR)
         elif Eval_Metric == ["Sensitivity"]:
             y_hat_proba = model.predict_proba(self.X_test)[:, 1]
-            y_pred = (y_hat_proba > 0.5)
+            y_pred = y_hat_proba > 0.5
             PM = np.mean((self.y_test * y_pred) / np.mean(self.y_test))
         elif Eval_Metric == ["Specificity"]:
             y_hat_proba = model.predict_proba(self.X_test)[:, 1]
-            y_pred = (y_hat_proba > 0.5)
-            PM = np.mean(((1 - self.y_test) * (1 - y_pred)) / np.mean((1 - self.y_test)))
+            y_pred = y_hat_proba > 0.5
+            PM = np.mean(
+                ((1 - self.y_test) * (1 - y_pred)) / np.mean((1 - self.y_test))
+            )
         elif Eval_Metric == ["Precision"]:
             y_hat_proba = model.predict_proba(self.X_test)[:, 1]
-            y_pred = (y_hat_proba > 0.5)
+            y_pred = y_hat_proba > 0.5
             PM = np.mean((self.y_test * y_pred) / np.mean(y_pred))
 
         return PM
 
-    def calculate_XPER_values(self, Eval_Metric, CFP=None, CFN=None, N_coalition_sampled=None, kernel=True, intercept=False, execution_type="ThreadPoolExecutor"):
+    def calculate_XPER_values(
+        self,
+        Eval_Metric,
+        CFP=None,
+        CFN=None,
+        N_coalition_sampled=None,
+        kernel=True,
+        intercept=False,
+        execution_type="ThreadPoolExecutor",
+        seed=42,
+    ):
         """
         Calculates XPER (Extended Partial-Expected Ranking) values for each feature based on the given inputs.
 
@@ -138,6 +239,7 @@ class ModelPerformance():
             kernel: True if we approximate the XPER values (appropriate when the number of features is large),
                 False otherwise.
             intercept: True if the model and the features include an intercept, False otherwise.
+            seed (int): Random seed for reproducibility.
 
         Returns:
             tuple: A tuple containing the following elements:
@@ -153,7 +255,7 @@ class ModelPerformance():
         p = self.X_test.shape[1]
 
         if kernel is False:
-            N_coalition_sampled = 2**(p - 1)
+            N_coalition_sampled = 2 ** (p - 1)
             total_iterations = p
             progress_bar = tqdm(total=total_iterations, desc="Performing computation")
             for var in range(p):
@@ -168,7 +270,8 @@ class ModelPerformance():
                     CFN=CFN,
                     intercept=intercept,
                     kernel=kernel,
-                    execution_type=execution_type
+                    execution_type=execution_type,
+                    seed=seed,
                 )
 
                 progress_bar.update(1)
@@ -184,10 +287,12 @@ class ModelPerformance():
 
             benchmark_ind = pd.DataFrame(
                 Contrib[4][np.isnan(Contrib[4]) == False],
-                columns=["Individual Benchmark"]
+                columns=["Individual Benchmark"],
             )
 
-            df_phi_i_j = pd.DataFrame(index=np.arange(len(self.y_test)), columns=np.arange(p))
+            df_phi_i_j = pd.DataFrame(
+                index=np.arange(len(self.y_test)), columns=np.arange(p)
+            )
 
             for i, contrib in enumerate(all_contrib):
                 phi_i_j = contrib[1].copy()
@@ -207,7 +312,7 @@ class ModelPerformance():
 
                     elif self.X_test.shape[1] > 11:
                         N_coalition_sampled = 2 * p + 2048
-                        
+
                     else:
                         N_coalition_sampled = (2**p) - 2
 
@@ -221,11 +326,10 @@ class ModelPerformance():
                     CFN=CFN,
                     intercept=intercept,
                     kernel=kernel,
-                    execution_type=execution_type
+                    execution_type=execution_type,
+                    seed=seed,
                 )
 
                 phi, phi_i_j = Contrib_Kernel
 
         return phi, phi_i_j
-
-
