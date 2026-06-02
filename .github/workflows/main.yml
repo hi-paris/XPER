@@ -70,7 +70,7 @@ jobs:
       - name: Run mypy
         run: |
           mypy --version
-          mypy
+          mypy XPER
 
   black:
     runs-on: ${{ matrix.os }}
